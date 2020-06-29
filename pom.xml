@@ -9,7 +9,7 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-		<spring.framework.version>4.2.5.RELEASE</spring.framework.version>
+		<spring.framework.version>5.2.7.RELEASE</spring.framework.version>
 		<spring.data.redis>1.7.1.RELEASE</spring.data.redis>
 		<spring.data.mongodb>1.9.1.RELEASE</spring.data.mongodb>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
