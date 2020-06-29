@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.EnterpriseEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="principal" jdbcType="VARCHAR" property="principal" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="commerce_id" jdbcType="BIGINT" property="commerce_id" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="bank_info_id" jdbcType="BIGINT" property="bank_info_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="creater" jdbcType="BIGINT" property="creater" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sys_user_id" />
+    <result column="enterprise_name" jdbcType="VARCHAR" property="enterprise_name" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+    <result column="build_enterpise" jdbcType="BIGINT" property="build_enterpise"/>
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name"/>
+    <association property="userEntity" resultMap="com.mfangsoft.zhuangjialong.integration.user.mapper.UserEntityMapper.BaseResultMap" columnPrefix="user_"></association>
+    <association property="bankEntity" resultMap="com.mfangsoft.zhuangjialong.integration.bank.mapper.BankEntityMapper.BaseResultMap" columnPrefix="bank_"></association>
+    <association property="commerceEntity" resultMap="com.mfangsoft.zhuangjialong.integration.commerce.mapper.CommerceEntityMapper.BaseResultMap" columnPrefix="com_"></association>
+    <association property="buildClassEntity" resultMap="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.BuildClassEntityMapper.BaseResultMap" columnPrefix="build_"></association>
+    
+    
+ 
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, principal, phone_num, class_id, commerce_id, imgurl, bank_info_id, create_time, 
+    creater, update_time, updater, sys_user_id, enterprise_name, brand_name,addr,build_enterpise
+  </sql>
+  
+  <sql id="Base_column_list_user">
+   u.id as user_id, u.user as user_user, u.account as user_account,   u.create_time as user_create_time,  u.state as user_state,  u.user_type user_user_type,  u.department_id as user_department_id,  u.position_id as user_position_id , u.phone_num as user_phone_num
+  </sql>
+  
+  <sql id="Base_column_list_ent">
+  
+   ent.id,  ent.principal,  ent.phone_num,  ent.class_id,  ent.commerce_id,  ent.imgurl,  ent.bank_info_id,  ent.create_time, 
+   ent.creater,  ent.update_time,  ent.updater,  ent.sys_user_id,  ent.build_enterpise,  ent.brand_name, ent.addr,ent.enterprise_name
+    
+  
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	select
+	ent.id, ent.principal, ent.phone_num, ent.class_id, ent.commerce_id,
+	ent.imgurl, ent.bank_info_id, ent.create_time,
+	ent.creater, ent.update_time, ent.updater, ent.sys_user_id,  be.name as brand_name,
+	ent.enterprise_name, ent.addr,ent.build_enterpise,
+
+	b.id as bank_id, b.account as bank_account, b.addr as bank_addr, b.name as
+	bank_name,b.pay_account as bank_pay_account,b.webkit_account as bank_webkit_account,
+
+	com.id as com_id, com.biz_num as com_biz_num, com.biz_url as com_biz_url,
+	com.open_acount as com_open_acount, com.open_acount_url
+	as com_open_acount_url, com.tax_num as  com_tax_num, com.tax_url as
+	com_tax_url,bc.name as class_name,
+
+
+	u.id as user_id, u.user as user_user, u.account as user_account,
+	u.create_time as user_create_time, u.state as user_state, u.user_type
+	user_user_type, u.department_id as user_department_id, u.position_id as
+	user_position_id , u.phone_num
+	as user_phone_num
+	from t_biz_enterprise ent, t_sys_user u, t_biz_commerce com ,t_biz_bank b,t_biz_build_enterprise be,t_biz_build_class bc
+	
+
+
+	where ent.sys_user_id= u.id and ent.commerce_id=com.id and
+	ent.bank_info_id=b.id  and be.id = ent.build_enterpise and bc.id=ent.class_id
+	and ent.id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_enterprise
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseEntity">
+    insert into t_biz_enterprise ( principal, phone_num, 
+      class_id, commerce_id, imgurl, 
+      bank_info_id, create_time, creater, 
+      update_time, updater, sys_user_id, 
+      enterprise_name, brand_name,addr,build_enterpise)
+    values  #{principal,jdbcType=VARCHAR}, #{phone_num,jdbcType=VARCHAR}, 
+      #{class_id,jdbcType=BIGINT}, #{commerce_id,jdbcType=BIGINT}, #{imgurl,jdbcType=VARCHAR}, 
+      #{bank_info_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, #{creater,jdbcType=VARCHAR}, 
+      #{update_time,jdbcType=TIMESTAMP}, #{updater,jdbcType=BIGINT}, #{sys_user_id,jdbcType=BIGINT}, 
+      #{enterprise_name,jdbcType=VARCHAR}, #{brand_name,jdbcType=VARCHAR},#{addr,jdbcType=VARCHAR},#{build_enterpise,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseEntity">
+    insert into t_biz_enterprise
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+     
+      <if test="principal != null">
+        principal,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="commerce_id != null">
+        commerce_id,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="bank_info_id != null">
+        bank_info_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="sys_user_id != null">
+        sys_user_id,
+      </if>
+      <if test="enterprise_name != null">
+        enterprise_name,
+      </if>
+      <if test="brand_name != null">
+        brand_name,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+       <if test="build_enterpise != null">
+        build_enterpise,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     
+      <if test="principal != null">
+        #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="commerce_id != null">
+        #{commerce_id,jdbcType=BIGINT},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="bank_info_id != null">
+        #{bank_info_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="sys_user_id != null">
+        #{sys_user_id,jdbcType=BIGINT},
+      </if>
+      <if test="enterprise_name != null">
+        #{enterprise_name,jdbcType=VARCHAR},
+      </if>
+      <if test="brand_name != null">
+        #{brand_name,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        #{addr,jdbcType=VARCHAR},
+      </if>
+       <if test="build_enterpise != null">
+        #{build_enterpise,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseEntity">
+    update t_biz_enterprise
+    <set>
+      <if test="principal != null">
+        principal = #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="commerce_id != null">
+        commerce_id = #{commerce_id,jdbcType=BIGINT},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="bank_info_id != null">
+        bank_info_id = #{bank_info_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="sys_user_id != null">
+        sys_user_id = #{sys_user_id,jdbcType=BIGINT},
+      </if>
+      <if test="enterprise_name != null">
+        enterprise_name = #{enterprise_name,jdbcType=VARCHAR},
+      </if>
+      <if test="brand_name != null">
+        brand_name = #{brand_name,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+       <if test="addr != null">
+        build_enterpise = #{build_enterpise,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseEntity">
+    update t_biz_enterprise
+    set principal = #{principal,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      class_id = #{class_id,jdbcType=BIGINT},
+      commerce_id = #{commerce_id,jdbcType=BIGINT},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      bank_info_id = #{bank_info_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      sys_user_id = #{sys_user_id,jdbcType=BIGINT},
+      enterprise_name = #{enterprise_name,jdbcType=VARCHAR},
+      brand_name = #{brand_name,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      build_enterpise =#{build_enterpise,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getEnterpriseForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  
+     select 
+     ent.enterprise_name,
+     date_format(ent.create_time, '%Y-%m-%d %T') as  create_time,
+	 date_format(ent.update_time, '%Y-%m-%d %T') as update_time,
+     ent.id,  ent.principal,  ent.phone_num, u.account,u.state,
+     be.name as  brand_name,
+     bu.name as class_name
+      
+    from 
+     t_biz_enterprise ent
+      left join 
+     t_sys_user u on ent.sys_user_id= u.id 
+     left join t_biz_build_class bu on  bu.id=ent.class_id  
+     left join  t_biz_build_enterprise be on be.id= ent.build_enterpise 
+     where 1=1
+    
+    
+    <if test="param.user_name!=null and param.user_name!=''">
+    
+        and ent.enterprise_name like CONCAT('%',#{param.user_name},'%') 
+    
+    </if>
+    
+    <if test="param.account!=null and param.account!=''">
+     and  u.account like CONCAT('%',#{param.account},'%') 
+    
+    </if>
+    
+    
+     <if test="param.phone_num!=null and param.phone_num!=''">
+    and  ent.phone_num like CONCAT('%',#{param.phone_num},'%') 
+    
+    </if>
+    
+     <if test="param.class_id!=null and param.class_id!=''">
+    and  ent.class_id =#{param.class_id}
+    
+    </if>
+   
+     <if test="param.sort!=null">
+ 		order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	
+ 	 	 ent.${sort.field}  ${sort.dir}
+ 	
+ 	</foreach>
+ 	</if>
+   
+  
+  </select>
+  
+  <select id="getEnterpriseBrandName" resultMap="BaseResultMap">
+  select 
+  <include refid="Base_Column_List"></include>
+  from t_biz_enterprise
+  </select>
+  
+  <select id="getEnterpriseEntity" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  
+  
+  select 
+  <include refid="Base_Column_List"></include>
+  from t_biz_enterprise  where   sys_user_id=#{userId}
+  
+  </select>
+  <select id="getEnterpriseName" resultMap="BaseResultMap">
+  
+  select be.name as enterprise_name from  t_biz_enterprise where  be.id= ent.build_enterpise 
+  
+  </select>
+  
+  <select id="selectEntById" parameterType="java.lang.Long" resultType="java.util.Map">
+  
+    select * from  v_personal_info where ${where}=#{value} group by ${where}
+  
+  </select>
+  
+  <select id="getEnterpriseByBuildId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  
+  select 
+  <include refid="Base_Column_List"></include>
+  from t_biz_enterprise where build_enterpise=#{id}
+  
+  </select>
+  
+</mapper>

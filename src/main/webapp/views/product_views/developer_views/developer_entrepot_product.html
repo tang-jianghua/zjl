@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<div ng-controller="developerRepotProductCtrl">
+	<section class="well ">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">开发者仓库产品</div>
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="col-xs-1 control-label">行业</label>
+							<div class="col-sm-3">
+								<input id="ppcpIndustry" />
+							</div>
+
+							<label class="col-sm-1 control-label">品类</label>
+							<div class="col-sm-3">
+								<input id="category" placeholder="品类" style="width: 100%;" />
+							</div>
+
+							<label class="col-sm-1 control-label">品牌</label>
+							<div class="col-sm-3">
+								<input id="enterprise" placeholder="品牌" style="width: 100%;" />
+							</div>
+
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="control-label col-sm-1 ">标题</label>
+							<div class="col-sm-3">
+								<input id="partner" placeholder="标题"
+									ng-model="form.product_name" style="width: 100%" class="k-textbox" />
+							</div>
+							<!-- 
+                	 <label  class="col-sm-1 control-label">分类</label>
+		 			<div class="col-sm-3">
+		 				<input id="classify" placeholder="分类" style="width:100%;"/>
+		 			 </div>
+                
+	    	 	 	<label  class="col-sm-1 control-label">系列</label>
+		 			<div class="col-sm-3">
+		 				<input id="series" placeholder="系列" style="width:100%;"/>
+		 			 </div> -->
+
+						</div>
+					</div>
+
+					<div class="buttons-wrap">
+						<button class="k-button k-state-default" ng-click="search()">搜索</button>
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<hr class="towGreen">
+			</div>
+
+
+			<div kendo-grid="grid" k-options="mainGridOptions"></div>
+		</div>
+	</section>
+</div>
+
+

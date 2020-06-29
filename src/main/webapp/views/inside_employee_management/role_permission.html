@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+    <style>
+  #treeview .k-sprite {
+    background-image: url("http://demos.telerik.com/kendo-ui/content/web/treeview/coloricons-sprite.png");
+  }
+
+  .folder { background-position: 0 -16px; }
+  .html { background-position: 0 -48px; }
+</style>
+ <div  ng-controller="rolePermissionCtrl">
+ 
+ 
+              <div class="col-xs-3" style="margin-top: 40px;">
+              
+              
+              <div kendo-tree-list="dep_tree_list"  
+              k-data-bound="tree_data_bound"  
+              k-options="treelistOptions"
+              k-toolbar="'<button   class=\'k-button k-state-default\' ng-click=\'add()\'>新增</button>
+              <button class=\'k-button k-state-default\' ng-click=\'edit()\'>修改</button>
+              <button  class=\'k-button k-state-default\' ng-click=\'remove()\'>删除</button>
+              <button  class=\'k-button k-state-default\' ng-click=\'save()\'>保存</button>
+              <button  class=\'k-button k-state-default\' ng-click=\'cancelEdit()\'>取消</button>'"
+              k-selectable="true" >
+              </div>
+              
+            <!--   <div kendo-tree-list="dep_tree_list" k-data-bound="tree_data_bound" k-options="treelistOptions" 
+              k-toolbar="'<h3 style=\'width:70%;\'>部门列表</h3><button   class=\'k-button k-state-default\' ng-click=\'add()\'>新增</button>'">
+              
+              </div> -->
+              
+             
+            </div>
+            
+            <div class="col-xs-9">
+            
+             <div kendo-grid="grid"  k-options="RoleGridOptions" ></div>
+            
+            </div>
+           <div kendo-window="permission_win" k-title="'权限设置'"
+            k-width="300" k-height="910" k-visible="false" k-modal="true" k-close="permission_win_close">
+            
+            <div  style="height:900" id="permission_tree" kendo-tree-view="permission_tree" k-options="permission_options" ></div>
+             <div class="buttons-wrap">
+                    <button class="k-button k-state-default" ng-click="save()" >保存</button>
+                    
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,1158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="creater" jdbcType="BIGINT" property="creater" />
+    <result column="creater_type" jdbcType="INTEGER" property="creater_type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="limit_time" jdbcType="TIMESTAMP" property="limit_time" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="promotion_product_num" jdbcType="INTEGER" property="promotion_product_num" />
+    <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+    <result column="brand_id" jdbcType="VARCHAR" property="brand_id" />
+    <result column="class_id" jdbcType="VARCHAR" property="class_id" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name" />
+    <result column="partner_id" jdbcType="VARCHAR" property="partner_id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="imgurl1" jdbcType="VARCHAR" property="imgurl1" />
+    <result column="imgurl2" jdbcType="VARCHAR" property="imgurl2" />
+    <result column="imgurl3" jdbcType="VARCHAR" property="imgurl3" />
+    <result column="var1" jdbcType="INTEGER" property="var1" />
+    <result column="var2" jdbcType="INTEGER" property="var2" />
+    <result column="var3" jdbcType="VARCHAR" property="var3" />
+    <result column="var4" jdbcType="VARCHAR" property="var4" />
+    <result column="use_coupons_flag" jdbcType="BIT" property="use_coupons_flag" />
+    <result column="use_redbag_flag" jdbcType="BIT" property="use_redbag_flag" />
+    <result column="use_zhekou_flag" jdbcType="BIT" property="use_zhekou_flag" />
+    <result column="isAllProduct" jdbcType="INTEGER" property="isAllProduct" />
+    
+    <collection property="timeEntity" column="id" resultMap="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionSeckillTimeEntityMapper.BaseResultMap" columnPrefix="st_">
+  	</collection>
+  
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  
+  <resultMap id="BaseResultForStepPromotionMap" extends="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntityStepParam">
+    
+    <collection property="stepConditionEntityList" column="id" resultMap="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionStepConditionEntityMapper.BaseResultMap" columnPrefix="con_">
+  	</collection>
+  	
+  </resultMap>
+  
+    <resultMap id="BaseResultMapTime" type="com.mfangsoft.zhuangjialong.app.promotion.model.PromotionTimer">
+    <id column="time_id" jdbcType="BIGINT" property="time_id" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="abc" jdbcType="INTEGER" property="abc" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="iscurrent" jdbcType="TINYINT" property="iscurrent" />
+    <result column="pstart_time" jdbcType="TIME" property="pstart_time" />
+    <result column="pend_time" jdbcType="TIME" property="pend_time" />
+    
+    	<result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+   		 <result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+		<result column="principal" jdbcType="VARCHAR" property="principal" />
+		<result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+		
+    <collection property="product" ofType="com.mfangsoft.zhuangjialong.app.product.model.Product" columnPrefix="p_">
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+    <result column="time_id" jdbcType="BIGINT" property="time_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+  	<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+  	<result column="model" jdbcType="VARCHAR" property="model" />
+  	<result column="promotion_price" jdbcType="DOUBLE" property="promotion_price" />
+  	<result column="old_price" jdbcType="DOUBLE" property="old_price" />
+  	 <result column="promotion_num" jdbcType="INTEGER" property="promotion_num" />
+  	 <result column="sale_num" jdbcType="INTEGER" property="sale_num" />
+  	 <result column="note_id" jdbcType="BIGINT" property="note_id" />
+  	 <result column="note_state" jdbcType="INTEGER" property="note_state" />
+  	  <result column="note_count" jdbcType="INTEGER" property="note_count" />
+  	<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+  	<result column="state" jdbcType="INTEGER" property="state" />
+  	 <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  	  <result column="stock" jdbcType="BIGINT" property="stock" />
+  	  <result column="max_price" jdbcType="DOUBLE" property="max_price" />
+  	  <result column="min_price" jdbcType="DOUBLE" property="min_price" />
+  	  <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+  	  <result column="info" jdbcType="VARCHAR" property="info" />
+  	</collection>
+  
+  </resultMap>
+  
+
+  <resultMap id="BaseResultMapProduct" type="com.mfangsoft.zhuangjialong.app.product.model.Product" >
+<result column="pid" jdbcType="BIGINT" property="promotion_id" />
+    <result column="time_id" jdbcType="BIGINT" property="time_id" />
+	<result column="id" jdbcType="BIGINT" property="id" />
+ 	<result column="product_id" jdbcType="BIGINT" property="product_id" />
+  	<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+  	<result column="model" jdbcType="VARCHAR" property="model" />
+  	<result column="promotion_price" jdbcType="DOUBLE" property="promotion_price" />
+  	<result column="old_price" jdbcType="DOUBLE" property="old_price" />
+  	<result column="min_price" jdbcType="DOUBLE" property="min_price" />
+  	<result column="max_price" jdbcType="DOUBLE" property="max_price" />
+  	 <result column="promotion_num" jdbcType="INTEGER" property="promotion_num" />
+  	 <result column="sale_num" jdbcType="INTEGER" property="sale_num" />
+  	<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+  	<result column="note_id" jdbcType="BIGINT" property="note_id" />
+  	<result column="note_state" jdbcType="INTEGER" property="note_state" />
+  	<result column="note_count" jdbcType="INTEGER" property="note_count" />
+	<result column="state" jdbcType="INTEGER" property="state" />
+	 <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+	 <result column="stock" jdbcType="BIGINT" property="stock" />
+	 <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+	 <result column="bili" jdbcType="INTEGER" property="bili" />
+	 <result column="pstart_time" jdbcType="TIME" property="strtime" />
+	 <result column="title" jdbcType="VARCHAR" property="title" />
+	 <result column="info" jdbcType="VARCHAR" property="info" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapBrandAndProduct" type="com.mfangsoft.zhuangjialong.app.promotion.model.PromotionTimer">
+  	<id column="time_id" jdbcType="BIGINT" property="time_id" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+  <collection property="brandProduct" ofType="com.mfangsoft.zhuangjialong.integration.promotion.model.BrandProduct">
+    <id column="brand_id" jdbcType="BIGINT" property="brand_id" />
+   	<result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+	<result column="principal" jdbcType="VARCHAR" property="principal" />
+	<result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+	<result column="time_id" jdbcType="BIGINT" property="time_id" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+		
+    <collection property="product" ofType="com.mfangsoft.zhuangjialong.app.product.model.Product" columnPrefix="p_">
+    <id column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+  	<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+  	<result column="model" jdbcType="VARCHAR" property="model" />
+  	<result column="promotion_price" jdbcType="DOUBLE" property="promotion_price" />
+  	<result column="old_price" jdbcType="DOUBLE" property="old_price" />
+  	 <result column="promotion_num" jdbcType="INTEGER" property="promotion_num" />
+  	 <result column="sale_num" jdbcType="INTEGER" property="sale_num" />
+  	 <result column="note_id" jdbcType="BIGINT" property="note_id" />
+  	 <result column="note_state" jdbcType="INTEGER" property="note_state" />
+  	  <result column="note_count" jdbcType="INTEGER" property="note_count" />
+  	<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+  	<result column="state" jdbcType="INTEGER" property="state" />
+  	 <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  	  <result column="stock" jdbcType="BIGINT" property="stock" />
+  	  <result column="max_price" jdbcType="DOUBLE" property="max_price" />
+  	  <result column="min_price" jdbcType="DOUBLE" property="min_price" />
+  	  <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+  	  <result column="info" jdbcType="VARCHAR" property="info" />
+  	</collection>
+  	</collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, title, type, creater, creater_type, create_time, update_time, limit_time, start_time, 
+    end_time, state, promotion_product_num, person_product_num, brand_id, class_id, partner_id, 
+    region_code, imgurl1, imgurl2, imgurl3, var1, var2, var3, var4, use_coupons_flag, use_redbag_flag, use_zhekou_flag, isAllProduct
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_promotion
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectPromotionByPrimaryKey" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntityStepParam">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_promotion
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectPromotionBrandInfoById" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.BrandProduct">
+    SELECT b.id as brand_id, e.name as brand_name, c.name as class_name, e.imgurl
+
+FROM t_biz_promotion p 
+left join t_biz_brand b on find_in_set(b.id, p.brand_id) &gt; 0
+LEFT JOIN t_biz_partner pp ON pp.id = b.citypartner_id
+left join t_biz_build_enterprise e on e.id = b.enterprise_id
+left join t_biz_build_class c on c.id = e.class_id
+
+where p.id = #{id,jdbcType=BIGINT} AND b.state != 0 AND FIND_IN_SET(#{region_code,jdbcType=VARCHAR}, pp.region_id)
+  </select>
+  
+   <update id="updateBrandIdByPrimaryKey" >
+    update t_biz_promotion
+    set brand_id = #{brand_id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKeyForStep" parameterType="java.lang.Long" resultType="java.util.Map">
+    select 
+    id, title, content, type, creater, creater_type, DATE_FORMAT(create_time,'%Y-%m-%d %T') AS create_time, DATE_FORMAT(update_time,'%Y-%m-%d %T') AS update_time, 
+    DATE_FORMAT(limit_time,'%Y-%m-%d') AS limit_time, DATE_FORMAT(start_time,'%Y-%m-%d') AS start_time, 
+    DATE_FORMAT(end_time,'%Y-%m-%d') AS end_time, state, promotion_product_num, person_product_num, brand_id, class_id, partner_id, 
+    region_code, imgurl1, imgurl2, imgurl3, var1, var2, var3, var4, use_coupons_flag, use_redbag_flag, use_zhekou_flag, isAllProduct,
+    IFNULL(FIND_IN_SET(#{brand_id,jdbcType=BIGINT}, brand_id),0) AS has_registered_flag
+    from t_biz_promotion
+    where id = #{id,jdbcType=BIGINT}
+    
+  </select>
+  <select id="selectAll" resultMap="ResultMapWithBLOBs">
+  SELECT <include refid="Base_Column_List" />
+    FROM t_biz_promotion  WHERE end_time &gt; NOW() and state = 1 and type = 0
+  </select>
+  
+  <select id="querypromotionforfirstpage" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntityStepParam">
+  SELECT p.id, p.title, p.type, p.var3, p.brand_id
+FROM t_biz_promotion p
+LEFT JOIN t_biz_partner bp ON FIND_IN_SET(bp.id, p.partner_id) > 0
+
+WHERE p.type != 0 AND p.state = 1 AND FIND_IN_SET(#{region_code,jdbcType=VARCHAR}, bp.region_id)
+AND p.start_time &lt; NOW() AND p.end_time &gt; NOW()
+GROUP BY p.id
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_promotion
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+   <select id="selectpromotionproductforcart" resultMap="BaseResultMapProduct">
+      SELECT pid,time_id,brand_id,product_id,price AS promotion_price,stock
+		FROM v_promotion_product_by_regioncode vp 
+		WHERE FIND_IN_SET('#{region_code,jdbcType=VARCHAR}' , vp.region_id) 
+  </select>
+
+   <select id="selectPromotionProductAndPriceForCart" resultMap="BaseResultMapProduct">
+
+SELECT vp.pid, vp.time_id, vp.product_id, vp.price AS promotion_price, vp.stock, IF(temp.sum_num IS NULL ,vp.person_product_num, IF(temp.sum_num &lt; vp.person_product_num,(vp.person_product_num-temp.sum_num),0)) AS person_product_num
+FROM  v_promotion_product_by_regioncode vp     
+LEFT JOIN (SELECT o.create_time,opp.product_id,opp.type_value,SUM(opp.product_num) AS sum_num
+
+FROM t_biz_order o
+LEFT JOIN t_biz_order_state_relation osr ON osr.order_id = o.id AND osr.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE order_id = osr.order_id)
+, t_biz_order_product opp
+
+WHERE o.customer_id = #{customer_id,jdbcType=BIGINT} AND opp.order_id = o.id AND opp.buy_type = 1 AND osr.order_state_code != 4000 AND osr.order_state_code != 5000
+
+GROUP BY opp.type_value, opp.product_id ) temp ON  temp.type_value = CONCAT(vp.pid,CONCAT('-',vp.time_id)) AND temp.product_id = vp.product_id 
+
+WHERE FIND_IN_SET(#{region_code,jdbcType=VARCHAR} , vp.region_id) AND (temp.sum_num IS NULL OR temp.sum_num &lt; vp.person_product_num)
+
+GROUP BY vp.product_id
+
+  </select> 
+  
+  <select id="selectManPromotionForCartOneProduct" resultMap="BaseResultForStepPromotionMap">
+      SELECT p.* , sc.id as con_id, sc.promotion_id as con_promotion_id, sc.value1 as con_value1, sc.value2 as con_value2, sc.discount as con_discount
+      
+FROM  t_biz_promotion p 
+LEFT JOIN t_biz_promotion_step_product sp ON sp.promotion_id = p.id
+LEFT JOIN t_biz_promotion_step_condition sc ON sc.promotion_id = p.id
+,t_biz_partner bp
+
+WHERE p.type = #{type,jdbcType=INTEGER} -- 1 2 3 
+AND FIND_IN_SET(#{region_code,jdbcType=VARCHAR} , bp.region_id)
+AND FIND_IN_SET(#{brand_id,jdbcType=BIGINT}, p.brand_id)
+AND sp.product_id = #{product_id,jdbcType=BIGINT}
+
+AND p.state = 1 AND sp.state = 1
+AND p.start_time &lt; NOW() AND p.end_time &gt; NOW()
+AND FIND_IN_SET(bp.id, p.partner_id) 
+  </select>
+  
+  <select id="selectManPromotionByPrimaryId" resultMap="BaseResultForStepPromotionMap">
+      SELECT p.* , sc.id as con_id, sc.promotion_id as con_promotion_id, sc.value1 as con_value1, sc.value2 as con_value2, sc.discount as con_discount
+      
+FROM  t_biz_promotion p 
+LEFT JOIN t_biz_promotion_step_condition sc ON sc.promotion_id = p.id
+
+WHERE p.id = #{id,jdbcType=BIGINT} 
+AND p.state = 1
+AND p.start_time &lt; NOW() AND p.end_time &gt; NOW()
+  </select>
+  
+  <select id="selectPromotionProductAndPriceForOrder" resultType="java.lang.Integer">
+   	SELECT (limit_num - sell_num) AS COUNT FROM t_biz_promotion_seckill_product WHERE promotion_id = #{pid,jdbcType=BIGINT} AND time_id = #{time_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT}
+  </select> 
+  
+  <select id="getSencondKillPromotionForPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  SELECT temp.*, 0 AS brand_id_count FROM
+ -- 0 未开始  2 已结束  1 进行中  IFNULL((LENGTH(temp.brand_id_group)-LENGTH(REPLACE(temp.brand_id_group,',','')) +1),0) AS brand_id_count
+  (SELECT p.id, p.type, p.title, date_format(p.create_time,'%Y-%m-%d %T') create_time, date_format(p.start_time,'%Y-%m-%d') start_time, date_format(p.end_time,'%Y-%m-%d') end_time, 
+IF(p.start_time &gt; NOW(),0,IF(p.end_time &lt; NOW(),2,1)) state_t, p.state,
+  GROUP_CONCAT(st.brand_id) AS brand_id_group
+  
+	FROM t_biz_promotion p 
+	LEFT JOIN t_biz_partner pa ON FIND_IN_SET(pa.id , p.partner_id) >0 
+	LEFT JOIN t_biz_promotion_seckill_time st ON p.id = st.pid
+	
+	WHERE p.type = 0 and p.state != 2 
+	
+	<if test="param.partner_id!=null and param.partner_id!=''">
+		AND FIND_IN_SET(${param.partner_id}, p.partner_id) > 0
+	</if>
+	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+		AND ( pa.enterprise_id = ${param.enterprise_id})
+	</if>
+	
+	<if test="param.title!=null and param.title!=''">
+		and p.title LIKE <![CDATA['%${param.title}%']]>
+	</if>
+	<if test="param.state!=null and param.state =='0'.toString()">
+		and p.start_time &gt; NOW()
+	</if>
+	<if test="param.state!=null and param.state =='1'.toString()">
+		and p.start_time &lt; NOW() and p.end_time &gt; NOW()
+	</if>
+	<if test="param.state!=null and param.state =='2'.toString()">
+		and p.end_time &lt; NOW()
+	</if>
+	<if test="param.create_time1!=null and param.create_time1!='' and param.create_time2!=null and param.create_time2!=''">
+		and date_format(p.create_time,'%Y-%m-%d') &gt;= date_format('${param.create_time1}','%Y-%m-%d') and date_format(p.create_time,'%Y-%m-%d') &lt;= date_format('${param.create_time2}','%Y-%m-%d') 
+	</if>
+	<if test="param.start_time1!=null and param.start_time1!='' and param.start_time2!=null and param.start_time2!=''">
+		and date_format(p.start_time,'%Y-%m-%d') &gt;= date_format('${param.start_time1}','%Y-%m-%d') and date_format(p.start_time,'%Y-%m-%d') &lt;= date_format('${param.start_time2}','%Y-%m-%d')
+	</if>
+GROUP BY p.id
+	order by p.end_time DESC
+	) temp	
+  </select>
+  
+   <select id="selectSencondKillPromotionByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+   
+SELECT p.*, temp.class_name,st.id as st_id, st.pstart_time AS st_pstart_time, st.pend_time AS st_pend_time,promotion_brand_num AS st_promotion_brand_num, 
+IFNULL((LENGTH(st.brand_id)-LENGTH(REPLACE(st.brand_id,',','')) +1),0) AS st_brand_id_count,
+st.brand_id AS st_brand_id,
+IF(FIND_IN_SET(#{brand_id,jdbcType=BIGINT}, st.brand_id) >0 , 1, 0) as st_has_registered_flag
+FROM t_biz_promotion p
+LEFT JOIN t_biz_promotion_seckill_time st ON p.id = st.pid,
+(SELECT GROUP_CONCAT(c.name SEPARATOR '/') class_name FROM t_biz_promotion bp,t_biz_build_class c WHERE bp.id = #{id,jdbcType=BIGINT} AND FIND_IN_SET(c.id, bp.class_id)) temp 
+WHERE p.id = #{id,jdbcType=BIGINT}
+
+  </select>
+  
+   <select id="getbrandpromotionList1ByPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+		SELECT temp.* FROM
+(
+ SELECT p.id, p.title, p.type, DATE_FORMAT(p.create_time,'%Y-%m-%d') create_time, DATE_FORMAT(p.start_time,'%Y-%m-%d') start_time, DATE_FORMAT(p.end_time,'%Y-%m-%d') end_time, 
+
+IF(p.end_time &lt; NOW(),2,IF(p.start_time &gt; NOW(),0,1))  AS state, -- 0：未开始 1：进行中 2：已结束
+0 AS brand_id_count, 
+IF(p.type = 0,GROUP_CONCAT(t.brand_id), p.brand_id) AS brand_ids
+
+FROM  t_biz_promotion p 
+LEFT JOIN t_biz_promotion_seckill_time t ON t.pid = p.id
+
+WHERE p.limit_time &lt; NOW() 
+
+	<if test="param.type!=null and param.type!=''">
+		and p.type = '${param.type}'
+	</if>
+	<if test="param.title!=null and param.title!=''">
+		and p.title LIKE '%${param.title}%'
+	</if>
+	<if test="param.state!=null and param.state == '0'.toString()">
+		and DATE_FORMAT(p.end_time,'%Y-%m-%d') &lt; DATE_FORMAT(NOW(),'%Y-%m-%d')
+	</if>
+	<if test="param.state!=null and param.state == '1'.toString()">
+		and DATE_FORMAT(p.end_time,'%Y-%m-%d') &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d')
+	</if>
+	<if test="param.start_time!=null and param.start_time!=''">
+		and DATE_FORMAT(p.start_time,'%Y-%m-%d') &lt; DATE_FORMAT( ${param.start_time} ,'%Y-%m-%d')
+	</if>
+	<if test="param.end_time!=null and param.end_time!=''">
+		and DATE_FORMAT(p.end_time,'%Y-%m-%d') &gt; DATE_FORMAT( ${param.end_time} ,'%Y-%m-%d') 
+	</if>
+	GROUP BY p.id
+	order by p.end_time DESC
+	) temp
+WHERE 1=1 
+
+	<if test="param.brand_id!=null and param.brand_id!=''">
+		and FIND_IN_SET(${param.brand_id}, temp.brand_ids) &gt; 0
+	</if>
+  </select>
+  
+  <select id="getbrandpromotionList2ByPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  SELECT t.id, t.title, t.type,t.limit_time,t.create_time,t.start_time,t.end_time,t.state,t.register_num,t.pass_num FROM (
+  SELECT p.id, p.title, p.type, DATE_FORMAT(p.limit_time,'%Y-%m-%d %T') limit_time, DATE_FORMAT(p.create_time,'%Y-%m-%d %T') create_time, DATE_FORMAT(p.start_time,'%Y-%m-%d') start_time, 
+DATE_FORMAT(p.end_time,'%Y-%m-%d') end_time, 
+IF(p.type = 0, IF(COUNT(t.id) &gt; 0, 1, 0), IF(FIND_IN_SET(${param.brand_id}, p.brand_id) &gt; 0, 1, 0)) AS state, -- 0未报名 1 已报名
+IFNULL(IF(p.type = 0,temp.num, temp2.num),0) AS register_num,
+IFNULL(IF(p.type = 0,IFNULL(temp1.num,0), temp3.num),0) AS pass_num
+
+	FROM t_biz_brand b, t_biz_promotion p 
+	LEFT JOIN t_biz_promotion_seckill_time t ON t.pid = p.id AND FIND_IN_SET(${param.brand_id}, t.brand_id) &gt; 0
+	LEFT JOIN (SELECT promotion_id, COUNT(product_id) AS num FROM t_biz_promotion_seckill_product WHERE ${param.brand_id} = brand_id GROUP BY promotion_id) temp ON temp.promotion_id = p.id 
+	LEFT JOIN (SELECT promotion_id, COUNT(product_id) AS num FROM t_biz_promotion_seckill_product WHERE ${param.brand_id} = brand_id AND state = 1 GROUP BY promotion_id) temp1 ON temp1.promotion_id = p.id 
+	LEFT JOIN (SELECT promotion_id, COUNT(product_id) AS num FROM t_biz_promotion_step_product sp WHERE sp.brand_id = ${param.brand_id} GROUP BY promotion_id) temp2 ON temp2.promotion_id = p.id
+	LEFT JOIN (SELECT promotion_id, COUNT(product_id) AS num FROM t_biz_promotion_step_product sp WHERE sp.brand_id = ${param.brand_id} AND sp.state = 1 GROUP BY promotion_id) temp3 ON temp3.promotion_id = p.id
+	
+	WHERE 
+	-- p.type = 0 AND 
+	b.id = ${param.brand_id} AND 
+	FIND_IN_SET(b.citypartner_id , p.partner_id) 
+	AND FIND_IN_SET(${param.class_id}, p.class_id) 
+	AND p.limit_time &gt; NOW() 
+	
+	<if test="param.type!=null and param.type!=''">
+		and p.type = '${param.type}'
+	</if>
+	
+	GROUP BY p.id
+) t
+WHERE 1=1 
+
+	<if test="param.title!=null and param.title!=''">
+		and t.title LIKE '%${param.title}%'
+	</if>
+	<if test="param.state!=null and param.state!=''">
+		and t.state = ${param.state}
+	</if>
+  </select>
+  
+   <select id="selectpromotionTimeForAppByRegionCode" parameterType="java.lang.String" resultMap="BaseResultMapTime">
+
+SELECT vp.start_time,vp.end_time,(t.pend_time - CURTIME()) AS abc, p.id AS pid, p.imgurl1 AS imgurl ,t.id AS time_id, t.pstart_time, t.pend_time ,
+IF(vp.start_time &lt; NOW() &amp;&amp; vp.end_time &gt; NOW() &amp;&amp; t.pstart_time &lt; NOW() &amp;&amp; t.pend_time &gt; NOW(),TRUE,FALSE) AS iscurrent,
+bp.id AS p_product_id, bp.product_title AS p_product_name, CONCAT(ps.color, ' ',ps.standard, ' ',ps.model) AS p_model ,pp.price AS p_promotion_price , pp.limit_num AS p_promotion_num, pp.sell_num AS p_sale_num ,ps.price AS p_old_price, img.imgurl AS p_image_url
+
+FROM t_biz_promotion p, v_promotion_by_regioncode vp, t_biz_promotion_seckill_time t,t_biz_promotion_seckill_product pp
+LEFT JOIN t_biz_brand b ON b.id = pp.brand_id
+LEFT JOIN t_biz_brand_product bp ON bp.id = pp.product_id
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = pp.product_id AND ps.id = (SELECT MIN(id) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id)
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = pp.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+
+WHERE p.type = 0 and FIND_IN_SET(  '${region_code}' , vp.region_id) AND vp.partner_id = b.citypartner_id AND 
+
+p.id = vp.pid AND t.id = vp.time_id AND pp.state = 1 AND pp.promotion_id = vp.pid AND pp.time_id = vp.time_id and pp.state in (1,3,5)
+
+AND bp.state = 1
+and b.state !=0
+AND ps.data_flag != 'del'
+AND (vp.start_time &gt; NOW() || (vp.start_time &lt; NOW() &amp;&amp; vp.end_time &gt; NOW())) -- 将来天的 或者当天开始或者未开始的
+ORDER BY vp.start_time ASC, t.pstart_time ASC, bp.create_time DESC
+
+  </select>
+  
+    <select id="selectpromotionTime" parameterType="java.lang.Long" resultMap="BaseResultMapTime">
+      SELECT p.id AS pid, p.imgurl1 AS imgurl ,t.id AS time_id, t.pstart_time, t.pend_time ,IF(t.pstart_time &lt; NOW() &amp;&amp; t.pend_time &gt; NOW(),TRUE,FALSE) as iscurrent, p.start_time
+
+FROM t_biz_promotion p
+LEFT JOIN t_biz_promotion_seckill_time t ON t.pid = p.id AND t.pstart_time IS NOT NULL AND t.pend_time IS NOT NULL
+
+WHERE p.id = #{pid,jdbcType=BIGINT}  AND  p.type = 0 AND p.state = 1 AND p.end_time &gt; NOW()  AND t.pid = p.id 
+
+ORDER BY t.pstart_time
+  </select>
+  
+   <select id="selectpromotionProductForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultMap="BaseResultMapProduct">
+
+SELECT n.id AS note_id ,IF(n.id IS NULL,0,1) AS note_state,bp.product_title AS product_name, CONCAT(ps.color, ' ',ps.standard, ' ',ps.model) AS model ,
+ pp.product_id AS product_id, pp.title, pp.person_product_num, pp.price AS promotion_price , IF(pp.limit_num = 0,0,FLOOR((IF(pp.sell_num &lt; pp.sell_num_1,pp.sell_num_1,pp.sell_num)/pp.limit_num)*100)) AS bili, pp.limit_num as promotion_num, if(pp.sell_num &lt; pp.sell_num_1, pp.sell_num_1, pp.sell_num) as sale_num,
+ ps.price AS old_price, img.imgurl AS image_url,  IF(temp.note_count IS NULL || temp.note_count &lt; pp.note_count, pp.note_count,temp.note_count) AS note_count, t.pstart_time
+
+FROM t_biz_promotion p,
+t_biz_promotion_seckill_time t,
+v_promotion_by_regioncode vp ,
+t_biz_promotion_seckill_product pp 
+LEFT JOIN t_biz_brand b ON b.id = pp.brand_id
+LEFT JOIN t_biz_brand_product bp ON bp.id = pp.product_id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = pp.product_id AND ps.id = (SELECT MIN(id) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id)
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = pp.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN (SELECT pid,time_id,product_id,COUNT(product_id) AS note_count FROM t_biz_promotion_note GROUP BY pid,time_id,product_id) temp ON temp.pid = pp.promotion_id AND temp.time_id = pp.time_id AND temp.product_id = pp.product_id
+LEFT JOIN t_biz_promotion_note n ON n.pid =  ${param.pid} AND n.time_id = ${param.time_id} AND customer_id = ${param.customer_id} AND n.product_id = pp.product_id and n.isnoted = 0
+
+WHERE  p.id = ${param.pid} AND p.type = 0 AND p.state = 1  
+AND t.id = ${param.time_id} AND t.pid = p.id
+AND pp.time_id = t.id AND pp.promotion_id = t.pid AND pp.state in (1,3,5)
+AND FIND_IN_SET('${param.region_code}' , vp.region_id)
+AND vp.pid = pp.promotion_id AND vp.time_id = pp.time_id 
+AND b.citypartner_id = vp.partner_id 
+AND bp.state = 1
+AND b.state != 0
+AND ps.data_flag != 'del'
+ORDER BY t.pstart_time 
+
+  </select>
+  
+  <select id="selectpromotionProductFor2Page" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultMap="BaseResultMapProduct">
+   
+ SELECT 0 AS note_state, bp.product_title AS product_name, CONCAT(ps.color, ' ',ps.standard, ' ',ps.model) AS model ,
+ pp.product_id AS product_id, pp.title, pp.person_product_num, pp.price AS promotion_price , IF(pp.limit_num = 0,0,FLOOR((IF(pp.sell_num &lt; pp.sell_num_1,pp.sell_num_1,pp.sell_num)/pp.limit_num)*100)) AS bili, pp.limit_num as promotion_num, if(pp.sell_num &lt; pp.sell_num_1, pp.sell_num_1, pp.sell_num) as sale_num,
+ ps.price AS old_price, img.imgurl AS image_url,  IF(temp.note_count IS NULL || temp.note_count &lt; pp.note_count, pp.note_count,temp.note_count) AS note_count, t.pstart_time
+
+FROM t_biz_promotion p,
+t_biz_promotion_seckill_time t,
+v_promotion_by_regioncode vp ,
+t_biz_promotion_seckill_product pp 
+LEFT JOIN t_biz_brand b ON b.id = pp.brand_id
+LEFT JOIN t_biz_brand_product bp ON bp.id = pp.product_id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = pp.product_id AND ps.id = (SELECT MIN(id) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id)
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = pp.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN (SELECT pid,time_id,product_id,COUNT(product_id) AS note_count FROM t_biz_promotion_note GROUP BY pid,time_id,product_id) temp ON temp.pid = pp.promotion_id AND temp.time_id = pp.time_id AND temp.product_id = pp.product_id
+
+WHERE  p.id = ${param.pid} AND p.type = 0 AND p.state = 1  
+AND t.id = ${param.time_id} AND t.pid = p.id
+AND pp.time_id = t.id AND pp.promotion_id = t.pid AND pp.state in (1,3,5)
+AND FIND_IN_SET('${param.region_code}' , vp.region_id)
+AND vp.pid = pp.promotion_id AND vp.time_id = pp.time_id 
+AND b.citypartner_id = vp.partner_id 
+AND bp.state = 1
+AND b.state != 0
+AND ps.data_flag != 'del'
+ORDER BY t.pstart_time 
+
+  </select>
+  
+  <select id="selectNoteProductByCustomerId" parameterType="java.lang.Long" resultMap="BaseResultMapTime">
+     SELECT t.pstart_time , n.id as p_note_id ,IF(temp.note_count IS NULL || temp.note_count &lt; pp.note_count, pp.note_count,temp.note_count) as p_note_count, 
+     n.pid as p_promotion_id, n.time_id as p_time_id, 
+     n.product_id as p_product_id, bp.product_title AS p_product_name, 
+     CONCAT(ps.color, ' ',ps.standard, ' ',ps.model) AS p_model ,
+pp.price AS p_promotion_price , pp.limit_num AS p_promotion_num, 
+pp.sell_num AS p_sale_num,
+ ps.price AS p_old_price, img.imgurl AS p_image_url
+
+FROM t_biz_promotion_note n
+LEFT JOIN (SELECT pid,time_id,product_id,COUNT(product_id) AS note_count FROM t_biz_promotion_note GROUP BY pid,time_id,product_id) temp ON temp.pid = n.pid AND temp.time_id = n.time_id AND temp.product_id = n.product_id
+, t_biz_promotion p , t_biz_promotion_seckill_time t,t_biz_promotion_seckill_product pp 
+LEFT JOIN t_biz_brand_product bp ON bp.id = pp.product_id 
+LEFT JOIN t_biz_brand b ON b.id = bp.brand_id
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = pp.product_id AND ps.id = (SELECT MIN(id) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id)
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = pp.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+
+WHERE n.customer_id = #{customer_id,jdbcType=BIGINT} AND 
+ n.isnoted = 0 and
+n.pid = p.id AND p.type = 0 AND p.state = 1 AND  
+
+n.time_id = t.id AND t.pstart_time &gt; NOW() AND DATE_FORMAT(t.pstart_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND 
+
+pp.promotion_id = n.pid AND pp.time_id = n.time_id AND pp.product_id = n.product_id AND pp.state = 1 AND
+bp.state = 1 and b.state != 0
+ORDER BY t.pstart_time
+  </select>
+  
+  
+  <select id="selectpromotionProductForBrandByPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+
+SELECT 
+pp.promotion_id AS pid, pp.time_id AS time_id,
+bp.id AS product_id, bp.product_title AS product_name,IF(AVG(e.quality) IS NULL, 5, round(AVG(e.quality),2)) AS quality, IF(AVG(e.service) IS NULL, 5, round(AVG(e.service),2)) AS service,
+ pp.price AS promotion_price ,pp.title, pp.person_product_num, pp.limit_num AS promotion_num, pp.sell_num, temp.stock, temp2.COLLECTION_COUNT,
+MIN(ps.price) AS min_price , MAX(ps2.price) AS max_price, img.imgurl AS image_url
+
+FROM  t_biz_brand_product bp 
+LEFT JOIN t_biz_promotion_seckill_product pp ON pp.promotion_id = ${param.pid} AND pp.time_id = ${param.time_id} AND pp.product_id = bp.id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = bp.id AND ps.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id) 
+LEFT JOIN t_biz_brand_prod_salesattr ps2 ON ps2.product_id = bp.id AND ps2.price = (SELECT MAX(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps2.product_id) 
+LEFT JOIN (SELECT product_id,SUM(stock) AS stock FROM t_biz_brand_prod_salesattr GROUP BY product_id) temp ON temp.product_id = bp.id
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = bp.id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN t_biz_evaluation e ON e.product_id = bp.id 
+LEFT JOIN v_prod_cl_se vs ON vs.product_id = bp.id
+LEFT JOIN (SELECT product_id, COUNT(customer_id) as COLLECTION_COUNT
+ FROM t_app_customer_collection cp 
+WHERE product_id IS NOT NULL
+ GROUP BY product_id) temp2 on pp.product_id = temp2.product_id 
+
+WHERE bp.brand_id = ${param.brand_id} AND bp.state = 1 
+AND ps.data_flag != 'del' AND ps2.data_flag != 'del' AND ps.id IS NOT NULL AND ps2.id IS NOT NULL
+
+	<if test="param.existProductList != null">
+				AND bp.id NOT IN 
+				<foreach collection="param.existProductList" item="item" open="(" separator="," close=")">
+					${item}
+				</foreach>
+	</if>
+	
+	<if test="param.product_id!=null and param.product_id!=''">
+		and bp.id = ${param.product_id}
+	</if>
+	
+	<if test="param.title!=null and param.title!=''">
+		and bp.product_title LIKE '%${param.title}%'
+	</if>
+	<if test="param.class_name!=null and param.class_name!=''">
+		AND firstPinyin(vs.class_name) = '${param.class_name}' || vs.class_name LIKE '%${param.class_name}%'
+	</if>
+	<if test="param.series_name!=null and param.series_name!=''">
+		AND firstPinyin(vs.series_name) = '${param.series_name}' || vs.series_name LIKE '%${param.series_name}%'
+	</if>
+GROUP BY bp.id
+  </select>
+  
+   <select id="selectUnioPromotionProductList" parameterType="java.lang.Long" resultType="java.lang.Long">
+  SELECT * FROM 
+(
+  SELECT DISTINCT(up.product_id) as product_id
+
+FROM t_biz_unionpromotion u
+ 
+LEFT JOIN t_biz_unionpro_product up ON up.promotion_id = u.id ,t_biz_promotion p 
+
+WHERE p.id = ${pid} and u.onOffFlag is true AND (
+(u.start_time &lt;= DATE_FORMAT(p.start_time, '%Y-%m-%d') AND u.end_time &gt;= DATE_FORMAT(p.end_time, '%Y-%m-%d')) || 
+(u.start_time &gt;= DATE_FORMAT(p.start_time, '%Y-%m-%d') AND u.start_time &lt;= DATE_FORMAT(p.end_time, '%Y-%m-%d')) || 
+(u.end_time &gt;= DATE_FORMAT(p.start_time, '%Y-%m-%d') AND u.end_time &lt;= DATE_FORMAT(p.end_time, '%Y-%m-%d')))
+  ) temp
+WHERE temp.product_id IS NOT NULL
+    </select>
+    
+   <select id="selectProductOfOnepromotionForBrandByPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+
+SELECT 
+pp.promotion_id AS pid, pp.time_id AS time_id,st.pstart_time, st.pend_time,
+bp.id AS product_id, bp.product_title AS product_name, pp.price AS promotion_price, (pp.limit_num-pp.sell_num) AS promotion_num, pp.state,
+ps.price AS min_price , ps2.price AS max_price, img.imgurl AS image_url, DATE_FORMAT(pp.update_time,'%Y-%m-%d %T') AS update_time 
+
+FROM  t_biz_promotion_seckill_product pp
+LEFT JOIN  t_biz_brand_product bp  ON  pp.product_id = bp.id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = bp.id AND ps.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id) 
+LEFT JOIN t_biz_brand_prod_salesattr ps2 ON ps2.product_id = bp.id AND ps2.price = (SELECT MAX(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps2.product_id) 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = bp.id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN t_biz_promotion_seckill_time st ON st.id = pp.time_id 
+
+WHERE pp.promotion_id = ${param.pid} AND pp.brand_id = ${param.brand_id} AND bp.state = 1 
+and pp.state != 4
+GROUP BY pp.time_id,pp.product_id
+  </select>
+  
+  <select id="selectBrandListOfOnepromotionForPlatform" resultMap="BaseResultMapTime">
+  
+  SELECT  b.id AS brand_id,e.name AS brand_name,b.principal, b.phone_num
+
+FROM  t_biz_promotion_seckill_time t
+LEFT JOIN t_biz_brand b ON FIND_IN_SET(b.id, t.brand_id) &gt; 0
+LEFT JOIN t_biz_build_enterprise e ON e.id = b.enterprise_id
+WHERE t.pid = #{pid} AND t.brand_id IS NOT NULL
+GROUP BY b.id
+  </select>
+  
+  <select id="selectProductOfOnepromotionForPlatform" resultMap="BaseResultMapBrandAndProduct">
+SELECT pp.promotion_id AS pid, pp.time_id AS time_id,
+b.id AS brand_id,e.name AS brand_name,b.principal, b.phone_num,
+bp.id AS p_product_id, bp.product_title AS p_product_name, pp.price AS p_promotion_price,pp.limit_num as p_sale_num, (pp.limit_num-pp.sell_num) AS p_promotion_num, pp.person_product_num AS p_person_product_num,
+ pp.state AS p_state, pp.info AS p_info,
+ps.price AS p_min_price , ps2.price AS p_max_price, img.imgurl AS p_image_url, pp.update_time AS p_update_time, SUM(ps3.stock) AS p_stock
+
+FROM  t_biz_promotion_seckill_product pp
+LEFT JOIN  t_biz_brand_product bp  ON  pp.product_id = bp.id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = bp.id AND ps.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id) 
+LEFT JOIN t_biz_brand_prod_salesattr ps2 ON ps2.product_id = bp.id AND ps2.price = (SELECT MAX(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps2.product_id) 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = bp.id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN t_biz_brand_prod_salesattr ps3 ON ps3.product_id = pp.product_id
+LEFT JOIN t_biz_brand b ON b.id = pp.brand_id
+LEFT JOIN t_biz_build_enterprise e ON e.id = b.enterprise_id
+WHERE pp.promotion_id = #{pid} AND pp.time_id = #{time_id}  AND bp.state = 1  
+
+	<if test="brand_id!=null and brand_id!=''">
+		AND pp.brand_id = #{brand_id}
+	</if>
+	
+	<if test="stateList!=null and stateList!=''">
+		AND pp.state in 
+		<foreach collection="stateList" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>
+	</if>
+	
+GROUP BY bp.id,ps3.product_id 
+  </select>
+  
+  <select id="checkTotalProductSumconditionForCustomer"  resultType="java.lang.Boolean">
+   SELECT IF(IF(SUM(opp.product_num) IS NULL, 0, SUM(opp.product_num)) &gt; p.promotion_product_num ,FALSE,TRUE) AS canbuy
+
+FROM t_biz_order_product opp ,t_biz_promotion p 
+
+WHERE opp.buy_type = 1 AND opp.type_value = CONCAT('#{pid}',CONCAT('-','#{time_id}')) AND  opp.product_id = #{product_id}
+
+AND p.id = #{pid}
+  </select> 
+  <select id="checkPersonProductSumconditionForCustomer"  resultType="java.lang.Boolean">
+   SELECT IF((IF(SUM(opp.product_num) IS NULL, 0, SUM(opp.product_num))) &lt; person_product_num , TRUE, FALSE) AS canbuy
+
+FROM t_biz_order o, t_biz_order_product opp ,t_biz_promotion p 
+
+WHERE o.customer_id = 135 AND 
+
+opp.order_id = o.id AND opp.buy_type = 1 AND opp.type_value = CONCAT('#{pid}',CONCAT('-','#{time_id}')) AND  opp.product_id = #{product_id}
+
+AND p.id = #{pid}
+  </select> 
+  
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion (title, type, creater, 
+      creater_type, create_time, update_time, 
+      limit_time, start_time, end_time, 
+      state, promotion_product_num, person_product_num, 
+      brand_id, class_id, partner_id, 
+      region_code, imgurl1, imgurl2, 
+      imgurl3, var1, var2, 
+      var3, var4, content
+      )
+    values (#{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{creater,jdbcType=BIGINT}, 
+      #{creater_type,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}, 
+      #{limit_time,jdbcType=TIMESTAMP}, #{start_time,jdbcType=TIMESTAMP}, #{end_time,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER}, #{promotion_product_num,jdbcType=INTEGER}, #{person_product_num,jdbcType=INTEGER}, 
+      #{brand_id,jdbcType=VARCHAR}, #{class_id,jdbcType=VARCHAR}, #{partner_id,jdbcType=VARCHAR}, 
+      #{region_code,jdbcType=VARCHAR}, #{imgurl1,jdbcType=VARCHAR}, #{imgurl2,jdbcType=VARCHAR}, 
+      #{imgurl3,jdbcType=VARCHAR}, #{var1,jdbcType=INTEGER}, #{var2,jdbcType=INTEGER}, 
+      #{var3,jdbcType=VARCHAR}, #{var4,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective"  useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    insert into t_biz_promotion
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="creater_type != null">
+        creater_type,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="limit_time != null">
+        limit_time,
+      </if>
+      <if test="start_time != null">
+        start_time,
+      </if>
+      <if test="end_time != null">
+        end_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="promotion_product_num != null">
+        promotion_product_num,
+      </if>
+      <if test="person_product_num != null">
+        person_product_num,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="partner_id != null">
+        partner_id,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="imgurl1 != null">
+        imgurl1,
+      </if>
+      <if test="imgurl2 != null">
+        imgurl2,
+      </if>
+      <if test="imgurl3 != null">
+        imgurl3,
+      </if>
+      <if test="var1 != null">
+        var1,
+      </if>
+      <if test="var2 != null">
+        var2,
+      </if>
+      <if test="var3 != null">
+        var3,
+      </if>
+      <if test="var4 != null">
+        var4,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="use_coupons_flag != null">
+        use_coupons_flag,
+      </if>
+      <if test="use_redbag_flag != null">
+        use_redbag_flag,
+      </if>
+      <if test="use_zhekou_flag != null">
+        use_zhekou_flag,
+      </if>
+      <if test="isAllProduct != null">
+        isAllProduct,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="creater_type != null">
+        #{creater_type,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="limit_time != null">
+        #{limit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="start_time != null">
+        #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="promotion_product_num != null">
+        #{promotion_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="person_product_num != null">
+        #{person_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=VARCHAR},
+      </if>
+      <if test="partner_id != null">
+        #{partner_id,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl1 != null">
+        #{imgurl1,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl2 != null">
+        #{imgurl2,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl3 != null">
+        #{imgurl3,jdbcType=VARCHAR},
+      </if>
+      <if test="var1 != null">
+        #{var1,jdbcType=INTEGER},
+      </if>
+      <if test="var2 != null">
+        #{var2,jdbcType=INTEGER},
+      </if>
+      <if test="var3 != null">
+        #{var3,jdbcType=VARCHAR},
+      </if>
+      <if test="var4 != null">
+        #{var4,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="use_coupons_flag != null">
+        #{use_coupons_flag,jdbcType=BIT},
+      </if>
+      <if test="use_redbag_flag != null">
+        #{use_redbag_flag,jdbcType=BIT},
+      </if>
+      <if test="use_zhekou_flag != null">
+        #{use_zhekou_flag,jdbcType=BIT},
+      </if>
+      <if test="isAllProduct != null">
+        #{isAllProduct,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    update t_biz_promotion
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="creater_type != null">
+        creater_type = #{creater_type,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="limit_time != null">
+        limit_time = #{limit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="start_time != null">
+        start_time = #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        end_time = #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="promotion_product_num != null">
+        promotion_product_num = #{promotion_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="person_product_num != null">
+        person_product_num = #{person_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=VARCHAR},
+      </if>
+      <if test="partner_id != null">
+        partner_id = #{partner_id,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl1 != null">
+        imgurl1 = #{imgurl1,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl2 != null">
+        imgurl2 = #{imgurl2,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl3 != null">
+        imgurl3 = #{imgurl3,jdbcType=VARCHAR},
+      </if>
+      <if test="var1 != null">
+        var1 = #{var1,jdbcType=INTEGER},
+      </if>
+      <if test="var2 != null">
+        var2 = #{var2,jdbcType=INTEGER},
+      </if>
+      <if test="var3 != null">
+        var3 = #{var3,jdbcType=VARCHAR},
+      </if>
+      <if test="var4 != null">
+        var4 = #{var4,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="use_coupons_flag != null">
+        use_coupons_flag = #{use_coupons_flag,jdbcType=BIT},
+      </if>
+      <if test="use_redbag_flag != null">
+        use_redbag_flag = #{use_redbag_flag,jdbcType=BIT},
+      </if>
+      <if test="use_zhekou_flag != null">
+        use_zhekou_flag = #{use_zhekou_flag,jdbcType=BIT},
+      </if>
+      <if test="isAllProduct != null">
+        isAllProduct = #{isAllProduct,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    update t_biz_promotion
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      creater = #{creater,jdbcType=BIGINT},
+      creater_type = #{creater_type,jdbcType=INTEGER},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      limit_time = #{limit_time,jdbcType=TIMESTAMP},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      promotion_product_num = #{promotion_product_num,jdbcType=INTEGER},
+      person_product_num = #{person_product_num,jdbcType=INTEGER},
+      brand_id = #{brand_id,jdbcType=VARCHAR},
+      class_id = #{class_id,jdbcType=VARCHAR},
+      partner_id = #{partner_id,jdbcType=VARCHAR},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      imgurl1 = #{imgurl1,jdbcType=VARCHAR},
+      imgurl2 = #{imgurl2,jdbcType=VARCHAR},
+      imgurl3 = #{imgurl3,jdbcType=VARCHAR},
+      var1 = #{var1,jdbcType=INTEGER},
+      var2 = #{var2,jdbcType=INTEGER},
+      var3 = #{var3,jdbcType=VARCHAR},
+      var4 = #{var4,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntity">
+    update t_biz_promotion
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      creater = #{creater,jdbcType=BIGINT},
+      creater_type = #{creater_type,jdbcType=INTEGER},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      limit_time = #{limit_time,jdbcType=TIMESTAMP},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      promotion_product_num = #{promotion_product_num,jdbcType=INTEGER},
+      person_product_num = #{person_product_num,jdbcType=INTEGER},
+      brand_id = #{brand_id,jdbcType=VARCHAR},
+      class_id = #{class_id,jdbcType=VARCHAR},
+      partner_id = #{partner_id,jdbcType=VARCHAR},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      imgurl1 = #{imgurl1,jdbcType=VARCHAR},
+      imgurl2 = #{imgurl2,jdbcType=VARCHAR},
+      imgurl3 = #{imgurl3,jdbcType=VARCHAR},
+      var1 = #{var1,jdbcType=INTEGER},
+      var2 = #{var2,jdbcType=INTEGER},
+      var3 = #{var3,jdbcType=VARCHAR},
+      var4 = #{var4,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryPromotionLinkPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  
+  
+  
+  select temp.* from (select u.id, u.name, '1' as type, date_format(u.start_time,'%Y-%m-%d %T') as start_time,date_format(u.end_time,'%Y-%m-%d %T') as end_time,u.partner_id, if(now()<![CDATA[ >= u.`start_time`]]>,1,0) as state from t_biz_unionpromotion u where NOW()<![CDATA[    >= u.`start_time`]]>  
+		AND NOW() <![CDATA[ < u.`end_time`]]>    
+union all
+select p.id, p.title as name,'2' as type, date_format(p.start_time,'%Y-%m-%d %T') as start_time,date_format(p.end_time,'%Y-%m-%d %T') as end_time,  t.partner_id,if(now()<![CDATA[ >= p.`start_time`]]>,1,0) as state from t_biz_promotion p
+
+  left join (select b.id, pa.id as partner_id from t_biz_brand  b, t_biz_partner pa where pa.id = b.citypartner_id)t on FIND_IN_SET(t.id, p.brand_id)!=0
+  
+  where p.type = 0 and NOW() <![CDATA[ >= p.`start_time`]]>
+		AND NOW() <![CDATA[< p.`end_time`]]>
+ group by p.id
+) temp 
+
+<if test="param.brand_id!=null and param.brand_id!=''">
+ 
+
+	left join t_biz_brand bb on bb.citypartner_id=temp.partner_id
+
+ </if>
+
+where 1=1 
+
+ <if test="param.name!=null and param.name!=''">
+ 
+   and temp.name like CONCAT('%', #{param.name},'%') 
+ 
+ 
+ </if>
+   <if test="param.start_time!=null and param.start_time!=''">
+ 
+  and temp.start_time <![CDATA[ >= p.`start_time`]]>
+ </if>
+ 
+ 
+ <if test="param.end_time!=null and param.end_time!=''">
+ 
+   and temp.ent_time <![CDATA[ <= #{param.ent_time}]]>
+ </if>
+ 
+  <if test="param.type!=null and param.type!=''">
+ 
+  and temp.type = #{param.type}
+ </if>
+ 
+ <if test="param.partner_id!=null and param.partner_id!=''">
+ 
+   and temp.partner_id = #{param.partner_id}
+ </if>
+ 
+ <if test="param.brand_id!=null and param.brand_id!=''">
+ 
+   and bb.id = #{param.brand_id}
+ </if>
+ 
+  
+  </select>
+  
+  <select id="getStepPromotionForPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+	SELECT IFNULL((LENGTH(p.brand_id)-LENGTH(REPLACE(p.brand_id,',','')) +1),0) AS brand_id_count,
+ p.id, p.title, p.type, 
+  DATE_FORMAT(p.create_time,'%Y-%m-%d %T') create_time, 
+  DATE_FORMAT(p.start_time,'%Y-%m-%d') start_time, 
+  DATE_FORMAT(p.end_time,'%Y-%m-%d') end_time, 
+IF(p.start_time &gt; NOW(),0,IF(p.end_time &lt; NOW(),2,1)) state_t, 
+p.state,
+ p.brand_id
+	FROM t_biz_promotion p 
+	WHERE p.state != 2 
+	<choose>
+   		<when test="param.type!=null and param.type!=''">
+   			AND p.type = #{param.type}
+   		</when>
+		<otherwise>
+			AND p.type != 0
+		</otherwise>
+	  </choose>
+
+	<if test="param.partner_id!=null and param.partner_id!=''">
+		AND FIND_IN_SET(${param.partner_id}, p.partner_id) > 0
+	</if>
+	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+		AND ( pa.enterprise_id = ${param.enterprise_id})
+	</if>
+	
+	<if test="param.title!=null and param.title!=''">
+		and p.title LIKE <![CDATA['%${param.title}%']]>
+	</if>
+	<if test="param.state!=null and param.state =='0'.toString()">
+		and p.start_time &gt; NOW()
+	</if>
+	<if test="param.state!=null and param.state =='1'.toString()">
+		and p.start_time &lt; NOW() and p.end_time &gt; NOW()
+	</if>
+	<if test="param.state!=null and param.state =='2'.toString()">
+		and p.end_time &lt; NOW()
+	</if>
+	<if test="param.create_time1!=null and param.create_time1!='' and param.create_time2!=null and param.create_time2!=''">
+		and date_format(p.create_time,'%Y-%m-%d') &gt;= date_format('${param.create_time1}','%Y-%m-%d') and date_format(p.create_time,'%Y-%m-%d') &lt;= date_format('${param.create_time2}','%Y-%m-%d') 
+	</if>
+	<if test="param.start_time1!=null and param.start_time1!='' and param.start_time2!=null and param.start_time2!=''">
+		and date_format(p.start_time,'%Y-%m-%d') &gt;= date_format('${param.start_time1}','%Y-%m-%d') and date_format(p.start_time,'%Y-%m-%d') &lt;= date_format('${param.start_time2}','%Y-%m-%d')
+	</if>
+	
+	<if test="param.sort!=null">
+	order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	 	 ${sort.field}  ${sort.dir}
+ 		</foreach>
+ 	</if>
+ 	
+	</select>
+		
+		
+</mapper>

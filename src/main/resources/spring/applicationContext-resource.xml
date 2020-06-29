@@ -1,0 +1,168 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:redis="http://www.springframework.org/schema/redis" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/jdbc
+    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd
+   	http://www.springframework.org/schema/redis 
+   	http://www.springframework.org/schema/redis/spring-redis.xsd
+   	http://www.springframework.org/schema/data/mongo 
+   	http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+    ">
+	<bean id="readerDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${reader.db.driver}</value>
+		</property>
+
+		<property name="jdbcUrl" value="${reader.db.url}" />
+		<property name="user" value="${reader.db.user}" />
+		<property name="password" value="${reader.db.pwd}" />
+		<property name="checkoutTimeout" value="30000" />
+		<property name="maxIdleTime" value="120" />
+		<property name="maxPoolSize" value="5" />
+		<property name="minPoolSize" value="5" />
+		<property name="initialPoolSize" value="5" />
+		<property name="maxStatements" value="0" />
+		<property name="maxStatementsPerConnection" value="0" />
+		<property name="idleConnectionTestPeriod" value="30" />
+		<property name="preferredTestQuery" value="select id from test where id=1"></property>
+	</bean>
+
+	<!-- redis start -->
+
+
+
+	<bean id="redisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:host-name="${redis.server}" p:port="${redis.port}"  />
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+		p:connection-factory-ref="redisConnectionFactory">
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+	</bean>
+	<bean
+		class="com.mfangsoft.zhuangjialong.common.utils.applicationcontextregister.ApplicationContextRegister" />
+
+	<bean id="listener"
+		class="com.mfangsoft.zhuangjialong.app.webscokettest.listener.impl.MessageDelegateListenerImpl"></bean>
+	<redis:listener-container>
+		<redis:listener ref="listener" method="handleMessage"
+			topic="chatroom" />
+	</redis:listener-container>
+    
+	<!-- redis end -->
+	<mongo:mongo host="${mongo.host}" port="${mongo.port}" />
+	<mongo:db-factory dbname="mongobase" mongo-ref="mongo" />
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	</bean>
+	<mongo:mapping-converter base-package="com.mfangsoft.zhuangjialong.*.*.model"></mongo:mapping-converter>
+	<mongo:repositories base-package="com.mfangsoft.zhuangjialong.*.*.mapper.impl"></mongo:repositories>
+	<!-- <bean id="readerSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+		<property name="dataSource" ref="readerDataSource" /> <property name="mapperLocations" 
+		value="classpath*:${jdbc.dialect}/*.xml" /> <property name="plugins"> <list> -->
+	<!-- sql 操作日志拦截 <bean id="sqlLogInterceptor" class="com.un.general.web.interceptor.GeneralSqlLogInterceptor" 
+		/> -->
+
+	<!-- MyBatis 分页拦截器 默认的过滤方式只对id以Page结尾的进行拦截（注意区分大小写） -->
+	<!--<bean id="paginationInterceptor" class="com.mfangsoft.zhuangjialong.core.interceptor.GeneralPageInterceptor" 
+		/> </list> </property> </bean> -->
+
+	<bean id="writerSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="readerDataSource" />
+		<property name="mapperLocations" value="classpath*:mysql/*.xml" />
+		<property name="plugins">
+			<list>
+				<bean id="pageInterceptor"
+					class="com.mfangsoft.zhuangjialong.core.interceptor.GeneralPageInterceptor"></bean>
+
+			</list>
+		</property>
+		<property name="configLocation" value="classpath:mybatis-confg.xml"></property>
+		
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:basePackage="com.mfangsoft.zhuangjialong.*.*.mapper,com.mfangsoft.zhuangjialong.*.mapper"
+		p:sqlSessionFactoryBeanName="writerSqlSessionFactory"
+		p:annotationClass="com.mfangsoft.zhuangjialong.common.utils.stereotype.WriterRepository" />
+
+
+	<!-- 注册Mapper 可不指定特定mapper，而使用自动扫描包的方式来注册各种Mapper ，配置如下： <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
+		<property name="basePackage" value="com.un.general.**.dao" /> <property name="annotationClass" 
+		value="com.mfangsoft.zhuangjialong.common.utils.stereotype.ReaderRepository" 
+		/> <property name="sqlSessionFactory" ref="readerSqlSessionFactory" /> </bean> -->
+
+
+
+	<bean id="initcontextbean" class="com.mfangsoft.zhuangjialong.common.initcontext.InitContextBean"></bean>
+
+	<!-- DataSourceTransactionManager -->
+
+	<context:component-scan base-package="com.mfangsoft.zhuangjialong">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="readerDataSource"></property>
+
+	</bean>
+	<!-- aop切面 -->
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="query*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut
+			expression="execution(* com.mfangsoft.zhuangjialong.*.*.service.impl.*Service*.*(..))"
+			id="pontcutId" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pontcutId" />
+	</aop:config>
+</beans>
+

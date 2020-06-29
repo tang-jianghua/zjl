@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<style>
+.button_center{
+    display: inherit;
+	margin: 0px auto;
+}
+.pannel{
+	text-align: left;
+    padding: 10px 80px;
+    background-color: #eeeeee;
+    border-radius: 5px; 
+}
+.people{
+    color: #2d64b3;
+    font-weight: bolder;
+}
+.text{
+    font-family: '宋体';
+}
+.time{
+	text-align: right; 
+}
+.evaluation_0{
+	width: 50px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #AC0262; 
+}
+.evaluation_1{
+	width: 50px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #08798f;  
+}
+
+</style>
+<div ng-controller="evaluationManagementCtrl">
+    <!-- 标题 -->
+    
+   	<section class="well">
+   	  	<div class="fileAbout backstage">评价管理</div>
+    
+    	<div class="idMessage">
+	   		<div class="greenLine">
+	   			<div id="list1" class="oneList choose" ng-click="chooseList(1)">评价管理</div>
+	   			<div id="list2" class="oneList" ng-click="chooseList(2)">敏感词库</div>
+	   		</div>
+	   		
+	   		<!-- 评价管理 -->
+	   		<div id="container1">
+	   			<div class="form-horizontal form-widgets col-sm-12 gray">
+				      <div class="form-group">
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">专辑名称</label>
+					                <div class="col-sm-8">
+					                    <input ng-model="search1.album_title" class="k-textbox" placeholder=""/>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">文章名称</label>
+					                <div class="col-sm-8">
+					                    <input ng-model="search1.article_title" class="k-textbox" placeholder=""/>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">用户昵称</label>
+					                <div class="col-sm-8">
+					                    <input ng-model="search1.customer_name" class="k-textbox" placeholder=""/>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">评价时间</label>
+					                <div class="col-sm-8">
+					                    <input id="evaluate_time"/>
+					                </div>
+					            </div>
+					        </div>
+					        
+					        <div class="buttons-wrap clearBoth">
+					            <button class="k-button k-state-default" ng-click="search(1)" >查询</button>
+					        </div>
+			     	 </div>
+			    </div>
+			    
+			    <div kendo-grid="grid1"  k-options="mainGridOptions1" ></div>
+	   		</div>
+	   		<!-- 敏感词汇库-->
+	   		<div id="container2">
+	   			<div class="form-horizontal form-widgets col-sm-12 gray">
+				      <div class="form-group">
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">词库名</label>
+					                <div class="col-sm-8">
+					                    <input ng-model="search2.name" class="k-textbox" placeholder=""/>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">词库内容</label>
+					                <div class="col-sm-8">
+					                    <input ng-model="search2.content" class="k-textbox" placeholder=""/>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">发布时间</label>
+					                <div class="col-sm-8">
+					                    <input id="publish_time"/>
+					                </div>
+					            </div>
+					        </div>
+					        
+					        <div class="buttons-wrap clearBoth">
+					            <button class="k-button k-state-default" ng-click="search(2)" >查询</button>
+					        </div>
+			     	 </div>
+			    </div>
+	
+			    <div >
+			     	<button class="k-button k-state-default" ng-click="addWord()">新增</button>
+			    </div>
+			    <div kendo-grid="grid2"  k-options="mainGridOptions2" ></div>
+	   		</div>
+	 
+   		</div>
+    </section>
+    
+	<!--评价详情 -->
+    <div kendo-window="evaluationDetailsWindow" k-title="'评论详情'" k-width="800" k-min-height="200" k-visible="false" k-modal="true" class="allTable">
+    	<table class="table">
+    		<tr>
+                <td class="col-sm-2">专辑名称:</td>
+                <td class="col-sm-10">{{evaluationDetails.album_title}}</td>
+            </tr>
+            <tr>
+                <td>文章名称:</td>
+                <td>{{evaluationDetails.article_title}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                	<div class="pannel">
+	                	<div style="padding: 15px 0px;">
+	                		<div>
+		                		<span class="people">{{evaluation_one.customer_name}}：</span>
+		                		<span class="text">{{evaluation_one.content}}</span>
+	                		</div>
+	                		<div class="time">
+		                		<span class="evaluation_0" ng-if="evaluation_one.state" ng-click="modifyEvaluationState(evaluation_one.id,0,evaluation_one.id,true)">屏蔽</span>
+		                		<span class="evaluation_1" ng-if="!evaluation_one.state" ng-click="modifyEvaluationState(evaluation_one.id,1,evaluation_one.id,true)">恢复</span>
+		                		<span>{{evaluation_one.create_time}}</span>
+	                		</div>
+	                	</div>
+	                	<div style="padding-left: 40px;margin-bottom: 10px;" ng-repeat="two in evaluation_two">
+	                		<div>
+		                		<span class="people">{{two.customer_name}}</span>
+		                		<span class="">回复</span>
+		                		<span class="people">{{two.parent_cus_name}}</span>
+		                		<span class="text">：{{two.content}}</span>
+	                		</div>
+	                		<div class="time" style="border-bottom: 1px dotted;">
+	                			<span class="evaluation_0" ng-if="two.state" ng-click="modifyEvaluationState(two.id,0,two.main_id,true)">屏蔽</span>
+		                		<span class="evaluation_1" ng-if="!two.state" ng-click="modifyEvaluationState(two.id,1,two.main_id,true)">恢复</span>
+		                		<span>{{two.create_time}}</span>
+	                		</div>
+	                	</div>
+                	</div>
+                	
+                </td>
+            </tr>
+    	</table>
+    </div>
+    
+    <!--新增敏感词 -->
+    <div kendo-window="addWordWindow" k-title="'新增敏感词'" k-width="800" k-min-height="400" k-visible="false" k-modal="true">
+    	<div class="form-horizontal form-widgets col-sm-11" style="padding:15px">
+            <div class="form-group">
+		        <label class="control-label col-sm-2">词库名称</label>
+		        <div class="col-sm-8">
+		            <input ng-model="word.name" class="k-textbox"/>
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label class="control-label col-sm-2">词库内容</label>
+		        <div class="col-sm-8">
+		            <textarea ng-model="word.content" style="width: 100%;height: 200px;"></textarea>
+		        </div>
+		    </div>
+		    
+		    <button class="k-button k-state-default button_center" ng-click="addNewWord()">确定</button>
+	    </div>
+    </div>
+ 
+</div>
+
+    
+

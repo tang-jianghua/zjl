@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BrandProdSalesAttrEntityMapper">
+	 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+	<resultMap id="BaseResultMap"
+		type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BrandProdSalesAttrEntity">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="color" jdbcType="VARCHAR" property="color" />
+		<result column="color_url" jdbcType="VARCHAR" property="color_url" />
+		<result column="standard" jdbcType="VARCHAR" property="standard" />
+		<result column="model" jdbcType="VARCHAR" property="model" />
+		<result column="product_id" jdbcType="BIGINT" property="product_id" />
+		<result column="set_meal" jdbcType="VARCHAR" property="set_meal" />
+		<result column="price" jdbcType="DOUBLE" property="price" />
+		<result column="stock" jdbcType="BIGINT" property="stock" />
+		<collection property="standardArray" resultMap="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BaseBrandProdSalesAttrEntityMapper.BaseResultMap" columnPrefix="sta_"></collection>
+		
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, color, color_url, standard, model, product_id, set_meal, price, stock
+	</sql>
+	<select id="selectProductSalesByProductId" resultMap="BaseResultMap"  parameterType="java.lang.Long">
+	
+	select <include refid="Base_Column_List"/> from t_biz_brand_prod_salesattr where data_flag != 'del' AND product_id = #{product_id,jdbcType=BIGINT}
+	</select>
+	
+		<select id="getProductIdBySaleId" resultType="java.lang.Long"
+		parameterType="java.lang.Long">
+SELECT  `product_id` FROM `t_biz_brand_prod_salesattr` WHERE id = #{id}
+	</select>
+
+	<select id="getColorByProductId" resultType="java.util.Map"
+		parameterType="java.lang.Long">
+
+		select color,color_url form t_biz_brand_prod_salesattr where
+		product_id=#{product_id}
+         AND data_flag != 'del'
+	</select>
+
+	<select id="getColorModelByProductId" resultType="java.lang.String"
+		parameterType="java.lang.Long">
+
+		SELECT DISTINCT(CONCAT(color,model)) color_model FROM
+		`t_biz_brand_prod_salesattr` WHERE
+		data_flag != 'del' AND product_id = #{product_id}
+
+	</select>
+
+	<select id="getColorsByProductId" resultType="java.lang.String"
+		parameterType="java.lang.Long">
+
+		SELECT DISTINCT(color) color FROM `t_biz_brand_prod_salesattr` WHERE
+		data_flag != 'del' AND
+		product_id = #{product_id}
+
+	</select>
+	<select id="getModelByProductId" resultType="java.lang.String"
+		parameterType="java.lang.Long">
+
+		SELECT DISTINCT(model) model FROM `t_biz_brand_prod_salesattr` WHERE
+		data_flag != 'del' AND
+		product_id = #{product_id}
+
+	</select>
+   <select id="getStandardsByProductId" resultType="java.lang.String"
+		parameterType="java.lang.Long">
+
+		SELECT DISTINCT(standard) standard FROM `t_biz_brand_prod_salesattr` WHERE
+		data_flag != 'del' AND
+		product_id = #{product_id}
+
+	</select>
+
+	<select id="getStandardByProductId"
+		resultType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BrandProdSalesAttrEntity"
+		parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BrandProdSalesAttrEntity">
+
+		SELECT id,standard FROM `t_biz_brand_prod_salesattr` WHERE
+		data_flag != 'del' AND
+		 product_id =#{product_id,jdbcType=BIGINT} 
+		 AND CONCAT(color,model) =#{color_model,jdbcType=VARCHAR}
+ 
+	</select>
+
+	<select id="getBrandProdSalesAttrByProductId"  resultMap="BaseResultMap"
+		parameterType="java.lang.Long"  useCache="false" >
+		
+		select temp.id, temp.color,temp.color_url,temp.product_id, se.id as sta_id,se.standard as sta_standard,se.model as sta_model,se.price as sta_price,se.stock  as sta_stock from (select bps.id, bps.color,bps.color_url,bps.product_id
+	
+		from t_biz_brand_prod_salesattr bps where product_id=#{product_id} and data_flag !='del' group by bps.color) temp left join
+    
+       t_biz_brand_prod_salesattr se on  se.product_id = temp.product_id and temp.color = se.color and se.data_flag!='del'
+		
+	</select>
+
+	<select id="getAppSalesAttrById" resultType="java.util.Map"
+		parameterType="java.lang.Long">
+		select color_url,price, stock from t_biz_brand_prod_salesattr where
+		id=#{id,jdbcType=BIGINT}
+	</select>
+	<update id="updateProdSalesAttr" parameterType="java.lang.Long">
+    update t_biz_brand_prod_salesattr set data_flag = 'del' where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

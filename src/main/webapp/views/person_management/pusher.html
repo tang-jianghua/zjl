@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<style>
+.imgContainer1 {
+	width: 90%;
+	height: 150px;
+	margin: 5px auto;
+}
+
+.imgContainer1 .imgBackground1 {
+	width: 75%;
+	height: 150px;
+	border: 1px dashed #999999;
+	text-align: center;
+	line-height: 150px;
+	font-size: 100px;
+	background-color: #eeeeee;
+	color: #999999;
+	position: absolute;
+}
+
+.imgContainer1 .imgBackground2 {
+	width: 75%;
+	height: 150px;
+	position: absolute;
+	margin:1px;
+}
+
+.imgContainer1 .k-upload {
+	opacity: 0;
+}
+
+.imgContainer1 .k-upload .k-dropzone {
+	padding: 0px;
+}
+
+.imgContainer1 .k-upload .k-upload-button {
+	width: 100%;
+	height: 150px;
+}
+</style>
+<div ng-controller="pusherManagementCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">地推员管理</div>
+
+		<div class="idMessage">
+			<div class="row">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4">姓名</label>
+								<div class="col-sm-8">
+									<input ng-model="search.name1" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4">用户名</label>
+								<div class="col-sm-8">
+									<input ng-model="search.account" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4">城市合伙人</label>
+								<div class="col-sm-8">
+									<input ng-model="search.principal" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4">联系方式</label>
+								<div class="col-sm-8">
+									<input ng-model="search.phone" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4">推广员</label>
+								<div class="col-sm-8">
+									<input ng-model="search.expand_name" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4">状态</label>
+								<div class="col-sm-8">
+									<input id="state" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="buttons-wrap text-center clearBoth ">
+						<button class="k-button k-state-default" ng-click="search()">查询</button>
+					</div>
+				</div>
+			</div>
+
+			<div >
+				<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+			 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+				<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+				<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+				<hr class="towGreen">
+			</div>
+			<div id="gridPromtion" kendo-grid="grid" k-options="mainGridOptions"></div>
+
+			<!--  推广导购信息窗口 -->
+			<div id="editAccount" kendo-window="editAccount_win"
+				k-title="'推广员信息'" k-width="650" k-height="250" k-visible="false"
+				k-modal="true">
+
+				<div class="row">
+					<div class="col-md-3" style="padding-top: 20px;">
+						<div class="form-group" id="top-unload-imgs">
+							<div class="col-sm-12 ">
+								<div class="imgContainer1">
+				                	<div class="imgBackground1">
+				                		<span class="glyphicon glyphicon-plus"></span>
+				                	</div>
+				                	<div class="imgBackground2" id="logo_img"></div>
+				                	<input type="file" name="file" id="logo"/>
+				                	<input type="hidden" id="logo_url"/>
+			                	</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-horizontal form-widgets col-md-7"
+						style="padding-top: 20px;">
+						<div class="form-group">
+							<label class="control-label col-md-3">姓名</label>
+							<div class="col-md-6">
+								<input ng-model="details.name" class="k-textbox" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">联系方式</label>
+							<div class="col-md-6">
+								<input ng-model="details.phone" class="k-textbox" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">支付宝账号</label>
+							<div class="col-md-6">
+								<input ng-model="details.ali_account" class="k-textbox" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row  text-center">
+					<button class="k-button k-state-defaul" ng-click="editAccountOK()">确定</button>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+

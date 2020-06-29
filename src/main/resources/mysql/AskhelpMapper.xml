@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.mapservice.mapper.AskhelpMapper">
+  <select id="selectByRegionCode" parameterType="java.lang.String" 
+  resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.AskForHelpModel">
+      SELECT 
+  ca.`id`,
+  ca.lbs,
+  CASE ca.user_type
+  WHEN 1
+  THEN c.`head_url`
+  WHEN 2
+  THEN s.head_img
+  END AS head_url
+FROM
+  `t_biz_askhelp` ca 
+  LEFT JOIN `t_app_customer` c 
+    ON ca.user_id = c.`id`
+    LEFT JOIN `t_app_seller` s
+    ON ca.user_id = s.`id`
+WHERE ca.`state` = 1 
+and TIMESTAMPDIFF(SECOND ,ca.create_time,now())&lt;=7*24*60*60
+  AND ca.`region_code` = #{region_code,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByLBSAndUserId" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseAskhelpEntity" 
+  resultType="java.lang.Integer">
+      SELECT 
+  `id`
+FROM
+  `t_biz_askhelp`
+WHERE state = 1 
+and lbs = #{lbs,jdbcType=VARCHAR}
+and user_id = #{user_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectById" parameterType="java.lang.Integer" 
+  resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.AskForHelpModel">
+		SELECT 
+		  ca.`id`,
+		  ca.`user_id`,
+		  CASE ca.user_type
+		  WHEN 1
+		  THEN c.`head_url`
+		  WHEN 2   
+		   THEN s.`head_img` 
+		   END AS head_url,
+		     CASE ca.user_type
+		  WHEN 1
+		  THEN  c.`name` 
+		   WHEN 2   
+		   THEN s.`name` 
+		   END AS user_name,
+		  ca.`title`,
+		  ca.`content`,
+		  ca.`lbs`,
+		  CASE ca.user_type
+		  WHEN 1
+		  THEN  CONCAT(user_id,'BUYER')
+		   WHEN 2   
+		   THEN CONCAT(user_id,'SELLER')
+		   END AS easemob_account ,
+		   c.phone
+		FROM
+		  `t_biz_askhelp` ca   
+		  LEFT JOIN `t_app_customer` c 
+		    ON ca.`user_id` = c.`id` 
+		  LEFT JOIN `t_app_seller` s
+		    ON ca.`user_id` = s.`id` 
+		WHERE ca.`id`=#{id,jdbcType=INTEGER}
+  </select>
+</mapper>

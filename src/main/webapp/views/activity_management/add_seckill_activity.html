@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<style>
+.imgContainer{
+    width:265px;
+    height: 127px;
+    margin: 5px auto;
+}
+.imgContainer .imgBackground1{
+    width:265px;
+    height: 127px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 127px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer .imgBackground2{
+    width:265px;
+    height: 127px;
+    position: absolute;
+}
+.imgContainer .k-upload{
+	opacity: 0;
+}
+.imgContainer .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer .k-upload .k-upload-button{
+    width:265px;
+    height: 127px; 
+}
+.panner{
+	padding: 5px;
+}
+.text{
+	font-size: 16px;
+    line-height: 32px; 
+}
+.button_center{
+    display: inherit;
+	margin: 10px auto;
+}
+.blackText{
+	color: black;
+    line-height: 30px;
+    text-align: center;
+}
+.k-multiselect .k-multiselect-wrap #join_partner_taglist li{
+	padding: 0.1em 1.5em 0.1em 0.4em;
+}
+.oneProduct div{
+	width: 170px;
+    margin: auto;
+}
+.oneProduct .operate{
+	height: 40px;
+	font-size: 24px;
+    color: #caa359;
+}
+.oneProduct .operate div:nth-child(1){
+	width: 40px;
+	height: 40px;
+    float: left;
+    cursor: pointer;
+}
+.oneProduct .operate div:nth-child(2){
+	width: 40px;
+	height: 40px;
+    float: right;
+    cursor: pointer;
+}
+.oneProduct .image{
+    height: 170px;
+    border: 1px solid gray;
+}
+.oneProduct .title{
+	font-size: 14px;
+    color: black;
+    font-family: '微软雅黑';
+    height: 66px;
+    overflow: hidden;
+}
+.oneProduct .text{
+	font-size: 12px;
+    color: #484545;
+}
+.redText{
+	font-size: 15px;
+	color: red; 
+} 
+.k-widget .k-floatwrap .k-reset li{
+	min-width:65px;
+}
+.operateContainer{
+    width: 265px;
+    margin: auto;
+} 
+</style>
+<div ng-controller="addSeckillActivityCtrl">
+	<section class="well">
+	    <!-- 标题 -->
+	    <div class="fileAbout backstage">平台活动   >
+	    	<span> 秒杀活动发布</span>
+	    </div>
+	    <div class="idMessage">
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">活动名称</label>
+	                <div class="col-sm-8"><input ng-model="form.title"  class="k-textbox" placeholder="请输入活动名称"/></div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">活动类型</label>
+	                <div class="col-sm-3"><input id="activity_type"/></div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">报名截止日期</label>
+	                <div class="col-sm-3"><input id="endTime" placeholder="请输入报名截止日期"/></div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">活动日期</label>
+	                <div class="col-sm-3">
+	                    <input id="start_time" placeholder="请输入活动开始日期"/>
+	                </div>
+	                <div class="col-sm-1" style="width: 3%;line-height: 32px;">---</div>
+	                <div class="col-sm-3">
+	                    <input id="end_time" placeholder="请输入活动结束日期"/>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">第一时间段</label>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="start_time1" type="text" placeholder="时分"  readonly>
+	                </div>
+	                <div class="col-sm-1" style="width: 3%;line-height: 32px;">-</div>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="end_time1" type="text" placeholder="时分"  readonly>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">品牌数量</label>
+	                <div class="col-sm-3">
+	                    <input type="number" id="brand_num_1" class="k-textbox"/>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">第二时间段</label>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="start_time2" type="text" placeholder="时分"  readonly>
+	                </div>
+	                <div class="col-sm-1" style="width: 3%;line-height: 32px;">-</div>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="end_time2" type="text" placeholder="时分"  readonly>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">品牌数量</label>
+	                <div class="col-sm-3">
+	                    <input type="number" id="brand_num_2" class="k-textbox"/>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">第三时间段</label>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="start_time3" type="text" placeholder="时分"  readonly>
+	                </div>
+	                <div class="col-sm-1" style="width: 3%;line-height: 32px;">-</div>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="end_time3" type="text" placeholder="时分"  readonly>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">品牌数量</label>
+	                <div class="col-sm-3">
+	                    <input type="number" id="brand_num_3" class="k-textbox"/>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">第四时间段</label>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="start_time4" type="text" placeholder="时分"  readonly>
+	                </div>
+	                <div class="col-sm-1" style="width: 3%;line-height: 32px;">-</div>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="end_time4" type="text" placeholder="时分"  readonly>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">品牌数量</label>
+	                <div class="col-sm-3">
+	                    <input type="number" id="brand_num_4" class="k-textbox"/>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">第五时间段</label>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="start_time5" type="text" placeholder="时分"  readonly>
+	                </div>
+	                <div class="col-sm-1" style="width: 3%;line-height: 32px;">-</div>
+	                <div class="col-sm-3">
+	                    <input class="timePicker wicon" id="end_time5" type="text" placeholder="时分"  readonly>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">品牌数量</label>
+	                <div class="col-sm-3">
+	                    <input type="number" id="brand_num_5" class="k-textbox"/>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">报名数量</label>
+	                <div class="col-sm-1 blackText outPadding">每个品牌限</div>
+	                <div class="col-sm-2"><input type="number" ng-model="form.promotion_product_num"  class="k-textbox"/></div>
+	                <div class="col-sm-1 blackText">款产品</div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">参与合伙人</label>
+	                <div class="col-sm-8"><input id="join_partner"/></div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">参与品类</label>
+	                <div class="col-sm-8"><input id="join_class"/></div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">活动宣传图</label>
+	                <div class="col-sm-10">
+	                	<div class="col-sm-12">（【尺寸要求】高度:220px &nbsp;&nbsp; 宽度:750px &nbsp;&nbsp; 大小:80Kb以内  &nbsp;&nbsp; 格式:jpg）</div>
+	                	<div class="col-sm-4">
+		                	<div class="imgContainer">
+			                	<div class="imgBackground1">
+			                		<span class="glyphicon glyphicon-plus"></span>
+			                	</div>
+			                	<div class="imgBackground2" id="introduce_img"></div>
+			                	<input type="file" name="file" id="introduce"/>
+			                	<input type="hidden" id="introduce_url"/>
+		                	</div>
+		                	<div class="operateContainer">
+		                		<button class="col-sm-12 btn k-button" ng-click="deletePicture(1)">删除</button>
+		                	</div>
+		                </div>
+	                </div>
+	            </div>
+	        </div>
+
+	        <button class="k-button k-state-default centerButton" id="formSubmitButton" ng-click="formSubmit()">确定</button> 
+		
+	    </div>
+    </section>  
+</div>
+
+

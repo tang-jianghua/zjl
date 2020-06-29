@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<style>
+.imgContainer1 {
+	width: 100%; 
+	height : 180px;
+	margin: 5px auto;
+}
+
+.imgContainer1 .imgBackground1 {
+	width: 90%;
+	height: 180px;
+	border: 1px dashed #999999;
+	text-align: center;
+	line-height: 180px;
+	font-size: 100px;
+	background-color: #eeeeee;
+	color: #999999;
+	position: absolute;
+}
+
+.imgContainer1 .imgBackground2 {
+	width: 90%;
+	height: 180px;
+	position: absolute;
+}
+
+.imgContainer1 .k-upload {
+	opacity: 0;
+}
+
+.imgContainer1 .k-upload .k-dropzone {
+	padding: 0px;
+}
+
+.imgContainer1 .k-upload .k-upload-button {
+	width: 100%;
+	height: 180px;
+}
+
+font {
+	color: red;
+	font-size: 20px;
+}
+</style>
+
+
+<div ng-controller="addEnterpriseInformationCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">
+			企业信息管理 > <span>创建企业账号信息</span>
+		</div>
+
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">产品品类<font>*</font></label>
+					<div class="col-sm-8" id="productClassContainer"></div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">经营品牌<font>*</font></label>
+					<div class="col-sm-8">
+						<input id="brandName" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">联系地址<font>*</font></label>
+					<div class="col-sm-8">
+						<input ng-model="form.addr" class="k-textbox"
+							placeholder="请输入联系地址" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">负责人<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.principal" class="k-textbox"
+							placeholder="请输入负责人名称" />
+					</div>
+					<label class="control-label col-sm-2">联系方式<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.phone_num" ng-blur="checkPhoneNumber()" class="k-textbox"
+							placeholder="请输入负责人联系方式" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">创建账号<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.userEntity.account" ng-blur="checkNotContainChinese(1);checkAccount();"
+							class="k-textbox" placeholder="请输入账号" />
+					</div>
+					<label class="control-label col-sm-2">创建密码<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.userEntity.pwd" ng-blur="checkNotContainChinese(2)" class="k-textbox"
+							placeholder="请输入密码" id="pwd" />
+
+					</div>
+					<div class="col-sm-2">
+						<button class="k-button k-state-default" id="resetPasswordBtn"
+							ng-click="resetPassword()">重置</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">企业名称<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.enterprise_name" class="k-textbox" />
+					</div>
+					<label class="control-label col-sm-2">LOGO<font>*</font></label>
+					<div class="col-sm-3">
+						<div class="imgContainer1" style="width:180px;">
+							<div class="imgBackground1" style="width:180px;">
+								<span class="glyphicon glyphicon-plus"></span>
+							</div>
+							<div class="imgBackground2" style="width:180px;" id="logo_img"></div>
+							<input type="file" name="file" id="logo" /> <input type="hidden"
+								id="logo_url" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2">工商注册信息<font>*</font></label>
+					<div class="col-sm-8">
+						<div class="col-sm-4">
+							<label class=" col-sm-12 business">营业执照</label>
+							<div class="col-sm-12">
+								<div class="imgContainer1">
+									<div class="imgBackground1">
+										<span class="glyphicon glyphicon-plus"></span>
+									</div>
+									<div class="imgBackground2" id="upload1_img"></div>
+									<input type="file" name="file" id="upload1" /> <input
+										type="hidden" id="upload1_url" />
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<input ng-model="form.commerceEntity.biz_num" class="k-textbox"
+									placeholder="营业执照注册号" />
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<label class=" col-sm-12 business">开户许可证</label>
+							<div class="col-sm-12 businessr">
+								<div class="imgContainer1">
+									<div class="imgBackground1">
+										<span class="glyphicon glyphicon-plus"></span>
+									</div>
+									<div class="imgBackground2" id="upload2_img"></div>
+									<input type="file" name="file" id="upload2" /> <input
+										type="hidden" id="upload2_url" />
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<input ng-model="form.commerceEntity.open_acount"
+									class="k-textbox" placeholder="开户许可证号" />
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<label class=" col-sm-12 business">税务登记证</label>
+							<div class="col-sm-12 businessr">
+								<div class="imgContainer1">
+									<div class="imgBackground1">
+										<span class="glyphicon glyphicon-plus"></span>
+									</div>
+									<div class="imgBackground2" id="upload3_img"></div>
+									<input type="file" name="file" id="upload3" /> <input
+										type="hidden" id="upload3_url" />
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<input ng-model="form.commerceEntity.tax_num" class="k-textbox"
+									placeholder="税务登记证号" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2 outPadding">银行信息<font>*</font></label>
+					<div class="col-sm-9">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-sm-2" style="padding: 0">户名</label>
+								<div class="col-sm-9">
+									<input ng-model="form.bankEntity.name" class="k-textbox"
+										placeholder="设置户名" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-sm-2" style="padding: 0">对公账号</label>
+								<div class="col-sm-9">
+									<input ng-model="form.bankEntity.account" class="k-textbox"
+										placeholder="设置账号" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-sm-2" style="padding: 0">开户行</label>
+								<div class="col-sm-9">
+									<input ng-model="form.bankEntity.addr" class="k-textbox"
+										placeholder="设置开户行" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-2 outPadding">第三方账户（至少一项）<font>*</font></label>
+					<div class="col-sm-9">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-sm-2" style="padding: 0">支付宝</label>
+								<div class="col-sm-9">
+									<input ng-model="form.bankEntity.pay_account" ng-blur="checkAlipayNumber()" class="k-textbox"
+										placeholder="请输入支付宝账号" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-sm-2" style="padding: 0">微信</label>
+								<div class="col-sm-9">
+									<input ng-model="form.bankEntity.webkit_account"
+										class="k-textbox" placeholder="请输入微信账号" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<button class="k-button k-state-default centerButton"
+				ng-click="formSubmit()">确定</button>
+		</div>
+	</section>
+
+</div>
+
+

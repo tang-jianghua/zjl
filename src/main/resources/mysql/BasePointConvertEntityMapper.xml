@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.pointmall.mapper.BasePointConvertEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointConvertEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="crater_time" jdbcType="TIMESTAMP" property="crater_time" />
+    <result column="convert_state" jdbcType="INTEGER" property="convert_state" />
+    <result column="convert_code" jdbcType="VARCHAR" property="convert_code" />
+    <result column="convert_type" jdbcType="INTEGER" property="convert_type" />
+    <result column="convert_time" jdbcType="TIMESTAMP" property="convert_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="user_id" jdbcType="BIGINT" property="user_id" />
+    <result column="convert_point" jdbcType="INTEGER" property="convert_point" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, product_id, shop_id, partner_id, brand_id, crater_time, convert_state, 
+    convert_code, convert_type, convert_time, update_time, user_id, convert_point
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_point_convert
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_point_convert
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointConvertEntity">
+    insert into t_biz_point_convert (id, customer_id, product_id, 
+      shop_id, partner_id, brand_id, 
+      crater_time, convert_state, convert_code, 
+      convert_type, convert_time, update_time, 
+      user_id, convert_point)
+    values (#{id,jdbcType=BIGINT}, #{customer_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, 
+      #{shop_id,jdbcType=BIGINT}, #{partner_id,jdbcType=BIGINT}, #{brand_id,jdbcType=BIGINT}, 
+      #{crater_time,jdbcType=TIMESTAMP}, #{convert_state,jdbcType=INTEGER}, #{convert_code,jdbcType=VARCHAR}, 
+      #{convert_type,jdbcType=INTEGER}, #{convert_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}, 
+      #{user_id,jdbcType=BIGINT}, #{convert_point,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective"
+  useGeneratedKeys="true" keyProperty="id"
+   parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointConvertEntity">
+    insert into t_biz_point_convert
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="shop_id != null">
+        shop_id,
+      </if>
+      <if test="partner_id != null">
+        partner_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="crater_time != null">
+        crater_time,
+      </if>
+      <if test="convert_state != null">
+        convert_state,
+      </if>
+      <if test="convert_code != null">
+        convert_code,
+      </if>
+      <if test="convert_type != null">
+        convert_type,
+      </if>
+      <if test="convert_time != null">
+        convert_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="user_id != null">
+        user_id,
+      </if>
+      <if test="convert_point != null">
+        convert_point,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="partner_id != null">
+        #{partner_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="crater_time != null">
+        #{crater_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="convert_state != null">
+        #{convert_state,jdbcType=INTEGER},
+      </if>
+      <if test="convert_code != null">
+        #{convert_code,jdbcType=VARCHAR},
+      </if>
+      <if test="convert_type != null">
+        #{convert_type,jdbcType=INTEGER},
+      </if>
+      <if test="convert_time != null">
+        #{convert_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user_id != null">
+        #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="convert_point != null">
+        #{convert_point,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointConvertEntity">
+    update t_biz_point_convert
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        shop_id = #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="partner_id != null">
+        partner_id = #{partner_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="crater_time != null">
+        crater_time = #{crater_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="convert_state != null">
+        convert_state = #{convert_state,jdbcType=INTEGER},
+      </if>
+      <if test="convert_code != null">
+        convert_code = #{convert_code,jdbcType=VARCHAR},
+      </if>
+      <if test="convert_type != null">
+        convert_type = #{convert_type,jdbcType=INTEGER},
+      </if>
+      <if test="convert_time != null">
+        convert_time = #{convert_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user_id != null">
+        user_id = #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="convert_point != null">
+        convert_point = #{convert_point,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointConvertEntity">
+    update t_biz_point_convert
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      shop_id = #{shop_id,jdbcType=BIGINT},
+      partner_id = #{partner_id,jdbcType=BIGINT},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      crater_time = #{crater_time,jdbcType=TIMESTAMP},
+      convert_state = #{convert_state,jdbcType=INTEGER},
+      convert_code = #{convert_code,jdbcType=VARCHAR},
+      convert_type = #{convert_type,jdbcType=INTEGER},
+      convert_time = #{convert_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      user_id = #{user_id,jdbcType=BIGINT},
+      convert_point = #{convert_point,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

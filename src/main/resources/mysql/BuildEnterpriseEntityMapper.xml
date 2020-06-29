@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.BuildEnterpriseEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildEnterpriseEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, class_id, name,imgurl
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_build_enterprise
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_build_enterprise
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildEnterpriseEntity">
+    insert into t_biz_build_enterprise (class_id, name,imgurl
+      )
+    values ( #{class_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{imgurl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective"  useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildEnterpriseEntity">
+    insert into t_biz_build_enterprise
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="imgurl!=null">
+      
+       imgurl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="class_id != null">
+        #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl!=null">
+      
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildEnterpriseEntity">
+    update t_biz_build_enterprise
+    <set>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+     <if test="imgurl!=null">
+      
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildEnterpriseEntity">
+    update t_biz_build_enterprise
+    set class_id = #{class_id,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+     imgurl= #{imgurl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getBuildEnterpriseList" resultMap="BaseResultMap" >
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_build_enterprise
+  
+  </select>
+  
+  
+  <select id="getBuildEnterpriseListByclassId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_build_enterprise where class_id =#{class_id}
+  
+  </select>
+</mapper>

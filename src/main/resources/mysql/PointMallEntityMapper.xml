@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.pointmall.mapper.PointMallEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointMallEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_title" jdbcType="VARCHAR" property="product_title" />
+    <result column="convert_type" jdbcType="INTEGER" property="convert_type" />
+    <result column="product_img" jdbcType="VARCHAR" property="product_img" />
+    <result column="point" jdbcType="INTEGER" property="point" />
+    <result column="product_num" jdbcType="INTEGER" property="product_num" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="valid_time" jdbcType="INTEGER" property="valid_time" />
+    <result column="valid_unit" jdbcType="INTEGER" property="valid_unit" />
+    <result column="partner_ids" jdbcType="BIGINT" property="partner_ids" />
+    <result column="brand_ids" jdbcType="BIGINT" property="brand_ids" />
+    <result column="shop_ids" jdbcType="BIGINT" property="shop_ids" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointMallEntity">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  
+    <resultMap id="PointProductMap" type="com.mfangsoft.zhuangjialong.app.pointmall.model.PointProductModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_title" jdbcType="VARCHAR" property="product_title" />
+    <result column="convert_type" jdbcType="INTEGER" property="convert_type" />
+    <result column="product_img" jdbcType="VARCHAR" property="product_img" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="convert_type_name" jdbcType="VARCHAR" property="convert_type_name" />
+    <result column="point" jdbcType="INTEGER" property="point" />
+    <result column="product_num" jdbcType="INTEGER" property="product_num" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="valid_time" jdbcType="INTEGER" property="valid_time" />
+    <result column="valid_unit" jdbcType="VARCHAR" property="valid_unit" />
+    <result column="partner_ids" jdbcType="BIGINT" property="partner_ids" />
+    <result column="brand_ids" jdbcType="BIGINT" property="brand_ids" />
+    <result column="shop_ids" jdbcType="BIGINT" property="shop_ids" />
+    <collection property="shops" ofType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity">
+      <id column="shop_name" jdbcType="VARCHAR" property="shop_name"/>
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lbs" jdbcType="VARCHAR" property="lbs" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_title, convert_type, product_img, point, product_num, start_time, end_time, 
+    price, valid_time, valid_unit, partner_ids, brand_ids, shop_ids
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+
+
+	<select id="queryPointProductsForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+
+		resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.PointProductModel">
+		
+		SELECT * FROM 
+(SELECT 
+  pm.`id`,
+  pm.`product_title`,
+  pm.`product_img`,
+  pm.`point`,
+  pm.`price`,
+  pm.`convert_type`,
+  ct.`name` convert_type_name 
+FROM
+  `t_biz_point_mall` pm 
+  LEFT JOIN `t_biz_partner` p 
+    ON FIND_IN_SET(p.`id`, pm.`partner_ids`) != 0 
+  LEFT JOIN `t_biz_convert_type` ct 
+    ON pm.`convert_type` = ct.`type` 
+WHERE NOW() &gt;= pm.`start_time` 
+  AND NOW() &lt;= pm.`end_time` 
+  AND FIND_IN_SET(#{param.region_code,jdbcType=VARCHAR}, p.`region_id`) != 0 
+  AND pm.state = 1 
+  AND pm.`convert_type` != 1
+UNION
+SELECT 
+  pm.`id`,
+  pm.`product_title`,
+  pm.`product_img`,
+  pm.`point`,
+  pm.`price`,
+  pm.`convert_type`,
+  ct.`name` convert_type_name 
+FROM
+  `t_biz_point_mall` pm 
+  LEFT JOIN `t_biz_convert_type` ct 
+    ON pm.`convert_type` = ct.`type` 
+WHERE NOW() &gt;= pm.`start_time` 
+  AND NOW() &lt;= pm.`end_time` 
+  AND pm.`convert_type` = 1
+  AND pm.state = 1 )a
+  ORDER BY a.`id` 
+		
+	</select>
+  
+  	<select id="queryPointProductDetails" parameterType="java.lang.Long"
+		resultMap="PointProductMap">
+		SELECT
+		pm.`id`,
+		pm.`product_title`,
+		pm.`product_img`,
+		pm.`point`,
+		pm.`price`,
+		pm.`start_time`,
+		pm.`end_time`,
+		pm.`description`,
+		s.`shop_name`,
+		s.`address`,
+		s.`phone_num`,
+		s.`lbs`,
+        pm.`product_num`
+		FROM
+		`t_biz_point_mall` pm
+		LEFT JOIN `t_biz_shop` s
+		ON FIND_IN_SET(s.`id`,pm.`shop_ids`)!=0
+		WHERE pm.`id` = #{id,jdbcType=BIGINT}
+	</select>
+  
+  <select id="queryPoinMallPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  select pm.id, pm.product_title,pm.product_num, pm.state, pm.product_img, date_format(pm.start_time,'%Y-%m-%d %T') as start_time,date_format(pm.end_time,'%Y-%m-%d %T') as end_time,pm.point,pm.convert_type,  pc_count.convert_count,   
+   group_concat(pa.principal) as partner_name from   t_biz_point_mall pm
+	left join t_biz_partner pa on  FIND_IN_SET(pa.id,pm.partner_ids)!=0
+	left join (select count(0) as convert_count, pc.product_id from t_biz_point_convert pc where pc.convert_state=1 ) pc_count on   pc_count.product_id = pm.id 
+	<if test="param.shop_id!=null and param.shop_id!=''">
+	left join  t_biz_shop sp on find_in_set(sp.id,pm.shop_ids)!=0
+	</if>
+	
+	where 1=1 
+	<if test="param.product_title!=null and param.product_title!=''">
+	    and pm.product_title  like CONCAT('%', #{param.product_title},'%')
+	</if>
+	
+	<if test="param.convert_type!=null and param.convert_type!=''">
+	
+	    and pm.convert_type=#{param.convert_type}
+	
+	</if>
+	
+	<if test="param.partner_name!=null and param.partner_name!=''">
+	
+	   and pa.principal like CONCAT('%', #{param.partner_name},'%') 
+	
+	</if>
+	<if test="param.shop_id!=null and param.shop_id!=''">
+	
+	    and  sp.id = #{param.shop_id}
+	    
+	</if>
+	group by pm.id order by pm.id desc
+  </select>
+  
+  <select id="queryOperator" resultType="java.util.Map" >
+  select fp.operator, fp.operator_code  from  t_biz_flow_package  fp group by fp.operator_code
+  </select>
+  
+  <select id="queryFlowPackage" resultType="java.util.Map" parameterType="java.lang.String">
+  
+  select fp.id,fp.flow,fp.price,fp.operator_code from  t_biz_flow_package  fp where right(flow,1)!='G' and fp.operator_code=#{operator_code}
+  
+  
+  </select>
+  
+  
+  <select id="queryPartner"  resultType="java.util.Map">
+  
+  select pa.id,pa.principal  from  t_biz_partner  pa where pa.check_state=2
+  
+  </select>
+  
+  <select id="queryBrand" resultType="java.util.Map" parameterType="java.util.List">
+  
+  select b.id,be.name as brand_name  from  t_biz_brand b left join t_biz_build_enterprise be on  be.id = b.enterprise_id where b.citypartner_id in (
+  
+  <foreach collection="list" index="index" item="item" separator=",">
+	  
+	      #{item}
+	  
+	  </foreach>
+	   )
+  
+ 
+  
+  </select>
+  
+   <select id="queryAllBrand" resultType="java.util.Map" parameterType="java.util.List">
+  
+  select b.id,be.name as brand_name,b.citypartner_id from  t_biz_brand b left join t_biz_build_enterprise be on  be.id = b.enterprise_id 
+ 
+  
+  </select>
+  
+  <select id="queryShop" resultType="java.util.Map" parameterType="java.lang.Long">
+  
+  select s.id,s.shop_name  from  t_biz_shop s where s.brand_id in(
+  
+  <foreach collection="list" index="index" item="item" separator=",">
+	  
+	      #{item}
+	  
+	  </foreach>
+	   )
+  
+  </select>
+  
+  
+  
+  <select id="queryPointConverPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  
+  
+  select pc.id,ac.account as name ,pm.product_title,pm.product_img, pc.convert_point, pc.convert_type,s.shop_name, pc.convert_code,date_format(pc.convert_time,'%Y-%m-%d %T') as convert_time, date_format(pc.crater_time,'%Y-%m-%d %T') as crater_time,   pc.convert_state, group_concat(pa.principal) as principal  from  t_biz_point_convert pc left join t_biz_point_mall pm on pm.id=pc.product_id
+  
+  
+
+
+left join  t_app_customer ac on ac.id = pc.customer_id
+
+left join  t_biz_partner  pa on find_in_set(pa.id,pm.partner_ids)
+
+left join t_biz_shop  s on s.id = pc.shop_id
+
+
+
+where 1=1 
+
+
+<if test="param.product_title!=null and param.product_title!=''">
+
+ and pm.product_title  like CONCAT('%', #{param.product_title},'%')
+
+
+</if>
+
+<if test="param.convert_type!=null and param.convert_type!=''">
+
+   and pm.convert_type=#{param.convert_type}
+
+</if>
+
+<if test="param.state!=null and param.state!=''">
+
+   and pc.convert_state =#{param.state}
+</if>
+  
+  <if test="param.name!=null and param.name!=''">
+
+   and ac.name  like CONCAT('%', #{param.name},'%')
+</if>
+
+  <if test="param.partner_name!=null and param.partner_name!=''">
+
+   and pa.principal like CONCAT('%', #{param.partner_name},'%')   
+</if>
+
+<if test="param.shop_name!=null and param.shop_name!=''">
+
+   and s.shop_name like  CONCAT('%', #{param.shop_name},'%')   
+
+</if>
+
+<if test="param.shop_id!=null and param.shop_id!=''">
+
+   and (s.id =  #{param.shop_id} or  (find_in_set(#{param.shop_id},pm.shop_ids)!=0 and pc.convert_state=1))   
+
+</if>
+
+
+<if test="param.convert_time!=null and param.convert_time!=''">
+
+
+  and  pc.convert_time=#{param.convert_time}
+
+</if>
+
+
+<if test="param.id!=null and param.id!=''">
+
+  and pc.id=#{param.id}
+
+</if>
+
+group  by  pc.id order by pc.convert_time desc
+  </select>
+  
+  
+  <select id="querysPointConvert" parameterType="java.lang.String" resultType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BasePointConvertEntity">
+  
+  select pc.id  from t_biz_point_convert pc 
+  
+  left join  t_biz_point_mall pm on   pm.id=pc.product_id
+  
+  left join  t_biz_shop sp on find_in_set(sp.id,pm.shop_ids)!=0
+  
+  where pc.convert_code=#{convertCode}
+  
+  and   
+ 
+  now()  <![CDATA[ >= ]]>pc.crater_time and now()  <![CDATA[ <=]]> 
+  
+  case WHEN  pm.valid_unit='day'
+  THEN date_add(pc.crater_time, INTERVAL pm.valid_time day) 
+  
+  when pm.valid_unit='year'
+  
+  then date_add(pc.crater_time, INTERVAL pm.valid_time year) 
+  
+  when pm.valid_unit='month'
+  
+  then date_add(pc.crater_time, INTERVAL pm.valid_time month) 
+  
+ end
+ 
+ and sp.id=#{shop_id} and pc.convert_state!=2
+  
+  </select>
+  
+  <select id="queryMallFlowByProductId" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseMallFlowEntity">
+  
+   select *  from   t_biz_mall_flow  where product_id=#{productId}
+  </select>
+  <select id="selectAllByPrimaryKey" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.pointmall.model.PointMallEntity">
+  
+   select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_point_mall
+    where id = #{id,jdbcType=BIGINT}
+  
+  </select>
+  
+</mapper>

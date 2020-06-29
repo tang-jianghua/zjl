@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<style>
+.progress {
+  width: 400px;
+  margin:auto;
+  margin-top:25%;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar {
+  position: relative;
+  height: 16px;
+  border-radius: 4px;
+  -webkit-transition: 0.4s linear;
+  -moz-transition: 0.4s linear;
+  -o-transition: 0.4s linear;
+  transition: 0.4s linear;
+  -webkit-transition-property: width, background-color;
+  -moz-transition-property: width, background-color;
+  -o-transition-property: width, background-color;
+  transition-property: width, background-color;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+}
+.progress-bar:before, .progress-bar:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.progress-bar:before {
+  bottom: 0;
+  background: url("../img/stripes.png") 0 0 repeat;
+  border-radius: 4px 4px 0 0;
+}
+.progress-bar:after {
+  z-index: 2;
+  bottom: 45%;
+  border-radius: 4px;
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+}
+
+.progress-bar {
+  width: 5%;
+  background-color: #caa359;
+}
+.zhezhao{
+background-color:#CCCCCC;
+position:absolute;
+width:100%;
+height:100%;
+z-index:1001;
+ -moz-opacity:0.7;
+ -khtml-opacity:0.7;
+ opacity: 0.7;
+ display:none;
+}
+</style>
+<div id="maskLayer" class="zhezhao">
+	<div class="progress">
+      	<div class="progress-bar"></div>
+    </div>
+</div>
+<div ng-controller="brandProductEnterpriseQuery">
+
+	<section class="well ">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">仓库产品</div>
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="control-label col-sm-1">标题</label>
+							<div class="col-sm-3">
+								<input ng-model="form.product_name" id="product_title"
+									class="k-textbox" placeholder="输入标题搜索" />
+							</div>
+
+							<label class="col-xs-1 control-label">分类</label>
+							<div class="col-sm-3">
+								<input id="classify" />
+							</div>
+
+							<label class="col-xs-1 control-label">系列</label>
+							<div class="col-sm-3">
+								<input id="series" />
+							</div>
+
+						</div>
+					</div>
+
+					<div class="buttons-wrap">
+						<button class="k-button k-state-default" ng-click="search()">搜索</button>
+					</div>
+				</div>
+			</div>
+			<div>
+				<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+			 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+				<!-- <button class="k-button k-state-default" ng-click="dataExport()">导出数据</button> -->
+				<button class="k-button k-state-default" ng-click="chooseWarehouse()">选取到库</button>
+				<button class="k-button k-state-default" ng-click="chooseWarehouseAll()">全部到库</button>
+				<hr class="towGreen"></hr>
+			</div>
+
+
+			<div kendo-grid="grid" k-options="mainGridOptions" id="grid"></div>
+		</div>
+	</section>
+</div>

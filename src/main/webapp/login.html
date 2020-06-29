@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<style>
+tr {
+	height: 80px;
+}
+
+@
+keyframes zoom {
+	from {transform: scale(1, 1);
+}
+
+to {
+	transform: scale(1.2, 1.2);
+}
+
+}
+input {
+	height: 50px;
+	padding-left: 12px;
+}
+
+.buttonlogin {
+	width: 100%;
+	height: 60px;
+	background-color: #444444;
+	font-size: 25px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#mess {
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	color: red;
+	text-align: center;
+	margin: 0 auto;
+	display: block;
+}
+
+.thisOther {
+	width: 100%;
+	border: none;
+	font-size: 14px;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill
+	{
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input:-webkit-autofill:active {
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input:-webkit-autofill:focus {
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input:-webkit-autofill:visited {
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input:-webkit-autofill:hover {
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+.ss {
+	width: 980px;
+	top: 0;
+}
+.twoPage {
+	width: 358px;
+	height: 296px;
+	background: url(images/login/imac.png);
+	position: absolute;
+	bottom: 84px;
+	left: 9px;
+	background-repeat: no-repeat;
+	padding: 15px 11px;
+}
+
+.twoPages {
+	width: 326px;
+	height: 197px;
+	overflow: hidden;
+}
+
+.twoPage img {
+	height: 197px;
+	position: relative;
+	left: 0;
+	transition: left;
+}
+
+.firstPage {
+	width: 76px;
+	height: 146px;
+	bottom: 84px;
+	right: 96px;
+	position: absolute;
+	background: url(images/login/iphone5.png);
+	background-repeat: no-repeat;
+}
+
+.firstPages {
+	width: 66px;
+	height: 105px;
+	overflow: hidden;
+	position: absolute;
+	top: 20px;
+	right: 5px;
+}
+
+.firstPage img {
+	width: 70px;
+	position: relative;
+	top: 0;
+	transition: top;
+}
+
+.threePage {
+	width: 121px;
+	height: 63px;
+	background: url(images/login/iphone5t.png);
+	position: absolute;
+	bottom: 87px;
+	right: 0px;
+	background-repeat: no-repeat;
+}
+
+.threePages {
+	width: 90px;
+	height: 52px;
+	overflow: hidden;
+	position: absolute;
+	bottom: 6px;
+	right: 16px;
+}
+
+.threePage img {
+	width: 90px;
+	position: relative;
+	top: 0;
+	transition: top;
+}
+
+.titlesTop {
+	width: 455px;
+	height: 54px;
+	background: url(images/login/title.png);
+	background-repeat: no-repeat;
+}
+</style>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/login/boilerplate.css">
+<link rel="stylesheet" href="css/login/page.css">
+<link rel="stylesheet" href="css/kendo.bootstrap.min.css">
+<link rel="stylesheet" href="css/demo.css" media="all">
+<script type="text/javascript" src="plugins/jquery/jquery.min.js"></script>
+</head>
+<body>
+	<div id="primaryContainer" class="primaryContainer clearfix">
+		<div class="topsLine">
+			<img id="logo" src="images/login/logo.png" class="image" /> <img
+				id="line" src="images/login/line.jpg" class="image" />
+			<p id="topic">欢迎登陆后台系统</p>
+		</div>
+		<div class="bgTops">
+			<div id="bg" class="clearfix">
+				<div id="container">
+					<div id="anitOut" class="anitOut" style="width: 100%; height: 575px;"></div>
+				</div>
+				<div id="bg" class="ss">
+					<div id="computer" class="clearfix">
+						<div class="titlesTop"></div>
+						<div class="lowerlimb">
+							<div class="twoPage">
+								<div class="twoPages">
+									<img alt="" src="images/login/login.png">
+								</div>
+							</div>
+							<div class="firstPage">
+								<div class="firstPages">
+									<img alt="" src="images/login/fistPage.jpg">
+								</div>
+							</div>
+							<div class="threePage">
+								<div class="threePages">
+									<img alt="" src="images/login/phoness.png">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="rounded_2" class="clearfix">
+						<p id="userId">用户登陆</p>
+						<div id="rounded_3" class="clearfix">
+
+							<form action="login" method="post">
+								<table style="width: 100%; margin-top: 25px;">
+									<tr>
+										<!-- <td nowrap="nowrap">用户名：</td> -->
+										<td colspan="2"><input id="user" type="text"
+											placeholder="请输入您的账号" autocomplete="on"
+											class="thisInput k-textbox thisOther" name="account"></td>
+									</tr>
+									<tr>
+										<!-- <td nowrap="nowrap">密 码：</td> -->
+										<td colspan="2"><input id="pwd" type="password"
+											placeholder="请输入您的密码" name="pwd" class="k-textbox thisOther"
+											style="width: 100%; border: none;"></td>
+									</tr>
+									<tr>
+										<!-- <td nowrap="nowrap">验证码：</td> -->
+										<td style="float: left"><input id="v_code" type="text"
+											name="v_code" placeholder="请输入验证码"
+											class="k-textbox thisOther"></td>
+										<td style="float: right"><a href="javascript:getcode();">
+												<img id="code" alt="" src="" style="width: 140px;">
+										</a></td>
+									</tr>
+
+								</table>
+
+								<button type="button" class="buttonlogin" onclick="login()">登&nbsp;陆
+								</button>
+
+								<span id="mess"></span>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="js/cav.js"></script>
+<script src="js/getstart.js"></script>
+<script type="text/javascript">
+	$.ajax({
+		url : "getvcode",
+		dataType : "json",
+		type : "GET",
+		success : function(data) {
+
+			$("#code").attr("src", "data:image/png;base64," + data.result)
+
+		}
+	});
+
+	$('input').keydown(function(event) {
+
+		if (event.keyCode == 13) {
+
+			login();
+
+		}
+
+	});
+
+	function getcode() {
+		$.ajax({
+			url : "getvcode",
+			dataType : "json",
+			type : "GET",
+			success : function(data) {
+
+				$("#code").attr("src", "data:image/png;base64," + data.result)
+
+			}
+		});
+
+	}
+
+	function v_data() {
+
+		var user = $("#user").val();
+		var paw = $("#pwd").val();
+
+		var v_code = $("#v_code").val();
+
+		if (user == null || user == '') {
+
+			$("#mess").html("用户名不能为空");
+
+			return false;
+
+		}
+		if (paw == null || paw == '') {
+
+			$("#mess").html("密码不能为空");
+
+			return false;
+
+		}
+
+		/* if(v_code==null||v_code==''){
+			
+			$("#mess").html("验证码不能为空");
+			
+			return false;
+			
+		} */
+		return true;
+
+	}
+
+	function login() {
+
+		if (v_data()) {
+			$.ajax({
+				url : "v_user",
+				dataType : "json",
+				data : $("form").serialize(),
+				type : "POST",
+				success : function(data) {
+
+					if (data.code == 0) {
+
+						$("form").submit();
+					} else {
+						$("#mess").html(data.message);
+					}
+
+				}
+			});
+		}
+
+	}
+	function flash1() {
+		$('.twoPages img').css({left : "0"});
+		$('.twoPages img').animate({left : "-326px"});
+	}
+	function flash2() {
+		$('.firstPages img').css({top : "0"});
+		$('.firstPages img').animate({top : "-104px"});
+	}
+	function flash3() {
+		$('.threePages img').css({top : "0"});
+		$('.threePages img').animate({top : "-52px"});
+	}
+	function timers() {
+		console.log("1")
+		flash1();
+		console.log("2")
+		setTimeout("flash2()", 2000);
+		console.log("3")
+		setTimeout("flash3()", 3000);
+	}
+	setInterval(timers, 5000);
+</script>
+</html>

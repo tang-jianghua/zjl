@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.brand.mapper.BrandMainProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.brand.model.BrandMainProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="sort" jdbcType="BIGINT" property="sort" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, brand_id, sort
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_main_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectProductIdByBrandId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select 
+   product_id
+    from t_biz_brand_main_product
+    where brand_id = #{brand_id,jdbcType=BIGINT}
+    order by sort
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_brand_main_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="batchDeleteBrandMainProductByIDs" parameterType="java.lang.Long">
+    DELETE FROM t_biz_brand_main_product
+    WHERE id IN
+    <foreach collection="brandMainProductIDList" index="index" item="item" open="("
+		separator="," close=")">
+		${item}
+	</foreach>
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BrandMainProductEntity">
+    insert into t_biz_brand_main_product (product_id, brand_id, 
+      sort)
+    values (#{product_id,jdbcType=BIGINT}, #{brand_id,jdbcType=BIGINT}, 
+      #{sort,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BrandMainProductEntity">
+    insert into t_biz_brand_main_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BrandMainProductEntity">
+    update t_biz_brand_main_product
+    <set>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BrandMainProductEntity">
+    update t_biz_brand_main_product
+    set product_id = #{product_id,jdbcType=BIGINT},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      sort = #{sort,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="findBrandMainProductListPage" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  	SELECT 
+	mp.id,mp.product_id,p.product_title product_name,
+	ROUND(e.sum_quality/e.count_quality) quality,ROUND(e.sum_service/e.count_service) service,
+	i.imgurl,n.product_num,GROUP_CONCAT(c.`name`) classify,GROUP_CONCAT(s.`name`) series,
+	CASE p.state WHEN 1 THEN '正常' ELSE '下架' END state,min_price,max_price
+	FROM t_biz_brand_main_product mp
+	LEFT JOIN t_biz_brand_product p on mp.product_id = p.id
+	LEFT JOIN (
+		SELECT SUM(quality) sum_quality,COUNT(quality) count_quality,SUM(service) sum_service,COUNT(service) count_service,product_id FROM t_biz_evaluation GROUP BY product_id
+	) e on mp.product_id = e.product_id
+	LEFT JOIN (
+		SELECT product_id,imgurl,MIN(img_sort) FROM t_biz_brand_prod_img WHERE type = 1 GROUP BY product_id ORDER BY product_id,img_sort asc
+	) i on mp.product_id = i.product_id
+	LEFT JOIN (
+		SELECT op.product_id,SUM(op.product_num) product_num FROM t_biz_order_product op
+		LEFT JOIN t_biz_order_state_relation r ON op.order_id = r.order_id
+		WHERE r.order_state_code = '3000'
+		GROUP BY op.product_id
+	) n ON mp.product_id = n.product_id
+	LEFT JOIN t_biz_brand_prod_series ps ON mp.product_id = ps.product_id
+	LEFT JOIN t_biz_brand_series s ON ps.series_id = s.id
+	LEFT JOIN t_biz_brand_classify c ON s.classify_id = c.id
+	LEFT JOIN (
+		SELECT MIN(price) min_price,MAX(price) max_price,product_id FROM t_biz_brand_prod_salesattr GROUP BY product_id
+	) psa ON mp.product_id = psa.product_id
+	<where>
+		<if test="param.brand_id != null">
+			mp.brand_id = ${param.brand_id}
+		</if>
+	</where>
+	GROUP BY mp.product_id
+  </select>
+</mapper>

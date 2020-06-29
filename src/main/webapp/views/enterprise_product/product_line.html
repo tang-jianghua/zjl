@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div ng-controller="entProductLineCtrl">
+<section class="well">
+    <!-- 标题 -->
+    <div class="fileAbout backstage ">产品分类管理
+    </div>
+    <div class="idMessage">
+     <div>
+     	<button class="k-button k-state-default" ng-click="saveChanges()" >保存分类</button>
+     	<button class="k-button k-state-default" ng-click="add()">添加分类</button>
+     </div>
+    <div kendo-tree-list="dep_tree_list" k-data-bound="tree_data_bound" k-options="mainGridOptions" k-selectable="true"></div>
+    </div>
+    </section>
+</div>
+    
+

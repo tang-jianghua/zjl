@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.applogin.mapper.CustomerAddressMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="address_details" jdbcType="VARCHAR" property="address_details" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, region_code, address_details, receiver_name, phone_num, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_customer_address 
+    where id = #{id,jdbcType=BIGINT};
+  </select>
+  <select id="selectByCustomerIdAndRegionCode" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_customer_address
+    where customer_id = #{customer_id,jdbcType=BIGINT} AND region_code LIKE '#{region_code,jdbcType=VARCHAR}%' ORDER BY state DESC;
+  </select>
+    <select id="selectByCustomerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_customer_address
+    where customer_id = #{customer_id,jdbcType=BIGINT} ORDER BY state DESC;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_app_customer_address
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByPrimaryKeyAndCustomerId" parameterType="java.lang.Long">
+    delete from t_app_customer_address
+    where id = #{id,jdbcType=BIGINT} and customer_id = #{customer_id,jdbcType=BIGINT};
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_customer_address (customer_id, region_code, address_details, 
+      receiver_name, phone_num, state
+      )
+    values (#{customer_id,jdbcType=BIGINT}, #{region_code,jdbcType=VARCHAR}, #{address_details,jdbcType=VARCHAR}, 
+      #{receiver_name,jdbcType=VARCHAR}, #{phone_num,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_customer_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="address_details != null">
+        address_details,
+      </if>
+      <if test="receiver_name != null">
+        receiver_name,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address_details != null">
+        #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver_name != null">
+        #{receiver_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+    update t_app_customer_address
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address_details != null">
+        address_details = #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver_name != null">
+        receiver_name = #{receiver_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+    update t_app_customer_address
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      address_details = #{address_details,jdbcType=VARCHAR},
+      receiver_name = #{receiver_name,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      state = #{state,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+   <update id="updateStateByCustomerId" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+    update t_app_customer_address
+    set state = #{state,jdbcType=TINYINT}
+    where customer_id = #{customer_id,jdbcType=BIGINT}
+  </update>
+</mapper>

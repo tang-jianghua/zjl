@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<style>
+.canOperate{
+	color: #0084ff;
+	cursor: pointer;
+}
+.noOperate{
+	color: gray !important;
+}
+</style>
+<div ng-controller="platformActivityCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">平台活动</div>
+
+		<div class="idMessage">
+			<div class="greenLine">
+				<!-- <div id="pannel_1" class="oneList" ng-click="choosePannel(1)">平台活动</div> -->
+				<div id="pannel_2" class="oneList" ng-click="choosePannel(2)">秒杀活动</div>
+				<div id="pannel_3" class="oneList" ng-click="choosePannel(3)">参与的活动</div>
+				<div id="pannel_4" class="oneList" ng-click="choosePannel(4)">活动报名</div>
+				<div id="pannel_5" class="oneList" ng-click="choosePannel(5)">折扣活动</div>
+			</div>
+
+			<!-- 平台活动 -->
+			<div id="container_1">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动名称</label>
+								<div class="col-sm-8">
+									<input ng-model="search1.customer_name" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<!-- <div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动性质</label>
+								<div class="col-sm-8">
+									<input id="activity_property1" />
+								</div>
+							</div>
+						</div> -->
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动状态</label>
+								<div class="col-sm-8">
+									<input id="activity_state1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">创建日期</label>
+								<div class="col-sm-8">
+									<input id="create_time1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">发布日期</label>
+								<div class="col-sm-8">
+									<input id="start_time1" />
+								</div>
+							</div>
+						</div>
+
+						<div class="buttons-wrap clearBoth">
+							<button class="k-button k-state-default" ng-click="search(1)">查询</button>
+						</div>
+					</div>
+				</div>
+				<div id="operateContainer1">
+					<button class="k-button k-state-default"
+						ng-click="publishActivity(1)">发布活动</button>
+					<button class="k-button k-state-default"
+						ng-click="checkActivity(1)">活动审核</button>
+					<hr class="towGreen">
+				</div>
+				<div kendo-grid="grid1" k-options="mainGridOptions1"></div>
+			</div>
+			<!-- 秒杀活动 -->
+			<div id="container_2">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动名称</label>
+								<div class="col-sm-8">
+									<input ng-model="search2.activity_name" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<!-- <div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动性质</label>
+								<div class="col-sm-8">
+									<input id="activity_property2" />
+								</div>
+							</div>
+						</div> -->
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动状态</label>
+								<div class="col-sm-8">
+									<input id="activity_state2" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">创建日期（始）</label>
+								<div class="col-sm-8">
+									<input id="create_time2_1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">创建日期（止）</label>
+								<div class="col-sm-8">
+									<input id="create_time2_2" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">发布日期（始）</label>
+								<div class="col-sm-8">
+									<input id="start_time2_1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">发布日期（止）</label>
+								<div class="col-sm-8">
+									<input id="start_time2_2" />
+								</div>
+							</div>
+						</div>
+
+						<div class="buttons-wrap clearBoth">
+							<button class="k-button k-state-default" ng-click="search(2)">查询</button>
+						</div>
+					</div>
+				</div>
+				<div id="operateContainer2">
+					<button class="k-button k-state-default"
+						ng-click="publishActivity(2)">发布活动</button>
+					<hr class="towGreen">
+				</div>
+				<div kendo-grid="grid2" k-options="mainGridOptions2"></div>
+			</div>
+			<!-- 参与的活动 -->
+			<div id="container_3">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动名称</label>
+								<div class="col-sm-8">
+									<input ng-model="search3.activity_name" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动类型</label>
+								<div class="col-sm-8">
+									<input id="activity_type3" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动状态</label>
+								<div class="col-sm-8">
+									<input id="activity_state3" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动日期（始）</label>
+								<div class="col-sm-8">
+									<input id="start_time3" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动日期（止）</label>
+								<div class="col-sm-8">
+									<input id="end_time3" />
+								</div>
+							</div>
+						</div>
+						<div class="buttons-wrap clearBoth">
+							<button class="k-button k-state-default" ng-click="search(3)">查询</button>
+						</div>
+					</div>
+				</div>
+				<div class="interval"></div>
+				<div kendo-grid="grid3" k-options="mainGridOptions3"></div>
+			</div>
+			<!--活动报名 -->
+			<div id="container_4">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动名称</label>
+								<div class="col-sm-8">
+									<input ng-model="search4.activity_name" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动类型</label>
+								<div class="col-sm-8">
+									<input id="activity_type4" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">报名状态</label>
+								<div class="col-sm-8">
+									<input id="sign_state4" />
+								</div>
+							</div>
+						</div>
+
+						<div class="buttons-wrap clearBoth">
+							<button class="k-button k-state-default" ng-click="search(4)">查询</button>
+						</div>
+					</div>
+				</div>
+				<div class="interval"></div>
+				<div kendo-grid="grid4" k-options="mainGridOptions4"></div>
+			</div>
+			<!-- 折扣活动 -->
+			<div id="container_5">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动名称</label>
+								<div class="col-sm-8">
+									<input ng-model="search5.activity_name" class="k-textbox" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动类型</label>
+								<div class="col-sm-8">
+									<input id="activity_type5" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">活动状态</label>
+								<div class="col-sm-8">
+									<input id="activity_state5" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">创建日期（始）</label>
+								<div class="col-sm-8">
+									<input id="create_time5_1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">创建日期（止）</label>
+								<div class="col-sm-8">
+									<input id="create_time5_2" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">发布日期（始）</label>
+								<div class="col-sm-8">
+									<input id="start_time5_1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-horizontal form-widgets col-sm-4">
+							<div class="form-group">
+								<label class="control-label col-sm-4 businessr">发布日期（止）</label>
+								<div class="col-sm-8">
+									<input id="start_time5_2" />
+								</div>
+							</div>
+						</div>
+
+						<div class="buttons-wrap clearBoth">
+							<button class="k-button k-state-default" ng-click="search(5)">查询</button>
+						</div>
+					</div>
+				</div>
+				<div id="operateContainer5">
+					<button class="k-button k-state-default" ng-click="publishActivity(5)">发布活动</button>
+					<hr class="towGreen">
+				</div>
+				<div kendo-grid="grid5" k-options="mainGridOptions5"></div>
+			</div>
+			
+			
+		</div>
+	</section>
+</div>
+
+

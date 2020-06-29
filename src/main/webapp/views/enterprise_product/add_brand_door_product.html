@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<style>
+#top-unload-imgs .k-upload-button {
+   direction: ltr;
+    overflow: hidden !important;
+    position:absolute;
+    left:0px;
+	top:10px;
+    width: 150px;
+    height:150px;
+    background-color:#3399FF;   
+	opacity:0;
+	z-index:1001;
+}
+#bottom-unload-img .k-upload-button {
+    direction: ltr;
+    overflow: hidden !important;
+    position:absolute;
+    left:0px;
+	top:10px;
+    width: 150px;
+    height:150px;
+    background-color:#3399FF;   
+	opacity:0;
+	z-index:1001;
+}
+.unloadIcon {
+    direction: ltr;
+    overflow: hidden !important;
+    position:absolute;
+    left:10px;
+	top:10px;
+    width:150px;
+    height:150px;
+    font-size:14px;
+    text-align:center;
+    line-height: 150px;
+    color:#999999;
+  	background-color:#eeeeee;   
+	display:block;
+	font-size: 100px;
+	border:1px dashed #999999;
+}
+
+.fieldlist{
+	list-style-type: none;
+	padding-left:0px;
+} 
+.fieldlist li{
+	float:left;
+	padding-left:5px;
+} 
+.salepadding li{
+	float:left;
+	padding:10px;
+	padding-top:6px;
+} 
+.myform input.form-control {
+   display: block;  /* allows labels to sit on input when inline */
+   margin-bottom: 15px; /* gives padding to bottom of inline inputs */
+}
+.productline{
+	height:225px;
+	background-color:#FFFFFF;
+	border-radius:3px 0 0 3px;
+}
+.k-checkbox{
+	position: relative;
+}
+.unloadIcon1 {
+   	direction: ltr;
+    overflow: hidden !important;
+    position:absolute;
+    width: 100px;
+    height:100px;
+    text-align:center;
+    line-height: 100px;
+    color:#999999;
+  	background-color:#eeeeee;   
+	display:block;
+	font-size: 50px;
+	border:1px dashed #999999;
+}
+#ColourClassifyId .k-upload-button {
+    direction: ltr;
+    overflow: hidden !important;
+    position:absolute;
+    left:0px;
+	top:10px;
+    width: 100px;
+    height:100px;
+    background-color:#3399FF;   
+	opacity:0;
+	z-index:1001;
+}
+.divImg{
+	margin-top:-65px;
+	margin-left:-5px;
+}
+.divImg1{
+	margin-top:-70px;
+}
+#ColourClassifyId .k-widget {
+   width:95px;
+}
+#top-unload-imgs .k-widget{
+	width:140px;
+	margin-top: 20px;
+}
+ #bottom-unload-img .k-widget{
+	width:140px;
+	margin-top: 20px;
+} 
+font{
+	color:red;
+	font-size:20px;
+}
+</style>
+
+<div ng-controller="entaddBrandDoorProductCtrl" id="entaddBrandDoorProductCtrl">
+	<section class="well">
+	    <!-- 标题 -->
+	    <div class="fileAbout backstage">企业产品>
+	    <span>产品情页</span>
+	    </div>
+
+ 		<section class="well well-lg"  style="height:220px;" >
+ 			<div class="form-horizontal form-widgets col-sm-12">
+		 		<div class="form-group" id="top-unload-imgs">
+		 			<div class="col-sm-2">
+		 				<label class="col-sm-12 text-left  businessl">产品展示图</label>
+		 				</div>
+		 				<span >【尺寸要求】高度：750px,宽度750px,单张图片大小不超过80Kb</span>
+		 				<div class="form-horizontal form-widgets col-sm-10">
+		       		    <div class="col-sm-2 ">
+		 						<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+								</div>
+		       		    		<input type="file" name="file" id="upload1" class="k-upload-button" />
+		       		    		<div class="col-sm-12 divImg" id="upload1_img"></div>	
+		       		    		<input type="hidden" id="upload1_url"/>
+		       		 	</div>
+		       		    <div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+								</div>
+		       		    		<input type="file" name="file" id="upload2" class="k-upload-button" />
+		       		    		<div class="col-sm-12 divImg" id="upload2_img"></div>	
+		       		    		<input type="hidden" id="upload2_url"/>
+		       		 		
+		       		 	</div>
+		       		    <div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+								</div>
+		       		    		<input type="file" name="file" id="upload3" class="k-upload-button" />
+		       		    		<div class="col-sm-12 divImg" id="upload3_img"></div>	
+		       		    		<input type="hidden" id="upload3_url"/>
+		       		 		
+		       		 	</div>
+		       		    <div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	<span class="glyphicon glyphicon-plus "></span>
+							</div>
+		       		    	<input type="file" name="file" id="upload4" class="k-upload-button" />
+	       		    		<div class="col-sm-12 divImg" id="upload4_img"></div>	
+	       		    		<input type="hidden" id="upload4_url"/>
+		       		 		
+		       		 	</div>
+		       		 	<div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+							</div>
+		       		    	<input type="file" name="file" id="upload5" class="k-upload-button" />
+	       		    		<div class="col-sm-12 divImg" id="upload5_img"></div>	
+	       		    		<input type="hidden" id="upload5_url"/>
+		       		 	</div>
+		       		 	</div>
+		       	</div>
+		     </div>
+ 		</section>
+ 		
+     
+		<section class="well well-lg"  style="height:180px;" >
+			<label class="control-label col-sm-1">基本信息</label>
+       		<div class="form-horizontal  form-widgets  col-sm-10">
+       			<div class="form-group">
+             		<label class="control-label col-sm-2" ><font>*</font>产品标题</label>
+             		<div class="col-sm-8"><input ng-model="form.product_name" class="k-textbox" placeholder="请输入名称"/></div>
+		 		</div>
+		 		<div class="form-group">
+	           		<label  class="col-xs-2 control-label"><font>*</font>产品排序</label>
+	 				<div class="col-xs-3">
+	 					<input type="number" id="sort" class="k-textbox"/>
+	 				</div>
+	 				<label class="control-label col-sm-2" ><font>*</font>计价单位</label>
+	             	<div class="col-sm-3">
+		 				 <input id="unit" style="width:100%"/> 
+			 		</div>
+		 		</div>
+		 	</div>
+		 </section>	
+
+		<section class="well well-lg"  style="height:480px;" >
+			<label class="control-label col-sm-1">产品属性</label>
+			<div class="form-horizontal  form-widgets  col-sm-9">
+				<div class="form-group">
+             		<label  class="col-xs-2 control-label businessr"><font>*</font>材质分类</label>
+	 				<div class="col-xs-4">
+	 					<input id="material" style="width:100%"/> 
+	 				 </div>
+	           		 <label class="col-xs-2 control-label businessr"><font>*</font>饰面工艺</label>
+				    <div class="col-xs-4"> 
+						<input id="craft_id" style="width:100%"/> 
+				   </div>
+		 		</div>
+		 	
+		 		<div class="form-group">
+             		<label  class="col-xs-2 control-label businessr"><font>*</font>开合方式</label>
+		 			<div class="col-xs-4">
+		 				<input id="ropen"  style="width:100%"/>
+		 			 </div>
+		 			
+			 	</div>
+		 		<div class="form-group">
+					    <label for="category" class="col-xs-2 control-label businessr"><font>*</font>所属分类</label>&nbsp; 
+					    <div id="tree_line" style="width:80%;background-color:#FFFFFF;border: #CCC 1px solid;" class="col-xs-10 productline">
+						 	
+						</div>
+				</div>
+			
+		 </section>	
+		 
+		 
+        	
+        <section class="well well-lg" style="height:160px;" id="marketPropertyId">
+	      		<div class="col-sm-12">
+					<div class="col-sm-2 form-group">
+						<div class="col-md-7 form-horizontal form-widgets">
+							<label  class="col-md-12 control-label"><font>*</font>颜色分类</label>
+						</div>
+						<div class="col-md-5">
+							<button class="k-state-default k-button" ng-click="addColourClassify()">添加</button>
+						</div>
+					</div>
+					<div class="col-sm-9 form-group form-horizontal form-widgets" id="ColourClassifyId">
+						<div class="col-sm-12 classifClass" style="height:110px;" id="deleteHtml0" title="0">
+							<div class="col-md-12" style="padding: 0;">
+								<div class="col-md-12" style="padding: 0;">
+									<div class="col-xs-8" style="padding: 0;">
+										<div class="col-xs-6" style="height:50px;">
+											<input name="autonomouslyName" class="k-textbox" placeholder="名称可自主编辑"/>
+										</div>
+										<div class="col-xs-6" style="height:50px;">
+											<input name="productModel" class="k-textbox" placeholder="请输入型号"/>
+										</div>
+										
+										<div class="col-xs-6" style="height:50px;">
+											<input name="addPrice" class="k-textbox" placeholder="添加价格" style="inline-block;width:80%;"/>
+									        <span style="inline-block;">元</span>
+										</div>
+										<div class="col-xs-6" style="height:50px;">
+											<input name="addRepertory" class="k-textbox" placeholder="添加库存数量" style="inline-block;width:80%;"/>
+									        <span style="inline-block;">件</span>
+										</div>
+						 			 </div>
+						 			 
+						 			 <div class="col-xs-2" class="market_img">
+					 			 		<div  class="unloadIcon1">
+										 	    <span class="glyphicon glyphicon-plus "></span>
+										</div>
+				       		    		<input type="file" name="file" id="uploadColourClassify0" class="k-upload-button"/>
+				       		    		<div class="col-sm-9 divImg1" id="ColourClassify_img0"></div>	
+				       		    		<input type="hidden" id="ColourClassify_url0"/>
+						 			 </div>
+						 			 
+						 			 <div class="col-xs-2">
+						 			 
+						 			 </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		 </section>		
+
+
+			<section class="well well-lg"  style="height:540px;" >
+				<label class="control-label col-sm-2">产品展示图</label>
+				<span class="text-left control-label" >【尺寸要求】宽度750px，高度不限，单张图片大小不超过80Kb</span>
+				
+	       		<div class="form-horizontal  form-widgets  col-sm-8">
+			      <div id="example">
+	                <textarea id="editor" rows="10" cols="30" style="height:440px">
+	                    
+	                </textarea>
+		        </div>
+		 	</div>
+		 	 <div id="upload-img-win">
+			    <div kendo-window="addImageWindow" k-title="'插入图片'" k-width="400" k-min-height="400" k-visible="false" k-modal="true">
+			    	<div class="form-horizontal form-widgets col-sm-11">
+					    <div class="form-group k-rtl">
+					        <label class="control-label col-sm-2">上传图片</label>
+					        <div class="col-sm-8">
+		                   		  <input type="file" name="file" id="logo1"/>
+		                   		  <div class="col-sm-12" id="logo1_img"></div>	
+		                   		  <input type="hidden" id="logo1_url"/>
+					        </div>
+					    </div>
+					    
+					   <div class="form-group">
+					        <label class="control-label col-sm-2">图片长度</label>
+					        <div class="col-sm-8">
+					            <input ng-model="form.imgWidth" onblur="if(isNaN(this.value))this.value=''" class="k-textbox" placeholder=""/>
+					        </div>
+					    </div>
+					    <div class="form-group">
+					        <label class="control-label col-sm-2">图片宽度</label>
+					        <div class="col-sm-8">
+					            <input ng-model="form.imgHeight" onblur="if(isNaN(this.value))this.value=''" class="k-textbox" placeholder=""/>
+					        </div>
+					    </div>
+					    <div class="form-group k-rtl ">
+					    	 <button class="k-button k-state-default " ng-click="closeImgToEditor()">取消</button>
+					    	<button class="k-button k-state-default " ng-click="addImgToEditor()">确认</button>
+		
+					    </div>
+				    </div>
+			    </div> 
+			</div>
+		 </section>	
+        
+	<section class="well well-lg col-sm-12" style="min-height:220px;">
+			<div class="col-sm-2">
+				<label class=" col-sm-12  text-left businessl">产品案例图</label>
+				<!-- <button class="col-sm-10 k-button" ng-click="deleteColourClassify(0)">删除</button> -->
+			</div>
+			<span  class="text-left control-label">【尺寸要求】宽度750px，高度不限，单张图片大小不超过80Kb</span>
+ 			<div class="form-horizontal form-widgets col-sm-10">
+		 		<div class="form-group" id="top-unload-imgs">
+
+		       		    <div class="col-sm-2 ">
+		 						<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+								</div>
+		       		    		<input type="file" name="file" id="upload6" class="k-upload-button" />
+		       		    		<div class="col-sm-12 divImg" id="upload6_img"></div>	
+		       		    		<input type="hidden" id="upload6_url"/>
+		       		 	</div>
+		       		    <div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+								</div>
+		       		    		<input type="file" name="file" id="upload7" class="k-upload-button" />
+		       		    		<div class="col-sm-12 divImg" id="upload7_img"></div>	
+		       		    		<input type="hidden" id="upload7_url"/>
+		       		 		
+		       		 	</div>
+		       		    <div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+							</div>
+	       		    		<input type="file" name="file" id="upload8" class="k-upload-button" />
+	       		    		<div class="col-sm-12 divImg" id="upload8_img"></div>	
+	       		    		<input type="hidden" id="upload8_url"/>
+		       		 		
+		       		 	</div>
+		       		    <div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	<span class="glyphicon glyphicon-plus "></span>
+							</div>
+		       		    	<input type="file" name="file" id="upload9" class="k-upload-button" />
+	       		    		<div class="col-sm-12 divImg" id="upload9_img"></div>	
+	       		    		<input type="hidden" id="upload9_url"/>
+		       		 		
+		       		 	</div>
+		       		 	<div class="col-sm-2">
+		 					<div  class="unloadIcon" >
+							 	 <span class="glyphicon glyphicon-plus "></span>
+							</div>
+		       		    	<input type="file" name="file" id="upload10" class="k-upload-button" />
+	       		    		<div class="col-sm-12 divImg" id="upload10_img"></div>	
+	       		    		<input type="hidden" id="upload10_url"/>
+		       		 	</div>
+		       	</div>
+		     </div>
+ 		</section>
+ 		<button class="k-button k-state-default centerButton" id="entaddBrandDoorProductCtrlButton" ng-click="saveWallpaper()">保存</button>
+ 		</section>
+</div>
+
+
+		 

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.pointmall.mapper.PointConvertEntityMapper">
+  <resultMap id="ConvertProductModelMap" type="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="crater_time" jdbcType="TIMESTAMP" property="crater_time" />
+    <result column="convert_state" jdbcType="INTEGER" property="convert_state" />
+    <result column="convert_code" jdbcType="VARCHAR" property="convert_code" />
+    <result column="convert_type" jdbcType="INTEGER" property="convert_type" />
+    <result column="convert_time" jdbcType="TIMESTAMP" property="convert_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="user_id" jdbcType="BIGINT" property="user_id" />
+    <result column="conver_point" jdbcType="INTEGER" property="conver_point" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, product_id, shop_id, partner_id, brand_id, crater_time, convert_state, 
+    convert_code, convert_type, convert_time, update_time, user_id, conver_point
+  </sql>
+  
+    <select id="selectAllByPrimaryKey"   parameterType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel"  resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+     select 
+    id,convert_code,customer_id
+    from t_biz_point_convert
+    where id IN 
+    <foreach collection="ids" index="index" item="id" open="("  separator="," close=")">
+    #{id}
+    </foreach>
+      </select>
+  
+  
+  
+  <select id="selectUnConvertRecordAtTime"  resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+     SELECT pc.`product_id`,c.`account` AS mobile,pc.`convert_code`,pc.`customer_id`
+FROM `t_biz_point_convert` pc
+LEFT JOIN `t_app_customer` c
+ON pc.`customer_id` = c.`id`
+WHERE pc.`product_id`  IN (22,23,24) AND pc.`convert_state` = 1 AND pc.`convert_type`=1 AND pc.id &gt;=602
+      </select>
+  
+  
+  <select id="selectConvertRecordForPage"  parameterType="com.mfangsoft.zhuangjialong.common.model.Page"  
+    
+      resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+  
+  SELECT 
+  pc.`id`,
+  pc.`product_id`,
+  pm.`product_title`,
+  pm.`product_img`,
+  pc.`convert_code`,
+  pc.`convert_type`,
+  pc.`convert_point`,
+  CASE
+    UPPER(pm.valid_unit) 
+    WHEN 'DAY' 
+    THEN DATE_ADD(
+      pc.`crater_time`,
+      INTERVAL pm.`valid_time` DAY
+    ) 
+    WHEN 'MONTH' 
+    THEN DATE_ADD(
+      pc.`crater_time`,
+      INTERVAL pm.`valid_time` MONTH
+    ) 
+    WHEN 'YEAR' 
+    THEN DATE_ADD(
+      pc.`crater_time`,
+      INTERVAL pm.`valid_time` YEAR
+    ) 
+  END AS end_time,
+  CASE
+    UPPER(pm.valid_unit) 
+    WHEN 'DAY' 
+    THEN IF(
+      NOW()  &lt;= DATE_ADD(
+        pc.`crater_time`,
+        INTERVAL pm.`valid_time` DAY
+      ),
+      CASE
+        pc.`convert_state` 
+        WHEN 1 
+        THEN 1 
+        WHEN 2 
+        THEN 3 
+        WHEN 3 
+        THEN 2 
+      END,
+      4
+    ) 
+    WHEN 'MONTH' 
+    THEN IF(
+      NOW()  &lt;= DATE_ADD(
+        pc.`crater_time`,
+        INTERVAL pm.`valid_time` MONTH
+      ),
+      CASE
+        pc.`convert_state` 
+        WHEN 1 
+        THEN 1 
+        WHEN 2 
+        THEN 3 
+        WHEN 3 
+        THEN 2 
+      END,
+      4
+    ) 
+    WHEN 'YEAR' 
+    THEN IF(
+      NOW()  &lt;= DATE_ADD(
+        pc.`crater_time`,
+        INTERVAL pm.`valid_time` YEAR
+      ),
+      CASE
+        pc.`convert_state` 
+        WHEN 1 
+        THEN 1 
+        WHEN 2 
+        THEN 3 
+        WHEN 3 
+        THEN 2 
+      END,
+      4
+    ) 
+  END AS c_state,
+  CASE
+    UPPER(pm.valid_unit) 
+    WHEN 'DAY' 
+    THEN IF(
+      NOW()  &lt;= DATE_ADD(
+        pc.`crater_time`,
+        INTERVAL pm.`valid_time` DAY
+      ),
+      pc.`convert_state`,
+      4
+    ) 
+    WHEN 'MONTH' 
+    THEN IF(
+      NOW()  &lt;= DATE_ADD(
+        pc.`crater_time`,
+        INTERVAL pm.`valid_time` MONTH
+      ),
+      pc.`convert_state`,
+      4
+    ) 
+    WHEN 'YEAR' 
+    THEN IF(
+      NOW()  &lt;= DATE_ADD(
+        pc.`crater_time`,
+        INTERVAL pm.`valid_time` YEAR
+      ),
+      pc.`convert_state`,
+      4
+    ) 
+  END AS convert_state 
+FROM
+  `t_biz_point_convert` pc 
+  LEFT JOIN `t_biz_point_mall` pm 
+    ON pc.`product_id` = pm.`id` 
+WHERE pc.`customer_id` = #{param.customer_id,jdbcType=BIGINT}  
+ORDER BY c_state ASC,
+  end_time DESC 
+      </select>
+  
+    <select id="selectFlowPackage"  parameterType="java.lang.String"  
+    
+      resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+       SELECT 
+	   pc.`id`,
+	  pc.`customer_id`,
+	    mf.`flow_group_id` as flow_code,
+case UPPER(pm.valid_unit)
+when  'DAY'
+	  THEN IF(NOW() &lt;=DATE_ADD(pc.`crater_time`,INTERVAL pm.`valid_time` DAY),TRUE,FALSE) 
+when  'MONTH'
+	  THEN IF(NOW() &lt;=DATE_ADD(pc.`crater_time`,INTERVAL pm.`valid_time` MONTH),TRUE,FALSE) 
+when 'YEAR'
+	  THEN IF(NOW() &lt;=DATE_ADD(pc.`crater_time`,INTERVAL pm.`valid_time` YEAR),TRUE,FALSE) 
+end AS valid_state
+	    FROM `t_biz_mall_flow` mf
+	  LEFT JOIN `t_biz_point_convert` pc
+	  ON mf.`product_id` =  pc.`product_id` 
+	  left join t_biz_point_mall pm
+	  on mf.product_id = pm.id
+	  WHERE pc.`convert_state` = 1 AND pc.`convert_type` = 1 AND pc.`convert_code` = #{convert_code，jdbcType=VARCHAR}
+      </select>
+    <select id="selectFirstFlowConvertByCustomerId"  parameterType="java.lang.Long"  
+    
+      resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+   SELECT 
+      pc.`product_id`,
+  pc.`convert_state` ,
+  pc.convert_code,
+case UPPER(pm.valid_unit)
+when  'DAY'
+	  THEN IF(NOW() &lt;=DATE_ADD(pc.`crater_time`,INTERVAL pm.`valid_time` DAY),TRUE,FALSE) 
+when  'MONTH'
+	  THEN IF(NOW() &lt;=DATE_ADD(pc.`crater_time`,INTERVAL pm.`valid_time` MONTH),TRUE,FALSE) 
+when 'YEAR'
+	  THEN IF(NOW() &lt;=DATE_ADD(pc.`crater_time`,INTERVAL pm.`valid_time` YEAR),TRUE,FALSE) 
+end AS valid_state
+FROM
+  `t_biz_point_convert` pc 
+  LEFT JOIN `t_app_customer` c 
+    ON pc.`customer_id` = c.`id`
+    LEFT JOIN t_biz_point_mall pm
+   ON pc.product_id = pm.id 
+WHERE pc.`convert_type` = 1 
+  AND pc.`customer_id` = #{customer_id,jdbcType=BIGINT}
+ORDER BY pc.`crater_time` DESC 
+LIMIT 1 
+      </select>
+
+  <select id="selectFirstFlowConvertByAccount"  parameterType="java.lang.String"  
+    
+      resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.ConvertProductModel">
+   SELECT pc.`product_id`,
+       c.`account` AS mobile,
+       pc.`convert_code`,
+       pc.`customer_id`,
+       pc.`convert_state`
+  FROM `t_biz_point_convert` pc
+       LEFT JOIN `t_app_customer` c ON pc.`customer_id` = c.`id`
+ WHERE pc.`convert_type` = 1 AND c.account =#{account,jdbcType=VARCHAR}
+ORDER BY pc.id
+ LIMIT 1
+      </select>
+
+
+	<select id="selectFlowDetailsById" parameterType="java.lang.Long"
+
+		resultType="com.mfangsoft.zhuangjialong.app.pointmall.model.FlowPackageModel">
+		SELECT
+		`id`,
+		`package_num`,
+		`flow`,
+		`price`,
+		`operator`,
+		`operator_code`
+		FROM
+		`t_biz_flow_package`
+		WHERE id = #{id，jdbcType=BIGINT}
+	</select>
+
+	<select id="selectPointProductConvertedNo" parameterType="java.lang.Long"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) stock FROM `t_biz_point_convert` WHERE product_id =
+		#{product_id,jdbcType=BIGINT}
+
+	</select>
+	<update id="updateConvertStateByConvertCode" parameterType="java.util.Map">
+		UPDATE `t_biz_point_convert`
+		 <set>
+      <if test="convert_state != null">
+        convert_state = #{convert_state,jdbcType=INTEGER},
+      </if>
+    </set>
+	 WHERE convert_code = #{convert_code,jdbcType=VARCHAR}
+	</update>
+	<select id="selectFlowByProductId" parameterType="java.lang.Long"
+
+		resultType="java.lang.String">
+
+		SELECT
+		fp.flow
+		FROM
+		t_biz_flow_package fp
+		LEFT JOIN t_biz_mall_flow mf
+		ON FIND_IN_SET(fp.id,mf.flow_group_id)!=0
+		where mf.product_id = #{product_id,jdbcType=BIGINT}
+
+	</select>
+	<select id="selectFlowByConvertCode" parameterType="java.lang.String"
+
+		resultType="java.lang.String">
+
+	SELECT
+		fp.flow
+		FROM
+		t_biz_flow_package fp
+		LEFT JOIN t_biz_mall_flow mf
+		ON FIND_IN_SET(fp.id,mf.flow_group_id)!=0
+		LEFT JOIN `t_biz_point_convert` pc
+		ON mf.`product_id` = pc.`product_id`
+		WHERE pc.`convert_code`  = #{convert_code,jdbcType=VARCHAR}
+
+	</select>
+   
+</mapper>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.shop.mapper.EmployeeEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.shop.model.EmployeeEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sex, name, phone_num, addr, age, shop_id,update_time,create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.EmployeeEntity">
+    insert into t_biz_employee (sex, name, 
+      phone_num, addr, age, 
+      shop_id,create_time,update_time)
+    values (#{sex,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{phone_num,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{shop_id,jdbcType=BIGINT},#{create_time,jdbcType=TIMESTAMP},#{update_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.EmployeeEntity">
+    insert into t_biz_employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="shop_id != null">
+        shop_id,
+      </if>
+       <if test="update_time != null">
+        update_time,
+      </if>
+       <if test="create_time != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="shop_id != null">
+        #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.EmployeeEntity">
+    update t_biz_employee
+    <set>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="shop_id != null">
+        shop_id = #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.EmployeeEntity">
+    update t_biz_employee
+    set sex = #{sex,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      shop_id = #{shop_id,jdbcType=BIGINT},
+      update_time=#{update_time,jdbcType=TIMESTAMP},create_time=#{create_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getEmployeeList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  
+  	 select 
+    <include refid="Base_Column_List" />
+    from t_biz_employee where shop_id=#{id}
+  
+  </select>
+  
+  
+  <select id="selectEmployeeListForPage" resultMap="BaseResultMap" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  
+  	 select 
+    <include refid="Base_Column_List" />
+    from t_biz_employee  t where 1=1
+  
+  
+   <if test="param.name!=null and param.name!=''">
+  
+    and  t.name like CONCAT('%', #{param.name},'%') 
+  </if>
+  <if test="param.phone_num!=null and param.phone_num!=''">
+  
+    and  t.phone_num like CONCAT('%', #{param.phone_num},'%') 
+  </if>
+   <if test="param.shop_id!=null and param.shop_id!=''">
+  
+    and  t.shop_id =  #{param.shop_id}
+  </if>
+  </select>
+</mapper>

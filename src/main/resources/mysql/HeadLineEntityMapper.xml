@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.headline.mapper.HeadLineEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.headline.model.HeadLineEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="edit_time" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="release_time" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="creater" jdbcType="VARCHAR" property="creater" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="tag" jdbcType="INTEGER" property="tag" />
+    <result column="link_type" jdbcType="INTEGER" property="link_type" />
+     <result column="data_param" jdbcType="VARCHAR" property="data_param" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, edit_time, release_time, title, state, end_time, creater, link, imgurl, tag, 
+    link_type,data_param
+  </sql>
+   <select id="selectByState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    id,title,tag,link,link_type,data_param
+    from t_biz_head_line
+    where state = #{state,jdbcType=INTEGER}
+    order by release_time 
+  </select> 
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_head_line
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_head_line
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.headline.model.HeadLineEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_head_line (edit_time, release_time, title, 
+      state, end_time, creater, 
+      link, imgurl, tag, 
+      link_type,data_param)
+    values (#{edit_time,jdbcType=TIMESTAMP}, #{release_time,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{end_time,jdbcType=TIMESTAMP}, #{creater,jdbcType=VARCHAR}, 
+      #{link,jdbcType=VARCHAR}, #{imgurl,jdbcType=VARCHAR}, #{tag,jdbcType=INTEGER}, 
+      #{link_type,jdbcType=INTEGER}, #{data_param,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.headline.model.HeadLineEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_head_line
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="edit_time != null">
+        edit_time,
+      </if>
+      <if test="release_time != null">
+        release_time,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="end_time != null">
+        end_time,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="link != null">
+        link,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="link_type != null">
+        link_type,
+      </if>
+       <if test="data_param != null">
+        data_param,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="edit_time != null">
+        #{edit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="release_time != null">
+        #{release_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="end_time != null">
+        #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="link_type != null">
+        #{link_type,jdbcType=INTEGER},
+      </if>
+      <if test="data_param != null">
+        #{data_param,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.headline.model.HeadLineEntity">
+    update t_biz_head_line
+    <set>
+      <if test="edit_time != null">
+        edit_time = #{edit_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="release_time != null">
+        release_time = #{release_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="end_time != null">
+        end_time = #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="link_type != null">
+        link_type = #{link_type,jdbcType=INTEGER},
+      </if>
+      <if test="data_param != null">
+        data_param = #{data_param,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.headline.model.HeadLineEntity">
+    update t_biz_head_line
+    set edit_time = #{edit_time,jdbcType=TIMESTAMP},
+      release_time = #{release_time,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=INTEGER},
+      link_type = #{link_type,jdbcType=INTEGER},
+         data_param = #{data_param,jdbcType=VARCHAR},
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectHeadLineListForPage" resultMap="BaseResultMap" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  
+   select 
+    <include refid="Base_Column_List" />
+    from t_biz_head_line t
+    
+    where 1=1
+    
+    <if test="param.title!=null and param.title!=''">
+  
+    and  t.title like CONCAT('%', #{param.title},'%') 
+  </if>
+  <if test="param.start_time!=null and param.start_time!=''">
+  
+    and  date_format(t.release_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>    
+  </if>
+  
+  <if test="param.end_time!=null and param.end_time!=''">
+  
+    and  date_format(t.release_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>    
+  </if>
+  
+  </select>
+</mapper>

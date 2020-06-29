@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<style>
+.canOperate{
+	color: #0084ff;
+	cursor: pointer;
+}
+.noOperate{
+	color: gray;
+}
+</style>
+<div ng-controller="discountManagementCtrl">
+	<section class="well">
+	    <!-- 标题 -->
+	    <div class="fileAbout backstage">折扣记录
+	    </div>
+	    
+	   	<div class="idMessage">
+	   		<div class="form-horizontal form-widgets col-sm-12 gray">
+	            <div class="form-group">
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">折扣类型</label>
+			                <div class="col-sm-8">
+			                    <input type="text" id="discountType"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">折扣状态</label>
+			                <div class="col-sm-8">
+			                    <input type="text" id="discountState"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">折扣日期（始）</label>
+			                <div class="col-sm-8">
+			                    <input type="text" id="startTime"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">折扣日期（止）</label>
+			                <div class="col-sm-8">
+			                    <input type="text" id="endTime"/>
+			                </div>
+			            </div>
+			        </div>
+			        
+			        <div class="buttons-wrap clearBoth">
+			            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+			        </div>
+			 	</div>
+			 </div>
+			 
+			 <div >
+	     		<button class="k-button k-state-default" ng-click="addDiscount()">添加折扣</button>
+	     		<hr class="towGreen">
+			</div>
+	   	 	<div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+	     </div>
+	</section>
+</div>
+    
+

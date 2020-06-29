@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.salesnum.mapper.SalesNumEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.salesnum.model.SalesNumEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="sales_num" jdbcType="BIGINT" property="sales_num" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, sales_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_sales_num
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_sales_num
+    where product_id = #{product_id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAllSalesNum"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_sales_num
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_sales_num
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.salesnum.model.SalesNumEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_sales_num (product_id, sales_num)
+    values (#{product_id,jdbcType=BIGINT}, #{sales_num,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.salesnum.model.SalesNumEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_sales_num
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="sales_num != null">
+        sales_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="sales_num != null">
+        #{sales_num,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.salesnum.model.SalesNumEntity">
+    update t_biz_sales_num
+    <set>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="sales_num != null">
+        sales_num = #{sales_num,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.salesnum.model.SalesNumEntity">
+    update t_biz_sales_num
+    set product_id = #{product_id,jdbcType=BIGINT},
+      sales_num = #{sales_num,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="UpdateSalesNum" >
+    UPDATE 
+  `t_biz_sales_num` 
+SET
+  `sales_num` = FLOOR(0+ RAND() * 11) + sales_num 
+  </update>
+  <update id="updateForCustmer" >
+    update t_biz_sales_num set sales_num = sales_num + #{num,jdbcType=INTEGER} where product_id = #{product_id,jdbcType=BIGINT}
+  </update>
+</mapper>

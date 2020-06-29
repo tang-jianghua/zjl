@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.applogin.mapper.UserEquipmentEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.applogin.model.UserEquipmentEntity">
+    <id column="pushstr" jdbcType="VARCHAR" property="pushstr" />
+    <result column="platform" jdbcType="VARCHAR" property="platform" />
+    <result column="name" jdbcType="VARCHAR" property="customer_name" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="class_id" jdbcType="VARCHAR" property="class_id" />
+    <result column="space" jdbcType="VARCHAR" property="space" />
+    <result column="style" jdbcType="VARCHAR" property="style" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pushstr, platform, customer_id, region_code, class_id, space, style, time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_userequipment
+    where pushstr = #{pushstr,jdbcType=VARCHAR}
+  </select>
+   <select id="selectByCustomerIdForModify" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_userequipment
+    where customer_id = #{customer_id,jdbcType=BIGINT}
+  </select>
+    <select id="selectByCustomerId" resultMap="BaseResultMap">
+    SELECT u.* , c.name FROM t_biz_userequipment u, t_app_customer c WHERE u.customer_id = #{customer_id,jdbcType=BIGINT} AND u.customer_id = c.id AND 
+	u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE customer_id = #{customer_id,jdbcType=BIGINT} )
+  </select>
+  
+      <select id="selectAllByCustomerId" resultMap="BaseResultMap">
+     SELECT u.* , c.name FROM t_biz_userequipment u, t_app_customer c 
+    WHERE u.customer_id IN 
+    <foreach collection="customerIdList" index="index" item="item" open="(" separator="," close=")">
+			${item}
+	</foreach> 
+	AND u.customer_id = c.id   AND 
+		u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE customer_id = u.customer_id );
+
+  </select>
+  <select id="selectAllByCustomerAccount" resultMap="BaseResultMap">
+     SELECT u.*, c.name 
+     FROM t_app_customer c 
+    LEFT JOIN  t_biz_userequipment u on u.customer_id = c.id and u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE customer_id = u.customer_id )
+    WHERE c.account IN 
+    <foreach collection="customerAccountList" index="index" item="item" open="(" separator="," close=")">
+			${item}
+	</foreach> 
+	AND c.isreceive_message_note IS TRUE
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_biz_userequipment
+    where pushstr = #{pushstr,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.UserEquipmentEntity">
+    insert into t_biz_userequipment (pushstr, platform, customer_id, 
+      region_code, class_id, space, 
+      style, time)
+    values (#{pushstr,jdbcType=VARCHAR}, #{platform,jdbcType=VARCHAR}, #{customer_id,jdbcType=BIGINT}, 
+      #{region_code,jdbcType=VARCHAR}, #{class_id,jdbcType=VARCHAR}, #{space,jdbcType=VARCHAR}, 
+      #{style,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.UserEquipmentEntity">
+    insert into t_biz_userequipment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pushstr != null">
+        pushstr,
+      </if>
+      <if test="platform != null">
+        platform,
+      </if>
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="space != null">
+        space,
+      </if>
+      <if test="style != null">
+        style,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pushstr != null">
+        #{pushstr,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=VARCHAR},
+      </if>
+      <if test="space != null">
+        #{space,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.UserEquipmentEntity">
+    update t_biz_userequipment
+    <set>
+      <if test="platform != null">
+        platform = #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=VARCHAR},
+      </if>
+      <if test="space != null">
+        space = #{space,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        style = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pushstr = #{pushstr,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByCustomerIdKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.UserEquipmentEntity">
+    update t_biz_userequipment
+    <set>
+      <if test="platform != null">
+        platform = #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_id != null">
+        pushstr = #{pushstr,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=VARCHAR},
+      </if>
+      <if test="space != null">
+        space = #{space,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        style = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where customer_id = #{customer_id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.UserEquipmentEntity">
+    update t_biz_userequipment
+    set platform = #{platform,jdbcType=VARCHAR},
+      customer_id = #{customer_id,jdbcType=BIGINT},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      class_id = #{class_id,jdbcType=VARCHAR},
+      space = #{space,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where pushstr = #{pushstr,jdbcType=VARCHAR}
+  </update>
+</mapper>

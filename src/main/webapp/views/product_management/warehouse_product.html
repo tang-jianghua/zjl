@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<div ng-controller="warehouseProduct">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">仓库产品管理</div>
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="control-label col-sm-1">标题</label>
+							<div class="col-sm-3">
+								<input ng-model="form.product_name" id="wallpaper_title"
+									class="k-textbox" placeholder="输入标题搜索" />
+							</div>
+
+							<label class="col-xs-1 control-label">分类</label>
+							<div class="col-sm-3">
+								<input id="wallpaper_classify" class="k-textbox"
+									placeholder="输入名称/拼音首字母" />
+							</div>
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="col-sm-1 control-label">付款模式</label>
+							<div class="col-sm-3">
+								<select id="wallpaper_payment_mode" kendo-combo-box="combo_dep"
+									k-data-text-field="'name'" k-data-value-field="'id'"
+									style="width: 100%">
+									<option value="" selected="selected">请选择</option>
+									<option value="1">全款</option>
+									<option value="2">定金</option>
+								</select>
+							</div>
+
+							<label class="col-xs-1 control-label">系列</label>
+							<div class="col-sm-3">
+								<input id="wallpaper_series" class="k-textbox"
+									placeholder="输入名称/拼音首字母" />
+							</div>
+						</div>
+					</div>
+
+					<div class="buttons-wrap">
+						<button class="k-button k-state-default" ng-click="search()">搜索</button>
+					</div>
+				</div>
+			</div>
+			<div class="interval">
+				<button class="k-button k-state-default" ng-click="dataExport()">导出数据</button>
+			</div>
+
+
+			<div kendo-grid="grid" k-options="mainGridOptions" id="grid"></div>
+
+		</div>
+	</section>
+</div>

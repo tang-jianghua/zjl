@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BrandProdSeriesEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdSeriesEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="series_id" jdbcType="BIGINT" property="series_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, series_id, product_id
+  </sql>
+ 
+  <select id="selectByProductId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select 
+    series_id
+    from t_biz_brand_prod_series
+    where product_id = #{product_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll"  resultType="java.util.Map">
+SELECT 
+    GROUP_CONCAT(bps.`series_id`) AS series_ids,
+  bps.`product_id`
+FROM
+   `t_biz_brand_prod_series` bps
+   LEFT JOIN `t_biz_brand_product` p
+   ON bps.`product_id` = p.`id`
+   WHERE  p.`id` IS NOT NULL AND bps.`series_id` IS NOT NULL
+GROUP BY product_id
+  </select>
+  <delete id="deleteByProductId" parameterType="java.lang.Long">
+     delete from t_biz_brand_prod_series  where product_id = #{product_id,jdbcType=BIGINT}
+  </delete>
+</mapper>

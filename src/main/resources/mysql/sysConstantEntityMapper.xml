@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.system.mapper.sysConstantEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.system.model.sysConstantEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, key, value, type, description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_constant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_sys_constant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.system.model.sysConstantEntity">
+    insert into t_sys_constant (id, key, value, 
+      type, description)
+    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.system.model.sysConstantEntity">
+    insert into t_sys_constant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="key != null">
+        key,
+      </if>
+      <if test="value != null">
+        value,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.system.model.sysConstantEntity">
+    update t_sys_constant
+    <set>
+      <if test="key != null">
+        key = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.system.model.sysConstantEntity">
+    update t_sys_constant
+    set key = #{key,jdbcType=VARCHAR},
+      value = #{value,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <select id="getSysConstantByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    id, c.key, VALUE, TYPE ,description
+    from t_sys_constant c
+    where c.key = #{key,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getSysConstantByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     id, t.key, value, type, description
+    from t_sys_constant t
+    where t.type = #{type,jdbcType=VARCHAR}
+  </select>
+  
+  
+   <select id="getSysConstantByKeyForMap" parameterType="java.lang.String" resultType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_constant
+    where key = #{key,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="getSysConstantByKeyAndTypeForMap" parameterType="java.lang.String" resultType="java.util.Map">
+    select 
+     id, t.key, value, type, description
+    from t_sys_constant t
+    where t.key = #{key,jdbcType=VARCHAR} and  type=#{type,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="getALLSysConstant" resultMap="BaseResultMap">
+    select 
+     id, t.key, value, type, description
+    from t_sys_constant t
+  </select>
+  
+</mapper>

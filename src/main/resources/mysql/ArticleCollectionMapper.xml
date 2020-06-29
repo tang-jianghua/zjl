@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.article.mapper.ArticleCollectionMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleCollectionEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_id" jdbcType="BIGINT" property="article_id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="album_id" jdbcType="BIGINT" property="album_id" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, article_id, customer_id, create_time, album_id, state
+  </sql>
+  <select id="selectArticleCollectionNum" parameterType="java.lang.Long" resultType="java.lang.Integer">
+  select count(1) from t_biz_article_collection where state = 1 and article_id = #{article_id,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectWhetherCollect" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleDetailModel" resultType="java.lang.Boolean">
+  select IF(COUNT(1)>0,TRUE,FALSE)  from t_biz_article_collection
+   where state = 1 
+   and article_id = #{article_id,jdbcType=BIGINT} 
+   and customer_id = #{customer_id,jdbcType=BIGINT}
+  </select>
+  
+      <select id="selectCollectRecord" parameterType="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleCollectionEntity"
+       resultType="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleCollectionEntity">
+  select 
+   <include refid="Base_Column_List"/>
+  from t_biz_article_collection
+   where  article_id = #{article_id,jdbcType=BIGINT} 
+   and customer_id = #{customer_id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="cancleCollectState" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleDetailModel">
+  UPDATE 
+  `t_biz_article_collection` 
+SET
+  `state` = 0 
+WHERE  customer_id = #{customer_id,jdbcType=BIGINT}
+and article_id IN
+  		<foreach collection="article_ids" item="item" open="("
+				separator="," close=")">
+				${item}
+			</foreach>
+  </update>
+  
+        <select id="selectCollectArticlesForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+       resultMap="com.mfangsoft.zhuangjialong.app.article.mapper.ArticleEntityMapper.BaseResultMap">
+		SELECT 
+		    a.`id`,
+		    a.`image`,
+		    a.`title`,
+		    a.`create_time`,
+		    a.`digest`,
+		    a.abum_id,
+		    a.`seen_time`
+		FROM
+		  `t_biz_article_collection` ac 
+		  LEFT JOIN `t_biz_article` a
+		  ON ac.`article_id` = a.`id`
+		  WHERE ac.`state` = 1
+		  AND ac.`customer_id`= #{param.customer_id,jdbcType=BIGINT}
+		  ORDER BY ac.`create_time` DESC
+  </select>
+  
+</mapper>

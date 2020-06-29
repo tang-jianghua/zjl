@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.order.mapper.OrderCashEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.order.model.OrderCashEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+    <result column="order_price" jdbcType="DOUBLE" property="order_price" />
+    <result column="exshopper_id" jdbcType="BIGINT" property="exshopper_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="pay_time" />
+    <result column="pay_state" jdbcType="INTEGER" property="pay_state" />
+    <result column="trade_data" jdbcType="VARCHAR" property="trade_data" />
+    <result column="customer_pay_id" jdbcType="INTEGER" property="customer_pay_id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, customer_id, promotion_id, order_price, exshopper_id, create_time, 
+    pay_time, pay_state, trade_data, customer_pay_id,type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_cash
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  	  <select id="selectInfoForNewOrder" resultMap="BaseResultMap">
+    SELECT c.exshopper_id, IF(u.cash_start_time &lt; NOW() &amp;&amp; u.cash_end_time &gt; NOW() &amp;&amp; u.cash_prom_num &gt; u.cash_sell_num, u.cash_prom_price, u.price) AS order_price,
+	IF(u.cash_start_time &lt; NOW() &amp;&amp; u.cash_end_time &gt; NOW() &amp;&amp; u.cash_prom_num &gt; u.cash_sell_num, 1, 0) AS type  
+    FROM t_biz_unionpromotion u, t_app_customer c 
+    WHERE c.id = #{customer_id,jdbcType=BIGINT} 
+    AND u.id = #{promotion_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCode" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_cash
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_order_cash
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderCashEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_cash (code, customer_id, promotion_id, 
+      order_price, exshopper_id, 
+      create_time, pay_time, pay_state, 
+      trade_data, customer_pay_id,type)
+    values (#{code,jdbcType=VARCHAR}, #{customer_id,jdbcType=BIGINT}, #{promotion_id,jdbcType=BIGINT}, 
+      #{order_price,jdbcType=DOUBLE}, #{exshopper_id,jdbcType=BIGINT}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{pay_time,jdbcType=TIMESTAMP}, #{pay_state,jdbcType=INTEGER}, 
+      #{trade_data,jdbcType=VARCHAR}, #{customer_pay_id,jdbcType=INTEGER},#{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderCashEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_cash
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+      <if test="order_price != null">
+        order_price,
+      </if>
+      <if test="exshopper_id != null">
+        exshopper_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="pay_time != null">
+        pay_time,
+      </if>
+      <if test="pay_state != null">
+        pay_state,
+      </if>
+      <if test="trade_data != null">
+        trade_data,
+      </if>
+      <if test="customer_pay_id != null">
+        customer_pay_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="order_price != null">
+        #{order_price,jdbcType=DOUBLE},
+      </if>
+      <if test="exshopper_id != null">
+        #{exshopper_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_time != null">
+        #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_state != null">
+        #{pay_state,jdbcType=INTEGER},
+      </if>
+      <if test="trade_data != null">
+        #{trade_data,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_pay_id != null">
+        #{customer_pay_id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderCashEntity">
+    update t_biz_order_cash
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="order_price != null">
+        order_price = #{order_price,jdbcType=DOUBLE},
+      </if>
+      <if test="exshopper_id != null">
+        exshopper_id = #{exshopper_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_time != null">
+        pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_state != null">
+        pay_state = #{pay_state,jdbcType=INTEGER},
+      </if>
+      <if test="trade_data != null">
+        trade_data = #{trade_data,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_pay_id != null">
+        customer_pay_id = #{customer_pay_id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderCashEntity">
+    update t_biz_order_cash
+    set code = #{code,jdbcType=VARCHAR},
+      customer_id = #{customer_id,jdbcType=BIGINT},
+      promotion_id = #{promotion_id,jdbcType=BIGINT},
+      order_price = #{order_price,jdbcType=DOUBLE},
+      exshopper_id = #{exshopper_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      pay_state = #{pay_state,jdbcType=INTEGER},
+      trade_data = #{trade_data,jdbcType=VARCHAR},
+      customer_pay_id = #{customer_pay_id,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

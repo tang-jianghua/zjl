@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<style>
+.img1 {
+	min-height: 150px;
+	background-color: lightgreen;
+	margin: 10px 0px;
+}
+
+.searchPannel {
+	padding: 10px;
+}
+
+.button_center {
+	display: inherit;
+	margin: 0px auto;
+}
+
+.button_right {
+	float: right;
+	margin-right: 20px;
+}
+.productImage{
+	width: 120px;
+	height: 120px;
+}
+.leftImage{
+    position: absolute;
+}
+.rightInfo{
+    padding-left: 50%;
+    text-align: left;
+    min-height: 120px;
+} 
+</style>
+<div ng-controller="promotionDataCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">
+			推广导购管理 > <span> 推广数据</span>
+		</div>
+		<div class="idMessage">
+			<!-- 推广消费者数据 -->
+			<div class="greenLine">
+				<div id="list_1" class="oneList choose" ng-click="chooseList(1)">推广消费者数据</div>
+				<div id="list_2" class="oneList" ng-click="chooseList(2)">订单收入</div>
+			</div>
+
+
+			<div id="list_1_container">
+				<div class="form-horizontal form-widgets col-sm-12 gray">
+					<div class="form-group">
+						<div class="searchPannel row">
+							<div class="form-horizontal form-widgets col-sm-4">
+								<div class="form-group">
+									<label class="control-label col-sm-4">姓名</label>
+									<div class="col-sm-8">
+										<input ng-model="search.customer_name" class="k-textbox" />
+									</div>
+								</div>
+							</div>
+							<div class="form-horizontal form-widgets col-sm-4">
+								<div class="form-group">
+									<label class="control-label col-sm-4">联系方式</label>
+									<div class="col-sm-8">
+										<input ng-model="search.customer_phone" class="k-textbox" />
+									</div>
+								</div>
+							</div>
+							<div
+								class="form-horizontal form-widgets col-sm-4 {{userRole.userPartner}}">
+								<div class="form-group">
+									<label class="control-label col-sm-4">城市合伙人</label>
+									<div class="col-sm-8">
+										<input ng-model="search.principal" class="k-textbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+					<div class="col-md-12 text-center">
+						<button class="k-button k-state-default" ng-click="search1()">查询</button>
+					</div>
+									</div>
+				</div>
+				<div style="clear: both;">
+					<hr class="towGreen">
+				</div>
+				<div kendo-grid="grid1" k-options="mainGridOptions1"></div>
+			</div>
+
+			<!-- 订单收入 -->
+			<div id="list_2_container">
+				<div class="searchPannel">
+					<div class="form-horizontal form-widgets col-sm-12 gray">
+						<div class="form-group">
+							<div class="form-horizontal form-widgets col-sm-12">
+								<div class="form-group">
+									<div class="form-horizontal form-widgets col-sm-4">
+										<div class="form-group">
+											<label class="control-label col-sm-4">订单号</label>
+											<div class="col-sm-8">
+												<input ng-model="search.order_code" class="k-textbox" />
+											</div>
+										</div>
+									</div>
+									<div class="form-horizontal form-widgets col-sm-4">
+										<div class="form-group">
+											<label class="control-label col-sm-4">导购姓名</label>
+											<div class="col-sm-8">
+												<input ng-model="search.seller_name" class="k-textbox" />
+											</div>
+										</div>
+									</div>
+									<div
+										class="form-horizontal form-widgets col-sm-4 {{userRole.userPartner}}">
+										<div class="form-group">
+											<label class="control-label col-sm-4">城市合伙人</label>
+											<div class="col-sm-8">
+												<input ng-model="search.principal" class="k-textbox" />
+											</div>
+										</div>
+									</div>
+									<div class="form-horizontal form-widgets col-sm-4">
+										<div class="form-group">
+											<label class="control-label col-sm-4">订单状态</label>
+											<div class="col-sm-8">
+												<input id="order_state" class="" />
+											</div>
+										</div>
+									</div>
+									<div class="form-horizontal form-widgets col-sm-4">
+										<div class="form-group">
+											<label class="control-label col-sm-4">支付方式</label>
+											<div class="col-sm-8">
+												<input id="pay_type"/>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							<div class="buttons-wrap col-md-12 text-center">
+								<button class="k-button k-state-default" ng-click="search2()">查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div kendo-grid="grid2" k-options="mainGridOptions2"></div>
+			</div>
+
+			<!-- 	弹出订单详细信息 -->
+			<div kendo-window="booking_detail" k-title="'订单详情'" k-width="800" k-min-height="500" k-visible="false" k-modal="true" class="allTable">
+				<!--顶部一行的3个数据-->
+					  <table class="col-sm-11 table">
+              <tr>
+	               <td class="col-sm-4 " colspan="2" rowspan="2" style="text-align:center">
+	               		<img style="width: 125px;height: 125px;" src="{{details.imgurl}}" />
+	               </td>
+	               <td class="col-sm-1 "  style="text-align:right">订单编号:</td>
+	               <td class="col-sm-2 " style="text-align:left">{{details.code}}</td>
+	               <td class="col-sm-1">交易时间:</td>
+	               <td class="col-sm-2 " style="text-align:left">{{details.create_time}}</td> 
+              </tr>
+              <tr>
+	                <td >标题：</td>
+	                <td colspan="4">{{details.product_name}}</td>
+              </tr>
+              <tr>
+	                <td >型号：</td>
+	                <td colspan="2" >{{details.sales_model}}</td>
+	                <td colspan="2" >颜色分类：</td>
+	                <td >{{details.color}}</td>
+              </tr>
+              <tr>
+              		<td >单价：</td>
+              		<td colspan="2">{{details.price}}</td>
+	                <td colspan="2">购买数量：</td>
+	                <td>{{details.product_num}}</td>
+              </tr>
+              <tr>
+              		<td >金额：</td>
+	                <td colspan="2">{{details.price*details.product_num}}</td>
+	                <td colspan="2">交易状态：</td>
+	                <td>{{details.state}}</td>
+              </tr>
+              
+              <tr>
+                	<td  colspan="6"style="text-align:left">【卖家信息】</td>
+              </tr>
+              <tr>
+                  <td >昵称:</td>
+                  <td >{{details.customerName}}</td>
+                  <td >姓名:</td>
+                  <td >{{details.receiver_name}}</td>
+                  <td >联系方式:</td>
+                  <td >{{details.customer_phone}}</td>
+              </tr>
+              <tr {{userRole.userBrand}}>
+                  <td {{userRole.userPartner}}>所属城市合伙人：</td>
+                  <td >{{details.principal}}</td>
+                  <td >所属品牌:</td>
+                  <td >{{details.brand_name}}</td>
+              </tr>
+               <tr>
+                  <td >所属店面:</td>
+                  <td >{{details.shop_name}}</td>
+                  <td >推广导购:</td>
+                  <td >{{details.seller_name}}</td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td class=" text-center">订单状态:</td>
+                  <td class=" text-center" colspan="4" style="text-align:center"><span ng-bind-html="details.state_info"></span></td>
+                  <td></td>
+              </tr>
+              <tr>
+              	  <td class=" text-center">送货地址:</td>
+              	  <td class=" text-center" colspan="5">{{details.address}} </td>
+              </tr>
+           </table>
+				<!-- <div class="col-md-12 row">
+					<div class="form-group">
+						<label class="control-label col-md-1 text-right">订单编号:</label>
+						<div class="col-md-2 text-left">{{details.code}}</div>
+						<label class="control-label col-md-1 text-right">交易时间:</label>
+						<div class="col-md-2 text-left">{{details.create_time}}</div>
+
+					</div>
+				</div> -->
+				<!--图片和右侧的数据-->
+				<!-- <div class="col-md-12">
+					<div class="col-md-3">
+						<img style="width: 100%; height: 100%;" src="{{details.imgurl}}" />
+					</div>
+					<div class="form-horizontal  form-widgets  col-md-8">
+						<div class="form-group">
+							<label class="col-xs-9">标题：{{details.product_name}}</label>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3">型号：{{details.sales_model}}</label> <label
+								class="col-xs-4">颜色分类：{{details.color}}</label>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3">单价：{{details.price}}</label> <label
+								class="col-xs-4">购买数量：{{details.product_num}}</label>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3">金额：{{details.price*details.product_num}}</label>
+							<label class="col-xs-4">交易状态：{{details.state}}</label>
+						</div>
+					</div>
+				</div> -->
+				<!--买家信息的文字-->
+				<!-- <div class="col-md-12">
+					<label class="control-label col-md-12 text-left">卖家信息</label>
+				</div> -->
+				<!--买家信息的数据-->
+				<!-- <div class="col-md-12">
+					<div class="form-horizontal  form-widgets  col-md-offset-1">
+						<div class="form-group">
+							<label class="col-xs-3">昵称：{{details.customerName}}</label> <label
+								class="col-xs-3">姓名：{{details.receiver_name}}</label> <label
+								class="col-xs-3">联系方式：{{details.customer_phone}}</label>
+						</div>
+						<div class="form-group {{userRole.userBrand}}">
+							<label class="col-xs-3 {{userRole.userPartner}}">所属城市合伙人：{{details.principal}}</label>
+							<label class="col-xs-3 {{userRole.userBrand}}">所属品牌：{{details.brand_name}}</label>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3 {{userRole.userShop}}">所属店面：{{details.shop_name}}</label>
+							<label class="col-xs-3">推广导购：{{details.seller_name}}</label>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-3">订单状态：<span
+								ng-bind-html="details.state_info"></span></label> <label
+								class="col-xs-4">送货地址：{{details.address}} </label>
+						</div>
+					</div>
+				</div> -->
+			</div>
+
+		</div>
+
+	</section>
+
+
+
+</div>
+
+

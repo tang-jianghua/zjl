@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.shop.mapper.ShopGuiderMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.shop.model.ShopGuiderModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="idcard_front" jdbcType="VARCHAR" property="idcard_front" />
+    <result column="idcard_back" jdbcType="VARCHAR" property="idcard_back" />
+    <result column="idcard_hold" jdbcType="VARCHAR" property="idcard_hold" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="timestamp" jdbcType="TIMESTAMP" property="timestamp" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, idcard_front, idcard_back, idcard_hold, brand_id, shop_id, timestamp, create_time
+  </sql>
+  <select id="selectShopGuiderForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+               resultType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopGuiderModel">
+SELECT 
+  s.`id`, -- 用户id
+  s.`name`,  -- 用户姓名
+  s.`account`, -- 账户名
+  s.`phone`, -- 联系方式
+    s.create_time, -- 创建时间 
+  s.`state`,  -- 账号状态
+  
+  be.`name` AS brand_name, -- 品牌名称
+  shop.`shop_name`,-- 店铺名称
+  IFNULL(exs.name, '') AS expand_name, -- 推广员
+  IFNULL(temp.invite_count, 0) AS invite_count, -- 邀请数
+  sg.certification_state, -- 认证状态  
+  p.`principal`,-- 城市合伙人
+  sg.isgenerate
+FROM
+  `t_app_seller` s 
+  LEFT JOIN `t_app_seller_info` si 
+    ON s.`id` = si.`seller_id` 
+  LEFT JOIN `t_app_shop_guider` sg 
+    ON si.`id` = sg.`seller_info_id` 
+  LEFT JOIN `t_biz_brand` b 
+    ON sg.`brand_id` = b.id 
+  LEFT JOIN `t_biz_build_enterprise` be 
+    ON b.`enterprise_id` = be.`id` 
+  LEFT JOIN `t_biz_shop` shop 
+    ON sg.`shop_id` = shop.`id` 
+  LEFT JOIN 
+    (SELECT 
+      seller.id,
+      COUNT(c.exshopper_id) AS invite_count 
+    FROM
+      t_app_customer c 
+      LEFT JOIN t_app_seller seller 
+        ON c.exshopper_id = seller.id 
+    GROUP BY c.exshopper_id) temp 
+    ON temp.id = s.id 
+  LEFT JOIN t_app_seller exs 
+    ON si.`expand_id` = exs.id 
+    LEFT JOIN `t_biz_partner` p
+    ON s.`partner_id` = p.`id`
+<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+    LEFT JOIN `t_biz_enterprise` e
+    ON be.`id` = e.`build_enterpise`
+    </if>
+WHERE s.`seller_type` = 4 
+	<if test="param.partner_id!=null and param.partner_id!=''">
+AND p.`id` =#{param.partner_id}
+	</if>
+
+	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+AND e.`id` = #{param.enterprise_id}
+	</if>
+	
+	<if test="param.shop_id!=null and param.shop_id!=''">
+AND  sg.`shop_id` = #{param.shop_id}
+	</if>
+	
+    <if test="param.name!=null and param.name!=''">
+AND s.`name` LIKE CONCAT('%',#{param.name},'%')
+	</if>
+	
+  	<if test="param.account!=null and param.account!=''">
+AND s.`account` LIKE CONCAT('%',#{param.account},'%') 
+	</if>
+	
+ 	 <if test="param.phone!=null and param.phone!=''">
+AND s.`phone` LIKE CONCAT('%',#{param.phone},'%')
+	</if>
+	
+	<if test="param.state!=null and param.state!=''">
+			AND s.state=#{param.state}
+	</if>
+	
+	<if test="param.certification_state!=null and param.certification_state!=''">
+AND sg.`certification_state` = #{param.certification_state}
+	</if>
+	
+	<if test="param.principal!=null and param.principal!=''">
+AND p.`principal` LIKE CONCAT('%',#{param.principal},'%')  
+	</if>
+	
+	<if test="param.expand_name!=null and param.expand_name!=''">
+AND exs.`name` LIKE  CONCAT('%',#{param.expand_name},'%')  
+	</if>
+	
+	<if test="param.shop_name!=null and param.shop_name!=''">
+AND shop.`shop_name` LIKE CONCAT('%',#{param.shop_name},'%')
+	</if>
+	
+	<if test="param.brand_name!=null and param.brand_name!=''">
+AND be.`name` LIKE CONCAT('%',#{param.brand_name},'%')
+	</if>
+	
+	<if test="param.sort!=null">
+	order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	 	 ${sort.field}  ${sort.dir}
+ 	</foreach>
+ 	</if>
+</select>
+
+<update id="updateCertificationStateBySellerId" parameterType="java.util.Map" >
+UPDATE 
+  `t_app_shop_guider` 
+set
+  certification_state = #{certification_state,jdbcType=INTEGER} 
+  <if test="no_pass_reason != null">
+ , no_pass_reason = #{no_pass_reason,jdbcType=VARCHAR} 
+  </if>
+WHERE seller_info_id = 
+  (SELECT 
+    id 
+  FROM
+    `t_app_seller_info` 
+  WHERE seller_id = #{seller_id,jdbcType=BIGINT}) ;
+</update>
+<select id="selectCertificationInfoBySellerId" parameterType="java.lang.Long" 
+resultType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopGuiderModel">
+SELECT 
+ sg.id AS certification_info_id,
+  s.`name`,
+  s.`phone`,
+  sg.`brand_id`,
+  be.`name` as brand_name,
+  sg.`shop_id`,
+  shop.`shop_name`,
+  sg.`idcard_hold`,
+  sg.`idcard_front`,
+  sg.`idcard_back`,
+  sg.`certification_state`,
+  sg.`isgenerate`,
+  if(
+    sg.certification_state = 3,
+    sg.`no_pass_reason`,
+    null
+  ) as no_pass_reason 
+FROM
+  `t_app_seller` s 
+  LEFT JOIN `t_app_seller_info` si 
+    ON s.`id` = si.`seller_id` 
+  LEFT JOIN `t_app_shop_guider` sg 
+    ON si.`id` = sg.`seller_info_id` 
+    left join `t_biz_brand` b
+    on sg.`brand_id` = b.`id`
+    left join `t_biz_build_enterprise` be
+     on b.`enterprise_id` = be.`id`
+     left join `t_biz_shop` shop
+     on sg.`shop_id` = shop.`id`
+WHERE s.`id` =#{id,jdbcType=BIGINT} 
+</select>
+
+<select id="selectCertificationStateBySellerId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+SELECT 
+  sg.`certification_state` 
+FROM
+  `t_app_seller` s 
+  LEFT JOIN `t_app_seller_info` si 
+    ON s.`id` = si.`seller_id` 
+  LEFT JOIN `t_app_shop_guider` sg 
+    ON si.`id` = sg.`seller_info_id` 
+    WHERE s.id = #{id,jdbcType=BIGINT}
+</select>
+</mapper>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<style>
+.titleTips{
+	color: #c52222 !important;
+    font-size: 16px;
+}
+.classTitle{
+	color: #13b784;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 25px;	
+    float: left;
+}
+.classOperate{
+	float: right;
+}
+
+
+.oneProduct{
+    height: 200px; 
+    padding: 5px 20px;
+}
+.oneProduct .leftImage{
+	float: left;
+    width: 130px;
+    height: 130px;
+    text-align: center;
+}
+.oneProduct .leftImage .image{
+    width: 130px;
+    height: 130px;
+}
+.oneProduct .rightInfo{
+	float: right;
+    width: 130px;
+    height: 130px;
+    position: relative;
+    padding: 5px;
+}
+.oneProduct .productTitle{
+  
+}
+.oneProduct .brandName{
+	position: absolute;
+    bottom: 0;  
+  
+}
+.redButton{
+	width: 120px;
+    height: 30px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #D9544F;
+    cursor: pointer;
+    margin-left: 12px;
+    margin-top: 10px;
+    position: absolute;
+}
+.redButton:HOVER {
+	background-color: #c14743;
+}
+
+.greenButton{
+	width: 120px;
+    height: 30px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CB0F9;
+    cursor: pointer;
+    margin-left: 12px;
+    margin-top: 10px;
+    float: left;
+}
+.greenButton:HOVER {
+	background-color: #2797e8;
+} 
+
+</style>
+
+<div ng-controller="classRecommendForPartnerCtrl">
+    <!-- 标题 -->
+   	<section class="well">
+   	    <div class="fileAbout backstage">
+   	    	<span>品类推荐</span>
+   	    	<span class="titleTips">(每个品类下请添至5款产品)</span>
+   	    </div>
+   	    
+	    <div class="idMessage">
+	    	<div id="class_{{oneClass.introduce_id}}" classId="{{oneClass.introduce_id}}" ng-repeat="oneClass in classArr">
+		    	<div>
+			    	<div class="classTitle">品类:{{oneClass.class_name}}</div>
+			    	
+			    	<div class="classOperate" ng-if="$first && $last">
+			    		<div class="greenButton" ng-click="removeClass(oneClass.introduce_id)">清&nbsp;&nbsp;空</div>
+			    	</div>
+			    	<div class="classOperate" ng-if="$first && !$last">
+			    		<div class="greenButton" ng-click="locationMove(oneClass.introduce_id,1)">下&nbsp;&nbsp;移</div>
+			    		<div class="greenButton" ng-click="removeClass(oneClass.introduce_id)">清&nbsp;&nbsp;空</div>
+			    	</div>
+			    	<div class="classOperate" ng-if="$middle">
+			    		<div class="greenButton" ng-click="locationMove(oneClass.introduce_id,-1)">上&nbsp;&nbsp;移</div>
+			    		<div class="greenButton" ng-click="locationMove(oneClass.introduce_id,1)">下&nbsp;&nbsp;移</div>
+			    		<div class="greenButton" ng-click="removeClass(oneClass.introduce_id)">清&nbsp;&nbsp;空</div>
+			    	</div>
+			    	<div class="classOperate" ng-if="$last && !$first">
+			    		<div class="greenButton" ng-click="locationMove(oneClass.introduce_id,-1)">上&nbsp;&nbsp;移</div>
+			    		<div class="greenButton" ng-click="removeClass(oneClass.introduce_id)">清&nbsp;&nbsp;空</div>
+			    	</div>
+		    	</div>
+		    	
+		    	<div style="clear: both;">
+		    		<div class="col-sm-3 oneProduct" style="width: 20%;" ng-repeat="oneProduct in oneClass.products">
+						<div class="leftImage">
+							<img src="{{oneProduct.imgurl}}" class="image">
+						</div>
+						<div class="rightInfo">
+							<div class="productTitle">{{oneProduct.product_title}}</div>
+							<div class="brandName">品牌：{{oneProduct.brand_name}}</div>
+						</div>
+						<div style="clear: both;">
+							<div class="redButton" ng-click="removeProduct(oneClass.introduce_id,oneProduct.introduce_product_id)">清&nbsp;&nbsp;除</div>
+						</div>
+					</div>
+		    	</div>
+		    	<div style="clear: both;"></div>
+	    	</div>
+	   		    
+        </div>
+     </section>
+</div>

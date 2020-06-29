@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<style>
+.button_center{
+    display: inherit;
+	margin: 0px auto;
+}
+.lower{
+	display:inline-block;
+}
+
+</style>
+<div ng-controller="headlineCtrl">
+    <!-- 标题 -->
+   	<section class="well">
+   	<div class="fileAbout backstage">头条管理
+    </div>
+    
+     <div class="idMessage">
+<div class="form-horizontal form-widgets col-sm-12 gray" >
+            <div class="form-group">
+   		<div class="form-horizontal form-widgets col-sm-4">
+            <div class="form-group">
+                <label class="control-label col-sm-4">内容</label>
+                <div class="col-sm-8">
+                    <input ng-model="search.title" class="k-textbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-4">
+            <div class="form-group">
+                <label class="control-label col-sm-3">起始时间</label>
+                <div class="col-sm-8">
+                    <input id="start_time"/>
+                </div>
+            </div>
+        </div>
+                <div class="form-horizontal form-widgets col-sm-4">
+            <div class="form-group">
+               	<label class="control-label col-sm-3">终止时间</label>
+                <div class="col-sm-8">
+                    <input id="end_time"/>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-wrap">
+            <button class="k-button k-state-default " ng-click="search()" >查询</button>
+        </div>
+     </div>
+  </div>
+        <div class="lower">
+
+     <div class="fix">
+     	<button class="k-button k-state-default" ng-click="addHeadline()">新增头条</button>
+     	<div class="towGreen"></div>
+     </div>
+     <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+     
+     <div kendo-window="addHeadlineWindow" k-title="'新增头条'" k-width="900" k-height="400" k-visible="false" k-modal="true">
+	     <div class="form-horizontal form-widgets col-sm-11">
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">发布日期</label>
+	                <div class="col-sm-3">
+	                    <input id="start_time2"/>
+	                </div>
+	               	<label class="control-label col-sm-2">到期日期</label>
+	                <div class="col-sm-3">
+	                    <input id="end_time2"/>
+	                </div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">发布内容</label>
+	                <div class="col-sm-9">
+	                    <textarea style="width: 100%;height: 120px;" ng-model="form.title"></textarea>
+	                </div>
+	            </div>
+	            <div class="col-sm-12">
+	            <div class="col-sm-6">
+	            <div class="form-group">
+	                <label class="control-label col-sm-3">状态</label>
+	                <div class="col-sm-7">
+	                	<input id="state"/>
+	                </div>
+	            </div>
+	            </div>
+	            <div class="col-sm-5">
+	            <div class="form-group">
+	                <label class="control-label col-sm-3">标识</label>
+	                <div class="col-sm-7">
+	                	<input id="tag"/>
+	                	</div>
+	            	</div>
+	            </div>
+	          </div>
+	          <div class="col-sm-12 flot">
+	        	<button class="k-button k-state-default button_center centerButton" ng-click="addNewHeadline()">确认</button>
+	        	</div>   
+	        	</div>	
+
+     	</div>
+	</div>
+    </section>
+   
+</div>
+    
+

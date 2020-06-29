@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<style>
+.oneModule1 {
+	width: 120px;
+	height: 35px;
+	line-height: 35px;
+	float: left;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: black;
+	cursor: pointer;
+}
+.chooseModule {
+	background-color: #caa359;
+	color: white;
+}
+.oneContainer {
+	padding: 20px 50px;
+	min-height: 600px;
+}
+.button_center {
+	display: inherit;
+	margin: 10px auto;
+}
+.button_right {
+	float: right;
+}
+
+.oneClassHeader{
+    width: 80%;
+    height: 50px;
+    background-color: #caa359;
+    margin: 3px auto;
+    font-size: 20px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px 5px 0px 0px;
+}
+.oneClassHeader:HOVER{
+	background-color: #04a570;
+}
+.oneClass{
+    width: 80%;
+    height: 60px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 20px;
+    line-height:60px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+.decorateLeft{
+	width: 80%;
+    float: left;
+    padding-left: 33px;
+}
+.decorateRight{
+	width:10%;
+	float:left;
+}
+.choose{
+	background-color: #37cec5;
+	color:#fff;
+	border:none;
+}
+.addClass{
+    width: 80%;
+    height: 50px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 16px;
+    color: #bdb9b9;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0px 0px 5px 5px;
+}
+.addClass:HOVER{
+	background-color: #e2e2e2;
+} 
+
+.imageContainer{
+	padding: 1%;
+	width: 30%;
+}
+.center{
+	text-align: center; 
+}
+.oneImage{
+	width: 150px;
+	height: 150px; 
+	margin: auto;
+	border: 1px dotted gray;
+}
+.oneImage .operate{
+	height: 40px;
+    padding:5px;
+}
+.oneImage .operate div{
+	width: 23px;
+	height: 23px;
+    float: right;
+    border-radius: 5px;
+    border: 1px solid #caa359; 
+}
+.oneImage .operate div input{
+	width: 20px;
+	height: 20px;
+    margin: 1px;
+}
+.oneImage .operate div i{
+    font-size: 25px;
+    color: #bc0055;
+    cursor: pointer;
+    margin: -1px 1px;
+}
+.text {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #232323;
+    font-family: '微软雅黑';
+    padding: 8px; 
+    height: 30px;
+}
+</style>
+
+<div ng-controller="enterpriseAboutCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout">企业关于</div>
+		<div class="idMessage">
+			<div class="greenLine">
+					<div id="module1" class="oneModule1" ng-click="chooseModule(1)">公司简介</div>
+					<div id="module2" class="oneModule1" ng-click="chooseModule(2)">发展历程</div>
+		   			<div id="module3" class="oneModule1" ng-click="chooseModule(3)">工程案例</div>
+		   			<div id="module4" class="oneModule1" ng-click="chooseModule(4)">企业荣誉</div>
+		   			<div id="module5" class="oneModule1" ng-click="chooseModule(5)">店面风采</div>
+			</div>
+
+			<!-- 公司简介 -->
+			<div id="container1" class="oneContainer">
+				<!-- 百度图文编辑器 -->
+				<textarea id="editor1" style="width:100%;"></textarea>
+				
+				<button class="k-button k-state-default button_center"ng-click="editCompanyProfile()">确定</button>
+			</div>
+			<!-- 发展历程 -->
+			<div id="container2" class="oneContainer">
+				<!-- 百度图文编辑器 -->
+				<textarea id="editor2" style="width:100%;"></textarea>
+				
+				<button class="k-button k-state-default button_center"ng-click="editDevelopHistory()">确定</button>
+			</div>
+			<!-- 工程案例 -->
+			<div id="container3" class="oneContainer">
+				<div class="col-sm-4" style="padding:0">
+			    	<div class="col-sm-12 oneClassHeader">分类名称</div>
+			    	<div id="class3">
+
+			    	</div>
+			    	<div class="col-sm-12 addClass outPadding" ng-click="addClass(3)">+点击增加分类</div>
+   	 		    </div>
+   	 		    <div class="col-sm-8">
+   	 		    	<div>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="multipleDelete()">批量删除</button>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="chooseAll('checkbox_image_3',false)">取消</button>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="chooseAll('checkbox_image_3',true)">全选</button>
+   	 		    		<button class="k-button k-state-default button_right" style="margin-right: 30px;" ng-click="multipleUpload()">批量上传</button>
+   	 		    	</div>
+   	 		    	<div style="clear: both;" id="imagesContainer3">
+   	 		    		<!-- <div class="col-sm-3">
+	   	 		    		<div>
+	   	 		    			<div class="oneImage" style="background: url('http://localhost:8080/file/upload/2016-10-10/1476086615803.jpg');background-size:100% 100%;">
+									<div class="operate"> 
+										<div><input type="checkbox"></div>
+									</div>
+								</div>
+	   	 		    		</div>
+	   	 		    		<div class="text">图片标题</div>
+   	 		    		</div> -->
+   	 		    	
+   	 		    	</div>
+   	 		    </div>
+			</div>
+			<!-- 企业荣誉 -->
+			<div id="container4" class="oneContainer">
+				<div class="col-sm-4" style="padding:0">
+			    	<div class="col-sm-12 oneClassHeader">分类名称</div>
+			    	<div id="class4">
+
+			    	</div>
+			    	<div class="col-sm-12 addClass outPadding" ng-click="addClass(3)">+点击增加分类</div>
+   	 		    </div>
+   	 		    <div class="col-sm-8">
+   	 		    	<div>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="multipleDelete()">批量删除</button>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="chooseAll('checkbox_image_4',false)">取消</button>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="chooseAll('checkbox_image_4',true)">全选</button>
+   	 		    		<button class="k-button k-state-default button_right" style="margin-right: 30px;" ng-click="multipleUpload()">批量上传</button>
+   	 		    	</div>
+   	 		    	<div style="clear: both;" id="imagesContainer4">
+   	 		    		
+   	 		    	</div>
+   	 		    </div>
+			</div>
+			<!-- 店面风采 -->
+			<div id="container5" class="oneContainer">
+				<div class="col-sm-4" style="padding:0">
+			    	<div class="col-sm-12 oneClassHeader">分类名称</div>
+			    	<div id="class5">
+
+			    	</div>
+			    	<div class="col-sm-12 addClass outPadding" ng-click="addClass(3)">+点击增加分类</div>
+   	 		    </div>
+   	 		    <div class="col-sm-8">
+   	 		    	<div>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="multipleDelete()">批量删除</button>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="chooseAll('checkbox_image_5',false)">取消</button>
+   	 		    		<button class="k-button k-state-default button_right" ng-click="chooseAll('checkbox_image_5',true)">全选</button>
+   	 		    		<button class="k-button k-state-default button_right" style="margin-right: 30px;" ng-click="multipleUpload()">批量上传</button>
+   	 		    	</div>
+   	 		    	<div style="clear: both;" id="imagesContainer5">
+   	 		    		
+   	 		    	</div>
+   	 		    </div>
+			</div>
+			
+			<div style="clear: both;"></div>
+			
+			<div kendo-window="addClassWindow" k-title="'新建分类'" k-width="800" k-min-height="100" k-visible="false" k-modal="true">
+		    	<div class="form-horizontal form-widgets col-sm-11" style="padding:15px">
+			            <div class="form-group">
+					        <label class="control-label col-sm-2">分类名称</label>
+					        <div class="col-sm-8">
+					            <input ng-model="newClass.name" class="k-textbox"/>
+					        </div>
+					    </div>
+					    <button class="k-button k-state-default button_center " ng-click="addNewClass()">确定</button>
+			    </div>
+		    </div>
+		    <div kendo-window="multipleUploadWindow" k-title="'批量上传'" k-width="800" k-min-height="200" k-visible="false" k-modal="true">
+		    	<div class="col-sm-11" style="padding:15px">
+		    		<div>
+		    			<input type="file" name="file" id="multipleUpload"/>
+		    		</div>
+		    		<div id="uploadContainer">
+		    			
+		    		</div>
+		    		<div style="clear: both;">
+		    			<button class="k-button k-state-default button_center " ng-click="addImages()">确定</button>
+		    		</div>    
+			    </div>
+		    </div>
+			
+			
+		</div>
+
+	</section>
+</div>
+
+

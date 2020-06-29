@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.order.mapper.OrderPayEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="order_id" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="pay_time" />
+    <result column="pay_state" jdbcType="INTEGER" property="pay_state" />
+    <result column="trade_data" jdbcType="VARCHAR" property="trade_data" />
+    <result column="customer_pay_id" jdbcType="INTEGER" property="customer_pay_id" />
+    <result column="grouppay_id" jdbcType="VARCHAR" property="grouppay_id" />
+ 	<result column="deposit_price" jdbcType="DOUBLE" property="deposit_price" />
+	<result column="isdeposit" jdbcType="TINYINT" property="isdeposit" />   
+    <result column="deposit_time" jdbcType="TIMESTAMP" property="deposit_time" />
+    <result column="trade_data_deposit" jdbcType="VARCHAR" property="trade_data_deposit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_id, pay_time, pay_state, trade_data, customer_pay_id,grouppay_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_pay
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectPayStateByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT p.order_id,p.pay_state,p.isdeposit FROM t_biz_order_pay p , t_biz_order o WHERE o.code = #{code,jdbcType=VARCHAR} AND o.id = p.order_id 
+  </select>
+    <select id="selectPayStateByGroupId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_pay
+    where grouppay_id = #{grouppay_id,jdbcType=BIGINT}
+  </select>
+    <select id="selectPayStateByCodes" parameterType="java.util.List" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM t_biz_order_pay p, t_biz_order o WHERE o.code in 
+     <foreach collection="list" item="tag" open="(" separator="," close=")">
+   		#{tag}
+  	</foreach>
+ AND o.id = p.order_id AND p.pay_state = 0;
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_order_pay
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_pay (order_id, pay_time, pay_state, 
+      trade_data, customer_pay_id, grouppay_id)
+    values (#{order_id,jdbcType=BIGINT}, #{pay_time,jdbcType=TIMESTAMP}, #{pay_state,jdbcType=INTEGER}, 
+      #{trade_data,jdbcType=VARCHAR}, #{customer_pay_id,jdbcType=INTEGER}, #{grouppay_id,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_pay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="order_id != null">
+        order_id,
+      </if>
+      <if test="pay_time != null">
+        pay_time,
+      </if>
+      <if test="pay_state != null">
+        pay_state,
+      </if>
+      <if test="trade_data != null">
+        trade_data,
+      </if>
+      <if test="customer_pay_id != null">
+        customer_pay_id,
+      </if>
+      <if test="grouppay_id != null">
+        grouppay_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="order_id != null">
+        #{order_id,jdbcType=BIGINT},
+      </if>
+      <if test="pay_time != null">
+        #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_state != null">
+        #{pay_state,jdbcType=INTEGER},
+      </if>
+      <if test="trade_data != null">
+        #{trade_data,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_pay_id != null">grouppay_id
+        #{customer_pay_id,jdbcType=INTEGER},
+      </if>
+      <if test="grouppay_id != null">grouppay_id
+        #{grouppay_id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    update t_biz_order_pay
+    <set>
+      <if test="order_id != null">
+        order_id = #{order_id,jdbcType=BIGINT},
+      </if>
+      <if test="pay_time != null">
+        pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_state != null">
+        pay_state = #{pay_state,jdbcType=INTEGER},
+      </if>
+      <if test="trade_data != null">
+        trade_data = #{trade_data,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_pay_id != null">
+        customer_pay_id = #{customer_pay_id,jdbcType=INTEGER},
+      </if>
+        <if test="grouppay_id != null">
+        grouppay_id = #{grouppay_id,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="updateDepositByOrderCode" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    UPDATE t_biz_order_pay p,t_biz_order o  SET p.deposit_time = #{deposit_time,jdbcType=TIMESTAMP}, 
+    p.trade_data_deposit = #{trade_data_deposit,jdbcType=VARCHAR}, p.deposit_price = #{deposit_price,jdbcType=DOUBLE}, p.isdeposit = #{isdeposit,jdbcType=TINYINT}
+ 	WHERE o.code = #{order_code,jdbcType=VARCHAR} AND o.id = p.order_id 
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    update t_biz_order_pay
+    set order_id = #{order_id,jdbcType=BIGINT},
+      pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      pay_state = #{pay_state,jdbcType=INTEGER},
+      trade_data = #{trade_data,jdbcType=VARCHAR},
+      customer_pay_id = #{customer_pay_id,jdbcType=INTEGER},
+       grouppay_id = #{grouppay_id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateGroupIdByOrderCode" parameterType="map">
+     UPDATE t_biz_order o ,t_biz_order_pay p SET p.grouppay_id = #{grouppay_id,jdbcType=VARCHAR}  WHERE o.code IN
+     <foreach collection="listOrdersId" item="tag" open="(" separator="," close=")">
+   		#{tag}
+  	</foreach>
+     AND p.order_id = o.id;
+  </update>
+  <update id="updateByGroupIdSelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    update t_biz_order_pay
+    <set>
+      <if test="pay_time != null">
+        pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_state != null">
+        pay_state = #{pay_state,jdbcType=INTEGER},
+      </if>
+      <if test="trade_data != null">
+        trade_data = #{trade_data,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_pay_id != null">
+        customer_pay_id = #{customer_pay_id,jdbcType=INTEGER},
+      </if>
+    </set>
+    where grouppay_id = #{grouppay_id,jdbcType=VARCHAR}
+  </update>
+   <update id="updateByOrderIdSelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderPayEntity">
+    update t_biz_order_pay
+    <set>
+      <if test="pay_time != null">
+        pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pay_state != null">
+        pay_state = #{pay_state,jdbcType=INTEGER},
+      </if>
+      <if test="trade_data != null">
+        trade_data = #{trade_data,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_pay_id != null">
+        customer_pay_id = #{customer_pay_id,jdbcType=INTEGER},
+      </if>
+    </set>
+    where order_id = #{order_id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.order.mapper.OrderProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.order.model.OrderProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="order_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="sales_property_id" jdbcType="BIGINT" property="sales_property_id" />
+    <result column="product_num" jdbcType="INTEGER" property="product_num" />
+    <result column="buy_type" jdbcType="INTEGER" property="buy_type" />
+    <result column="type_value" jdbcType="VARCHAR" property="type_value" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="sale_price" jdbcType="DOUBLE" property="sale_price" />
+    <result column="coupon_status" jdbcType="VARCHAR" property="coupon_status" />
+     <result column="promotion_type" jdbcType="INTEGER" property="promotion_type" />
+     <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+     
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_id, product_id, sales_property_id, product_num, buy_type, type_value, info, price, sale_price, coupon_status, promotion_type, promotion_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectByOrderCode" resultMap="BaseResultMap">
+    select p.*
+     FROM t_biz_order o,t_biz_order_product p 
+    WHERE CODE = #{order_code,jdbcType=VARCHAR} AND o.id = p.order_id 
+  </select>
+  
+   <select id="selectProductIdByOrderId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select 
+    product_id
+    from t_biz_order_product
+    where order_id = #{order_id,jdbcType=BIGINT}
+  </select>
+    <select id="selectListByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_product
+    where order_id = #{order_id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectProductListByOrderIds" resultMap="BaseResultMap">
+  SELECT p.order_id, p.sales_property_id, p.product_num,o.code
+    FROM t_biz_order_product p,t_biz_order o
+    WHERE p.order_id IN (#{orderIds}) AND p.buy_type = 0
+    AND o.id = p.order_id
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_order_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_product (order_id, product_id, sales_property_id, 
+      product_num , buy_type, type_value, info)
+    values (#{order_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, #{sales_property_id,jdbcType=BIGINT}, 
+      #{product_num,jdbcType=INTEGER},  #{buy_type,jdbcType=INTEGER}, 
+      #{type_value,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="order_id != null">
+        order_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="sales_property_id != null">
+        sales_property_id,
+      </if>
+      <if test="product_num != null">
+        product_num,
+      </if>
+      <if test="buy_type != null">
+        buy_type,
+      </if>
+      <if test="type_value != null">
+        type_value,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="sale_price != null">
+        sale_price,
+      </if>
+      <if test="coupon_status != null">
+        coupon_status,
+      </if>
+      <if test="promotion_type != null">
+        promotion_type,
+      </if>
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="order_id != null">
+        #{order_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="sales_property_id != null">
+        #{sales_property_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_num != null">
+        #{product_num,jdbcType=INTEGER},
+      </if>
+      <if test="buy_type != null">
+        #{buy_type,jdbcType=INTEGER},
+      </if>
+      <if test="type_value != null">
+        #{type_value,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="sale_price != null">
+        #{sale_price,jdbcType=DOUBLE},
+      </if>
+      <if test="coupon_status != null">
+        #{coupon_status,jdbcType=VARCHAR},
+      </if>
+      <if test="promotion_type != null">
+        #{promotion_type,jdbcType=INTEGER},
+      </if>
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderProductEntity">
+    update t_biz_order_product
+    <set>
+      <if test="order_id != null">
+        order_id = #{order_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="sales_property_id != null">
+        sales_property_id = #{sales_property_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_num != null">
+        product_num = #{product_num,jdbcType=INTEGER},
+      </if>
+      <if test="buy_type != null">
+        buy_type = #{buy_type,jdbcType=INTEGER},
+      </if>
+      <if test="type_value != null">
+        type_value = #{type_value,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="sale_price != null">
+        sale_price = #{sale_price,jdbcType=DOUBLE},
+      </if>
+      <if test="coupon_status != null">
+        coupon_status = #{coupon_status,jdbcType=VARCHAR},
+      </if>
+      <if test="promotion_type != null">
+        promotion_type = #{promotion_type,jdbcType=INTEGER},
+      </if>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderProductEntity">
+    update t_biz_order_product
+    set order_id = #{order_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      sales_property_id = #{sales_property_id,jdbcType=BIGINT},
+      product_num = #{product_num,jdbcType=INTEGER},
+      buy_type = #{buy_type,jdbcType=INTEGER},
+      type_value = #{type_value,jdbcType=VARCHAR},
+      info = #{info,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  
+  
+</mapper>

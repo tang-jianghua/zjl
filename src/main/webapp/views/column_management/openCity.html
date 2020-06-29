@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<style>
+.tips{
+	text-align: center;
+    color: red;
+    font-size: 20px;
+}
+.button_center {
+	display: inherit;
+	margin: 10px auto;
+}
+</style>
+<div ng-controller="openCityCtrl">
+
+   	<section class="well">
+   	    <!-- 标题 -->
+	    <div class="fileAbout backstage">开通城市管理>
+	   	 	<span>当前开通城市</span>
+	    </div>
+	    <div class="idMessage">
+	   		<div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+	   	</div>
+    </section> 
+    
+    <div kendo-window="closeCityWindow" k-title="'关闭城市'" k-width="500" k-min-height="70" k-visible="false" k-modal="true">
+	    <div class="form-horizontal form-widgets col-sm-11">
+		    <div class="col-sm-12 form-group">
+		        <label class="control-label col-sm-2">关闭时间：</label>
+		        <div class="col-sm-8 push issused">
+		            <input id="closeTime" ng-model="closeTime"/>
+		        </div>
+		    </div>
+		    <div class="tips">城市将会在选择日期的【23:59:59】关闭！</div>
+		    <div class="col-sm-12">
+		    	<button class="k-button k-state-default button_center" ng-click="closeCity()">确定</button>
+		    </div>
+	    </div>
+    </div>  
+</div>
+    
+

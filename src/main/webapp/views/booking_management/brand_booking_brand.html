@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<style>
+.canEdit{
+	color: green;
+	font-weight: bold;
+    cursor: pointer;
+}
+.noEdit{
+	color: gray;
+	font-weight: bold;
+}
+</style>
+<div ng-controller="brandBookingForBrandCtrl">
+<section class="well">
+    <!-- 标题 -->
+    <div class="fileAbout backstage ">预约列表
+    </div>
+    
+   	<div class="idMessage">
+        <div class="form-horizontal form-widgets col-sm-12 gray">
+            <div class="form-group">
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4 outPadding">省</label>
+		                <div class="col-sm-8">
+		                    <input id="province"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">市</label>
+		                <div class="col-sm-8">
+		                    <input id="city"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">区</label>
+		                <div class="col-sm-8">
+		                    <input id="area"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-8">
+		            <div class="form-group">
+		                <label class="control-label col-sm-2 outPadding">预约时间（始）</label>
+		                <div class="col-sm-4">
+		                    <input id="start_time"/>
+		                </div>
+		               	<label class="control-label col-sm-2 outPadding">预约时间（止）</label>
+		                <div class="col-sm-4">
+		                    <input id="end_time"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">姓名</label>
+		                <div class="col-sm-8">
+		                    <input ng-model="search.customer_name"  class="k-textbox"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4 outPadding">预约店面</label>
+		                <div class="col-sm-8">
+		                    <input ng-model="search.shop_name"  class="k-textbox"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4 businessr">服务人员</label>
+		                <div class="col-sm-8">
+		                    <input ng-model="search.server_name"  class="k-textbox"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4 businessr">预约状态</label>
+		                <div class="col-sm-8">
+		                    <input id="bookingState"/>
+		                </div>
+		            </div>
+		        </div>
+     		</div>
+	        <div class="buttons-wrap clearBoth"  style="margin-bottom:10px">
+	            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+	        </div>
+    </div>
+    <div>
+		<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+	 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+		<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+		<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+		<hr class="towGreen"></hr>
+	</div>
+    
+    <div class="interval">
+    	<div id="gridBooking" kendo-grid="grid"  k-options="mainGridOptions" ></div>
+    </div>
+     
+     </div>
+     <div kendo-window="booking_detail" k-title="'预约详情'" k-width="600" k-min-height="400" k-visible="false" k-modal="true" class="allTable">
+        <div>
+           <table class="col-sm-12 table table-striped">
+              <tr>
+                <td colspan="2" rowspan="3" class="col-sm-4">
+                	<div style="background:url('{{details.door_model_img}}');width:200px;height:200px;background-repeat:no-repeat;background-size: contain;background-position:center;"/></div>
+                </td>
+                <td class="col-sm-2 " style="text-align:right">预约姓名：</td>
+                <td class="col-sm-2 "style="text-align:left">{{details.name}}</td>
+                <td class="col-sm-2 " style="text-align:right">预约品牌：</td>
+                <td class="col-sm-2 " style="text-align:left">{{details.brand_name}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 ">预约电话：</td>
+                <td class="col-sm-2 ">{{details.phone}}</td>
+                <td class="col-sm-2 ">预约店面：</td>
+                <td class="col-sm-2 ">{{details.shop_name}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 ">预约地址：</td>
+                <td class="col-sm-2 " colspan="3">{{details.address_details}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 ">预约品类：</td>
+                <td class="col-sm-2 ">{{details.class_name}}</td>
+                <td class="col-sm-2  ">预约时间：</td>
+                <td class="col-sm-2 " colspan="3">{{details.start_time}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2  ">预约空间：</td>
+                <td class="col-sm-2 ">{{details.app_space}}</td>
+                <td class="col-sm-2  ">装修预算：</td>
+                <td class="col-sm-2 ">{{details.min_price}}~{{details.max_price}}</td>
+                <td class="col-sm-2  ">预约风格：</td>
+                <td class="col-sm-2 ">{{details.app_style}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2  ">设计需求：</td>
+                <td class="col-sm-2 " colspan="5">{{details.needs}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2  ">预约进度：</td>
+                <td class="col-sm-2  " colspan="5">
+                	<div><span ng-bind-html="details.deal_info"></span></div>
+                </td>
+              </tr>
+           
+           </table>
+        </div>
+        </div>
+</section> 
+</div>
+    
+

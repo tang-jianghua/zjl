@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.mfangsoft.zhuangjialong.integration.region.mapper.RegionEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.mfangsoft.zhuangjialong.integration.region.model.RegionEntity">
+		<id column="code" jdbcType="VARCHAR" property="code" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+		<resultMap id="NewRegionResultMap"
+		type="com.mfangsoft.zhuangjialong.app.brand.model.RegionModel">
+				<id column="region_code" jdbcType="VARCHAR" property="region_code" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<collection property="regions"
+			resultMap="BaseResultMap">
+		</collection>
+	</resultMap>
+	
+	
+	
+			<resultMap id="RegionWithLetterResultMap"
+		type="com.mfangsoft.zhuangjialong.app.brand.model.RegionWithLetter">
+		<result column="letter" jdbcType="VARCHAR" property="letter" />
+		<collection property="regionModels"
+			ofType="com.mfangsoft.zhuangjialong.app.brand.model.RegionModel">
+				<id column="region_code" jdbcType="VARCHAR" property="region_code" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<collection property="regions"
+			resultMap="BaseResultMap">
+		</collection>
+		</collection>
+	</resultMap>
+	
+			<resultMap id="CityRegionWithLetterResultMap"
+		type="com.mfangsoft.zhuangjialong.app.brand.model.RegionWithLetter">
+		<result column="letter" jdbcType="VARCHAR" property="letter" />
+		<collection property="regionModels"
+			ofType="com.mfangsoft.zhuangjialong.app.brand.model.RegionModel">
+				<id column="region_code" jdbcType="VARCHAR" property="region_code" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		</collection>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		code, name
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from region
+		where code = #{code,jdbcType=VARCHAR}
+	</select>
+	
+		<select id="selectRegionWithLetterForMunicipality" 
+		resultMap="RegionWithLetterResultMap">
+		SELECT  firstPinyin(re.name) letter,re.name city,cnr.code,cnr.name,cnr.region_code
+		FROM (
+			SELECT r.code,r.name, CONCAT('',
+		LEFT(r.code,'2'),'0000') AS region_code
+		FROM t_biz_partner p,region r
+		WHERE FIND_IN_SET(r.code,p.region_id)!=0 AND RIGHT(r.`code`,4)!="0000" AND p.check_state = 2
+		GROUP BY r.code) cnr,
+		region re
+		WHERE cnr.region_code = re.code
+	    AND cnr.region_code  IN ('110000', '120000', '310000', '500000')
+	    order by  firstPinyin(re.name),firstPinyin(cnr.name)
+	</select>
+	
+	
+			<select id="selectRegionWithLetterNotForMunicipality" 
+		resultMap="RegionWithLetterResultMap">
+		SELECT firstPinyin(re.name) letter,re.name city,cnr.code,cnr.name,cnr.cregion_code region_code
+		FROM (
+			SELECT r.code,r.name, CONCAT('',
+		LEFT(r.code,'2'),'0000') AS region_code,CONCAT('',
+		LEFT(r.code,'4'),'00') AS cregion_code
+		FROM t_biz_partner p,region r
+		WHERE FIND_IN_SET(r.code,p.region_id)!=0  AND RIGHT(r.`code`,4)!="0000" AND p.check_state = 2
+		GROUP BY r.code) cnr,
+		region re
+		WHERE cnr.cregion_code = re.code
+		AND cnr.region_code NOT IN ('110000', '120000', '310000', '500000')
+		 ORDER BY  firstPinyin(re.name),firstPinyin(cnr.name)				
+	</select>
+		<select id="selectCityRegionWithLetterForMunicipality" 
+		resultMap="CityRegionWithLetterResultMap">
+				SELECT  firstPinyin(re.name) letter,re.name city,cnr.region_code
+		FROM (
+		SELECT r.code,r.name, CONCAT('',
+		LEFT(r.code,'2'),'0000') AS region_code
+		FROM t_biz_partner p,region r
+		WHERE FIND_IN_SET(r.code,p.region_id)!=0 AND RIGHT(r.`code`,4)!="0000" AND p.check_state = 2
+		GROUP BY r.code) cnr,
+		region re
+		WHERE cnr.region_code = re.code
+	    AND cnr.region_code  IN ('110000', '120000', '310000', '500000')
+	    group by region_code
+	    order by  firstPinyin(re.name),firstPinyin(cnr.name)
+	</select>
+	
+	<select id="selectCityRegionWithLetterNotForMunicipality" 
+		resultMap="CityRegionWithLetterResultMap">
+		SELECT firstPinyin(re.name) letter,re.name city,cnr.cregion_code region_code
+		FROM (
+			SELECT r.code,r.name, CONCAT('',
+		LEFT(r.code,'2'),'0000') AS region_code,CONCAT('',
+		LEFT(r.code,'4'),'00') AS cregion_code
+		FROM t_biz_partner p,region r
+		WHERE FIND_IN_SET(r.code,p.region_id)!=0  AND RIGHT(r.`code`,4)!="0000" AND p.check_state = 2
+		GROUP BY r.code) cnr,
+		region re
+		WHERE cnr.cregion_code = re.code
+		AND cnr.region_code NOT IN ('110000', '120000', '310000', '500000')
+		group by cnr.cregion_code
+		 ORDER BY  firstPinyin(re.name),firstPinyin(cnr.name)					
+	</select>
+	
+	<select id="selectOpenRegion" 
+		resultMap="NewRegionResultMap">
+	SELECT a.region_code,re.`name` city,a.code,a.`name` FROM `region` re,(
+	SELECT SUBSTR(p.region_id,8,6) region_code,r.code,r.`name` FROM
+	`t_biz_partner` p,region r,(SELECT DISTINCT(partner_id) FROM `t_biz_brand_product` WHERE state = 1) bp WHERE 
+	FIND_IN_SET(r.`code`,RIGHT(region_id,LENGTH(region_id)-14)) !=0 AND
+	p.isglobal=2 AND p.check_state=2 AND bp.partner_id = p.`id`) a WHERE a.region_code = re.`code`
+	UNION
+	ALL
+	SELECT r.`code` region_code,r.`name` city,r.`code` AS `code`,'全城' AS `name`
+	FROM `t_biz_partner` p,region r,(SELECT DISTINCT(partner_id) FROM `t_biz_brand_product` WHERE state = 1) bp  WHERE
+	FIND_IN_SET(r.`code`,SUBSTR(p.region_id,8,6)) !=0 AND
+	p.isglobal=1 AND p.check_state=2 AND bp.partner_id = p.`id`
+	ORDER BY firstPinyin(city),firstPinyin(`name`)
+	</select>
+	
+	<select id="inRegion" parameterType="java.util.Map"
+		resultType="java.lang.Boolean">
+	SELECT 
+  IF(COUNT(*) > 0, TRUE, FALSE) 
+FROM
+  `t_biz_partner` p,
+  (SELECT DISTINCT 
+    (partner_id) 
+  FROM
+    `t_biz_brand_product` 
+  WHERE state = 1) bp 
+WHERE bp.partner_id = p.`id` 
+  AND FIND_IN_SET(#{region_code,jdbcType=VARCHAR}, p.region_id) != 0 
+  AND p.`check_state` = 2
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from region
+		where code = #{code,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.mfangsoft.zhuangjialong.integration.region.model.RegionEntity">
+		insert into region (code, name)
+		values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.mfangsoft.zhuangjialong.integration.region.model.RegionEntity">
+		insert into region
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				code,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.mfangsoft.zhuangjialong.integration.region.model.RegionEntity">
+		update region
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.mfangsoft.zhuangjialong.integration.region.model.RegionEntity">
+		update region
+		set name = #{name,jdbcType=VARCHAR}
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="select" resultMap="BaseResultMap" >
+	  SELECT <include refid="Base_Column_List" /> from region where RIGHT(code,4) ='0000'
+	</select>
+	
+	<select id="selectCity" resultMap="BaseResultMap" parameterType="java.lang.String">
+	
+	SELECT  <include refid="Base_Column_List" />  from  region where  left(code,2) =left(#{code},2) and  code!=#{code} and RIGHT(code,2)='00'
+	
+	</select>
+	
+	<select id="selectProvinceNameByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+	
+	select  <include refid="Base_Column_List" />  from region where  LEFT(code,2)= left(#{code},2) and RIGHT(code,4) ='0000'
+	
+	</select>
+	
+	<select id="selectCityNameByCode" resultMap="BaseResultMap">
+	
+	select  <include refid="Base_Column_List" />  from region where  LEFT(code,4)= left(#{code},4) and RIGHT(code,2) ='00' 
+	</select>
+	<select id="selectNameByCode" resultMap="BaseResultMap">
+	
+	select  <include refid="Base_Column_List" />  from region where code=#{code}
+	</select>
+	
+	<select id="selectRegionByCode" parameterType="java.lang.String" resultType="java.lang.String">
+	select  name  from region where code=#{code}
+	</select>
+	
+	<select id="selectCounty" resultMap="BaseResultMap" parameterType="java.lang.String">
+	
+	SELECT <include refid="Base_Column_List" />  from  region where  left(code,4) =left(#{code},4) and  code!=#{code} and name!='市辖区'
+	
+	</select>
+
+	
+	<select id="selectreginName" resultType="java.lang.String" parameterType="java.lang.String">
+	
+	  select group_concat(re.name)  from region  re  where  find_in_set(re.code,#{region_code})!=0
+	</select>
+
+		<select id="selectServiceRegion" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT CODE,NAME FROM region WHERE CODE IN (
+SELECT DISTINCT(CONCAT('',LEFT(r.code,'2'),'0000')) AS region_code
+		FROM t_biz_partner b,region r
+		WHERE FIND_IN_SET(r.code,b.region_id)!=0 
+		) 
+	</select>
+	<select id="queryserviceCityByprovence" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT * FROM region WHERE CODE IN (
+SELECT DISTINCT(CONCAT(LEFT(r.code,'4'),'00')) 
+		FROM t_biz_partner b,region r
+		WHERE FIND_IN_SET(r.code,b.region_id)!=0 AND LEFT(r.code,2) = LEFT(#{code},2) AND RIGHT(r.code,'4') != '0000'
+)
+	</select>
+	<select id="queryserviceCountryByCity" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT * FROM region WHERE CODE IN (
+SELECT DISTINCT(r.code) 
+		FROM t_biz_partner b,region r 
+		WHERE FIND_IN_SET(r.code,b.region_id)!=0 AND LEFT(r.code,'4') = LEFT(#{code},'4') AND RIGHT(r.code,'2') != '00'
+)
+	</select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.ClassAttrValueEntityMapper">
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseClassAttrValueEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="attr_id" jdbcType="BIGINT" property="attr_id" />
+    <result column="parent_attr_id" jdbcType="BIGINT" property="parent_attr_id" />
+  </resultMap>
+ 
+ <select id="getClassAttrValueEntityByAttrIdNoWrite" resultMap="BaseResultMap" parameterType="java.lang.Long">
+ 
+ 
+ select id, value,attr_id,parent_attr_id from t_biz_class_attr_value where  attr_id = #{attr_id}
+ 
+ </select>
+ 
+  <select id="getAttrValueEntityByAttrId" resultType="com.mfangsoft.zhuangjialong.integration.newproduct.model.ClassAttrValueEntity" parameterType="java.lang.Long">
+ 
+ select id, value from t_biz_class_attr_value where  attr_id = #{attr_id}
+ 
+ </select>
+ 
+ 
+  <select id="getClassAttrValueEntityByAttrIdWrite" resultMap="BaseResultMap" parameterType="java.lang.Long">
+ 
+ 
+ select value as id, value as value,attr_id,parent_attr_id from t_biz_class_attr_value where  attr_id = #{attr_id}
+ 
+ </select>
+ 
+  <select id="getClassAttrValueEntityByParent" resultMap="BaseResultMap" parameterType="java.util.Map">
+ 
+ 
+  select id, value from t_biz_class_attr_value where  parent_attr_id = #{id} and attr_id=#{attr_id}
+ 
+ </select>
+ 
+</mapper>

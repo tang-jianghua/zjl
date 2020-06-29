@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.partner.mapper.OpenCityEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.partner.model.OpenCityEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="region_name" jdbcType="VARCHAR" property="region_name" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    
+        <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, region_code, region_name, state,partner_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_open_city
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_open_city
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.OpenCityEntity">
+    insert into t_biz_open_city (region_code, region_name, 
+      state,partner_id)
+    values (#{region_code,jdbcType=VARCHAR}, #{region_name,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{partner_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.OpenCityEntity">
+    insert into t_biz_open_city
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="region_name != null">
+        region_name,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="partner_id != null">
+        partner_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="region_name != null">
+        #{region_name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="partner_id != null">
+        #{partner_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.OpenCityEntity">
+    update t_biz_open_city
+    <set>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="region_name != null">
+        region_name = #{region_name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="partner_id != null">
+        partner_id = #{partner_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.OpenCityEntity">
+    update t_biz_open_city
+    set region_code = #{region_code,jdbcType=VARCHAR},
+      region_name = #{region_name,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      partner_id = #{partner_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="queryOpenCity" resultMap="BaseResultMap" >
+  
+   select 
+    <include refid="Base_Column_List" />
+    from t_biz_open_city where state=1
+  </select>
+ 
+ <select id="queryOpenCtiyByPartnerId" resultType="java.lang.Integer">
+ 
+ SELECT o.id
+FROM   t_biz_open_city o
+WHERE  o.partner_id = #{partner_id} and o.state = #{state}
+ </select>
+ 
+ 
+  <select id="selectUnEndOrderCustomerByPartnerId" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.partner.model.CustomerSMSModel">
+ 
+SELECT 
+  c.`name`,c.`account`,region.`name` region_name
+FROM
+  `t_biz_order` o 
+  LEFT JOIN `t_biz_order_state_relation` osr 
+    ON o.`id` = osr.`order_id` 
+    LEFT JOIN `t_biz_partner` p
+    ON FIND_IN_SET(o.`region_code`,p.`region_id`)!=0
+    LEFT JOIN `t_biz_userequipment` u
+    ON o.`customer_id` = u.`customer_id`
+    LEFT JOIN `t_app_customer` c
+    ON o.`customer_id` = c.`id`
+    LEFT JOIN `region` region
+    ON o.`region_code` = region.`code`
+WHERE osr.`time` = 
+  (SELECT 
+    MAX(TIME) 
+  FROM
+    t_biz_order_state_relation 
+  WHERE order_id = osr.`order_id`) 
+  AND osr.`order_state_code` NOT IN ('3000', '4000', '5000')
+ AND p.`id` = #{partner_id,jdbcType=BIGINT}
+  GROUP BY o.`customer_id`
+ </select>
+ 
+</mapper>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<style>
+.thisTitle thead tr th, .thisTitle thead tr th a {
+	text-align: center;
+	color: #fff;
+}
+.imgContainer1{ 
+    width:316px;
+    height: 160px;
+    margin: 10px 0;
+}
+.imgContainer1 .imgBackground1{
+    width:316px;
+    height: 135px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 134px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width:316px;
+    height: 135px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+	width: 100%;
+    height: 125px;  
+}  
+.imgContainer2{
+    width: 96px;
+    height: 96px;
+    margin: 5px 0;
+}
+.imgContainer2 .imgBackground1{
+    width: 96px;
+    height: 96px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 120px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+    border-radius: 60px;
+}
+.imgContainer2 .imgBackground2{
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    border-radius: 60px;
+}
+.imgContainer2 .k-upload{
+	opacity: 0;
+}
+.imgContainer2 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer2 .k-upload .k-upload-button{
+	width: 120px;
+    height: 120px;  
+}  
+</style>
+<div ng-controller="developerIntegralsStore">
+	<section class="well ">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">积分商城</div>
+		
+		<div class="idMessage">
+		
+		<div>
+	   		<span class="title1">宣传图上传</span>
+	   		<span class="title2">（尺寸要求：高度：280px 宽度：750px）</span>
+   		</div>
+        <div class="form-horizontal form-widgets col-sm-12" style="height:180px;border-bottom: 1px solid #caa359;">
+   	 		<div class="form-group" id="bannerContainer">
+   	 			<div class="col-sm-4">
+	   	 			<div class="imgContainer1">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="integrals_img"></div>
+	                	<input type="file" name="file" id="integrals"/>
+	                	<input type="hidden" id="integrals_url"/>
+                	</div>
+   	 			</div>
+   	 			
+   	 		</div>
+        </div>
+		
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+			
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="control-label col-sm-1">商品名称</label>
+							<div class="col-sm-3">
+								<input id=product_title placeholder="商品名称" style="width:100%;"/>
+							</div>
+							<label class="control-label col-sm-1">兑换类型</label>
+							<div class="col-sm-3">
+								<input id="exchangeType" placeholder="兑换类型"  style="width:100%;"/>
+							</div>
+							<label class="control-label col-sm-1">城市合伙人</label>
+							<div class="col-sm-3">
+								<input id="partner" placeholder="城市合伙人" style="width:100%;"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="buttons-wrap clearBoth">
+						<button class="k-button k-state-default blueBackground"
+							ng-click="search()">搜索</button>
+					</div>
+				</div>
+				
+			</div>
+			<div>
+					<button class="k-button k-state-default blueBackground"
+						ng-click="addIntegralsStore()">添加积分商品</button>
+						<hr class="towGreen"></hr>
+			</div>
+			<div kendo-grid="grid" k-options="mainGridOptions" class="thisTitle"></div>
+
+		</div>
+	</section>
+</div>

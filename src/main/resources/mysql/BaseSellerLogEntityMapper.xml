@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.applogin.mapper.BaseSellerLogEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.applogin.model.BaseSellerLogEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="seller_id" jdbcType="BIGINT" property="seller_id" />
+    <result column="device_no" jdbcType="VARCHAR" property="device_no" />
+    <result column="device_type" jdbcType="VARCHAR" property="device_type" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="action" jdbcType="INTEGER" property="action" />
+    <result column="stamptime" jdbcType="TIMESTAMP" property="stamptime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, seller_id, device_no, device_type, region_code, action, stamptime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_seller_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectLastLoginBySellerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_seller_log
+    where ACTION=1
+    AND seller_id = #{id,jdbcType=BIGINT}
+    ORDER BY stamptime DESC LIMIT 1 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_app_seller_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.BaseSellerLogEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_seller_log (seller_id, device_no, device_type, 
+      region_code, action, stamptime
+      )
+    values (#{seller_id,jdbcType=BIGINT}, #{device_no,jdbcType=VARCHAR}, #{device_type,jdbcType=VARCHAR}, 
+      #{region_code,jdbcType=VARCHAR}, #{action,jdbcType=INTEGER}, #{stamptime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.BaseSellerLogEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_seller_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="seller_id != null">
+        seller_id,
+      </if>
+      <if test="device_no != null">
+        device_no,
+      </if>
+      <if test="device_type != null">
+        device_type,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="action != null">
+        action,
+      </if>
+      <if test="stamptime != null">
+        stamptime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="seller_id != null">
+        #{seller_id,jdbcType=BIGINT},
+      </if>
+      <if test="device_no != null">
+        #{device_no,jdbcType=VARCHAR},
+      </if>
+      <if test="device_type != null">
+        #{device_type,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="action != null">
+        #{action,jdbcType=INTEGER},
+      </if>
+      <if test="stamptime != null">
+        #{stamptime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.BaseSellerLogEntity">
+    update t_app_seller_log
+    <set>
+      <if test="seller_id != null">
+        seller_id = #{seller_id,jdbcType=BIGINT},
+      </if>
+      <if test="device_no != null">
+        device_no = #{device_no,jdbcType=VARCHAR},
+      </if>
+      <if test="device_type != null">
+        device_type = #{device_type,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="action != null">
+        action = #{action,jdbcType=INTEGER},
+      </if>
+      <if test="stamptime != null">
+        stamptime = #{stamptime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.applogin.model.BaseSellerLogEntity">
+    update t_app_seller_log
+    set seller_id = #{seller_id,jdbcType=BIGINT},
+      device_no = #{device_no,jdbcType=VARCHAR},
+      device_type = #{device_type,jdbcType=VARCHAR},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      action = #{action,jdbcType=INTEGER},
+      stamptime = #{stamptime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

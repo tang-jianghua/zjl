@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.order.mapper.SellerBalanceDetailEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.order.model.SellerBalanceDetailEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="seller_id" jdbcType="BIGINT" property="seller_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="order_id" jdbcType="BIGINT" property="order_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, amount, seller_id, create_time, order_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_seller_balance_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_seller_balance_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.order.model.SellerBalanceDetailEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_seller_balance_detail (type, amount, seller_id, 
+      create_time, order_id)
+    values (#{type,jdbcType=INTEGER}, #{amount,jdbcType=DOUBLE}, #{seller_id,jdbcType=BIGINT}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{order_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.SellerBalanceDetailEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_seller_balance_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="seller_id != null">
+        seller_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="order_id != null">
+        order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+       TRUNCATE(#{amount,jdbcType=DOUBLE},2),
+      </if>
+      <if test="seller_id != null">
+        #{seller_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_id != null">
+        #{order_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.order.model.SellerBalanceDetailEntity">
+    update t_biz_seller_balance_detail
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="seller_id != null">
+        seller_id = #{seller_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_id != null">
+        order_id = #{order_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.order.model.SellerBalanceDetailEntity">
+    update t_biz_seller_balance_detail
+    set type = #{type,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DOUBLE},
+      seller_id = #{seller_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      order_id = #{order_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.UnionProductMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionProduct">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="promotion_id" jdbcType="INTEGER" property="promotion_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, promotion_id, brand_id, product_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_unionpro_product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+<select id="selectUnionProductIds" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.lang.Long">
+	SELECT p.product_id
+FROM t_biz_unionpro_product p
+LEFT JOIN `t_biz_unionpromotion` u
+ON p.`promotion_id` = u.`id`
+WHERE 
+NOW() &gt;= u.`start_time`
+AND NOW() &lt;= u.`end_time`
+ <if test="param.promotion_id != null">
+ and  p.promotion_id = #{param.promotion_id,jdbcType=INTEGER} 
+      </if>
+       <if test="param.brand_id != null">
+AND p.brand_id =#{param.brand_id,jdbcType=BIGINT}
+      </if>
+  </select>
+	<select id="selectUnionProductsForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultType="com.mfangsoft.zhuangjialong.app.product.model.ProductListModel">
+			SELECT
+		p.id AS product_id,
+		p.`product_title` AS product_name,
+		bm.`imgurl` AS image_url,
+		IF(
+		ISNULL(sn.`sales_num`),
+		0,
+		sn.`sales_num`
+		) AS sale_num,
+		IF(
+		ISNULL(psp.`price`),
+		MIN(ps.price),
+		psp.`price`
+		) AS min_prom_price
+		FROM t_biz_unionpro_product up		
+		LEFT JOIN `t_biz_unionpromotion` u
+		ON up.`promotion_id` = u.`id`
+		LEFT JOIN `t_biz_brand_product`  p
+		ON  up.product_id = p.id 
+		LEFT JOIN `v_sales_num` sn
+		ON up.product_id = sn.product_id
+		LEFT JOIN `t_biz_brand_prod_img` `bm`
+		ON up.product_id = `bm`.`product_id`
+		AND (
+		`bm`.`img_sort` =
+		(SELECT
+		MIN(
+		`t_biz_brand_prod_img`.`img_sort`
+		)
+		FROM
+		`t_biz_brand_prod_img`
+		WHERE up.product_id = `t_biz_brand_prod_img`.`product_id`
+		AND `t_biz_brand_prod_img`.`type` = 1)
+		)
+		LEFT JOIN `t_biz_brand_prod_salesattr` ps
+		ON up.product_id = ps.`product_id`
+		LEFT JOIN `t_biz_partner` par
+		ON p.`partner_id` = par.`id`
+		LEFT JOIN `v_simple_seckill_promotion` psp
+		ON up.product_id  = psp.`product_id`
+		LEFT JOIN t_biz_brand_prod_series bps
+		ON up.product_id = bps.`product_id`
+		LEFT JOIN t_biz_brand b
+        ON up.brand_id = b.id
+		WHERE p.state =1 AND u.onOffFlag = 1
+		AND ps.data_flag != 'del'
+		AND NOW() &gt;= u.`start_time`
+		AND NOW() &lt;= u.`end_time`
+		 AND b.state !=0
+		AND 
+		<if test="param.promotion_id != null">
+			and up.promotion_id = #{param.promotion_id,jdbcType=INTEGER}
+		</if>
+		<if test="param.brand_id != null">
+			AND up.brand_id =#{param.brand_id,jdbcType=BIGINT}
+		</if>
+		GROUP BY up.product_id
+		ORDER BY up.id
+	</select>
+ 
+ 
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_unionpro_product
+    where id IN 
+    <foreach collection="idList" index="index" item="item" open="("
+		separator="," close=")">
+		${item}
+	</foreach>
+  </delete>
+  <delete id="deleteByUnionPromotionID" parameterType="java.lang.Integer">
+    delete from t_biz_unionpro_product
+    where promotion_id = #{promotionID,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByUnionPromotionIDANDBrandIDs" parameterType="java.lang.Integer">
+    delete from t_biz_unionpro_product
+    where promotion_id = #{unionPromotionID,jdbcType=INTEGER} 
+    AND brand_id IN 
+    <foreach collection="idArray" index="index" item="item" open="(" separator="," close=")">
+		${item}
+	</foreach>
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionProduct">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_unionpro_product (promotion_id, brand_id, product_id
+      )
+    values (#{promotion_id,jdbcType=INTEGER}, #{brand_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="batchInsert" parameterType="java.util.List">
+  	INSERT INTO t_biz_unionpro_product (promotion_id,brand_id,product_id)
+  	VALUES 
+  	<foreach collection="upList" index="index" item="item" separator=",">
+  		(#{item.promotion_id},#{item.brand_id},#{item.product_id})
+  	</foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionProduct">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_unionpro_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=INTEGER},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionProduct">
+    update t_biz_unionpro_product
+    <set>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=INTEGER},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionProduct">
+    update t_biz_unionpro_product
+    set promotion_id = #{promotion_id,jdbcType=INTEGER},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findUnionProductListPage" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  	SELECT 
+	up.id,up.product_id,model,p.product_title product_name,
+	ROUND(e.sum_quality/e.count_quality) quality,ROUND(e.sum_service/e.count_service) service,
+	i.imgurl,n.product_num,	r.`name` city,bent.`name` brand_name,pt.principal,GROUP_CONCAT(c.`name`) classify,GROUP_CONCAT(s.`name`) series,
+	CASE p.state WHEN 1 THEN '正常' ELSE '下架' END state,
+	min_price,max_price,stock
+	FROM t_biz_unionpro_product up
+	LEFT JOIN t_biz_brand_product p on up.product_id = p.id
+	LEFT JOIN (
+		SELECT MIN(price) min_price,MAX(price) max_price,product_id,GROUP_CONCAT(model) model,SUM(stock) stock FROM t_biz_brand_prod_salesattr GROUP BY product_id
+	) sa ON up.product_id = sa.product_id
+	LEFT JOIN (
+		SELECT SUM(quality) sum_quality,COUNT(quality) count_quality,SUM(service) sum_service,COUNT(service) count_service,product_id FROM t_biz_evaluation GROUP BY product_id
+	) e on up.product_id = e.product_id
+	LEFT JOIN (
+		SELECT product_id,imgurl,MIN(img_sort) FROM t_biz_brand_prod_img WHERE type = 1 GROUP BY product_id ORDER BY product_id,img_sort asc
+	) i ON up.product_id = i.product_id
+	LEFT JOIN (
+		SELECT op.product_id,SUM(op.product_num) product_num FROM t_biz_order_product op
+		LEFT JOIN t_biz_order_state_relation r ON op.order_id = r.order_id
+		WHERE r.order_state_code = '3000'
+		GROUP BY op.product_id
+	) n ON up.product_id = n.product_id
+	LEFT JOIN t_biz_enterprise ent ON p.enterprise_id = ent.id
+	LEFT JOIN t_biz_build_enterprise bent ON ent.build_enterpise = bent.id
+	LEFT JOIN t_biz_partner pt ON p.partner_id = pt.id
+	LEFT JOIN region r ON SUBSTR(pt.region_id,8,6) = r.`code`
+	LEFT JOIN t_biz_brand_prod_series ps ON up.product_id = ps.product_id
+	LEFT JOIN t_biz_brand_series s ON ps.series_id = s.id
+	LEFT JOIN t_biz_brand_classify c ON s.classify_id = c.id
+	<where>
+		<if test="param.brand_id !=null">
+			up.brand_id = ${param.brand_id}
+		</if>
+		<if test="param.promotion_id !=null">
+			AND up.promotion_id = ${param.promotion_id}
+		</if>
+	</where>
+	GROUP BY up.product_id
+  </select>
+  <select id="findUnionProductList" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  	SELECT 
+	up.id,up.product_id,model,p.product_title product_name,
+	ROUND(e.sum_quality/e.count_quality) quality,ROUND(e.sum_service/e.count_service) service,
+	i.imgurl,n.product_num,	r.`name` city,bent.`name` brand_name,pt.principal,GROUP_CONCAT(c.`name`) classify,GROUP_CONCAT(s.`name`) series,
+	CASE p.state WHEN 1 THEN '正常' ELSE '下架' END state,
+	min_price,max_price,stock
+	FROM t_biz_unionpro_product up
+	LEFT JOIN t_biz_brand_product p on up.product_id = p.id
+	LEFT JOIN (
+		SELECT MIN(price) min_price,MAX(price) max_price,product_id,GROUP_CONCAT(model) model,SUM(stock) stock FROM t_biz_brand_prod_salesattr GROUP BY product_id
+	) sa ON up.product_id = sa.product_id
+	LEFT JOIN (
+		SELECT SUM(quality) sum_quality,COUNT(quality) count_quality,SUM(service) sum_service,COUNT(service) count_service,product_id FROM t_biz_evaluation GROUP BY product_id
+	) e on up.product_id = e.product_id
+	LEFT JOIN (
+		SELECT product_id,imgurl,MIN(img_sort) FROM t_biz_brand_prod_img WHERE type = 1 GROUP BY product_id ORDER BY product_id,img_sort asc
+	) i ON up.product_id = i.product_id
+	LEFT JOIN (
+		SELECT op.product_id,SUM(op.product_num) product_num FROM t_biz_order_product op
+		LEFT JOIN t_biz_order_state_relation r ON op.order_id = r.order_id
+		WHERE r.order_state_code = '3000'
+		GROUP BY op.product_id
+	) n ON up.product_id = n.product_id
+	LEFT JOIN t_biz_enterprise ent ON p.enterprise_id = ent.id
+	LEFT JOIN t_biz_build_enterprise bent ON ent.build_enterpise = bent.id
+	LEFT JOIN t_biz_partner pt ON p.partner_id = pt.id
+	LEFT JOIN region r ON SUBSTR(pt.region_id,8,6) = r.`code`
+	LEFT JOIN t_biz_brand_prod_series ps ON up.product_id = ps.product_id
+	LEFT JOIN t_biz_brand_series s ON ps.series_id = s.id
+	LEFT JOIN t_biz_brand_classify c ON s.classify_id = c.id
+	<where>
+		<if test="param.brand_id !=null">
+			up.brand_id = ${param.brand_id}
+		</if>
+		<if test="param.promotion_id !=null">
+			AND up.promotion_id = ${param.promotion_id}
+		</if>
+	</where>
+	GROUP BY up.product_id
+  </select>
+  <select id="findNotSelectedBrandProductPage" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+		SELECT 
+		p.id,p.product_title product_name,GROUP_CONCAT(c.`name`) classify,GROUP_CONCAT(s.`name`) series,i.imgurl
+		FROM t_biz_brand_product p
+		LEFT JOIN t_biz_brand_prod_series ps ON p.id = ps.product_id
+		LEFT JOIN t_biz_brand_series s ON ps.series_id = s.id
+		LEFT JOIN t_biz_brand_classify c ON s.classify_id = c.id
+		LEFT JOIN (
+			SELECT product_id,imgurl,MIN(img_sort) FROM t_biz_brand_prod_img WHERE type = 1 GROUP BY product_id ORDER BY product_id,img_sort asc
+	    ) i ON p.id = i.product_id
+		<where>
+			p.state = 1
+			<if test="param.brand_id != null">
+				AND p.brand_id = ${param.brand_id}
+				<!-- 
+				排除该时间段内参加其他联盟活动和秒杀活动的产品
+				 -->
+				<if test="param.existProductList != null">
+					AND p.id NOT IN 
+					<foreach collection="param.existProductList" item="item" open="(" separator="," close=")">
+						${item}
+					</foreach>
+				</if>
+			</if>
+			<if test="param.product_name != null and param.product_name !=''">
+				AND p.product_title like CONCAT('%',#{param.product_name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="param.classify_id != null and param.classify_id != ''">
+				AND c.id = ${param.classify_id}
+			</if>
+			<if test="param.series_id != null and param.series_id != ''">
+				AND s.id = ${param.series_id}
+			</if>
+		</where>
+		GROUP BY p.id
+	</select>
+	
+	
+	<select id="findNotSelectedBrandProductIDList" resultType="java.lang.Long" parameterType="java.util.Map">
+		SELECT p.id	FROM t_biz_brand_product p
+		<where>
+			p.state = 1
+			<if test="brand_id != null">
+				AND p.brand_id = ${brand_id}
+				<!-- 
+				排除该时间段内参加其他联盟活动和秒杀活动的产品
+				 -->
+				AND p.id NOT IN (
+					SELECT product_id FROM t_biz_unionpro_product up
+					LEFT JOIN t_biz_unionpromotion u ON up.promotion_id = u.id
+					WHERE brand_id = ${brand_id}
+					AND (
+						(#{start_time} &gt;= u.start_time	AND #{start_time} &lt;= u.end_time) OR
+						(#{end_time} &gt;= u.start_time	AND #{end_time} &lt;= u.end_time)
+					) 
+					UNION
+						SELECT product_id FROM t_biz_promotion_seckill_product psp
+							LEFT JOIN t_biz_promotion p ON psp.promotion_id = p.id
+						WHERE psp.brand_id = ${brand_id}
+						AND (
+							(#{start_time} &gt;= start_time	AND #{start_time} &lt;= end_time) OR
+							(#{end_time} &gt;= start_time	AND #{end_time} &lt;= end_time)
+						)
+				)
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectedExistUnionPromotionBrandProduct" resultType="java.lang.String" parameterType="java.util.Map">
+		  SELECT DISTINCT(up.product_id) AS product_id_list
+
+FROM t_biz_unionpromotion u
+ 
+LEFT JOIN t_biz_unionpro_product up ON up.promotion_id = u.id 
+
+WHERE u.onOffFlag IS TRUE AND up.brand_id = ${brand_id} AND (
+(u.start_time &lt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &gt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.start_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.start_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.end_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')))
+	
+	</select>
+</mapper>

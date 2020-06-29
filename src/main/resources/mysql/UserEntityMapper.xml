@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.user.mapper.UserEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.user.model.UserEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="user_type" jdbcType="INTEGER" property="user_type" />
+    <result column="department_id" jdbcType="BIGINT" property="department_id" />
+    <result column="position_id" jdbcType="BIGINT" property="position_id" />
+    <result  column="phone_num"  jdbcType="VARCHAR" property="phone_num"/>
+    <result  column="is_seat"  jdbcType="INTEGER" property="is_seat"/>
+    <association property="department" resultMap="com.mfangsoft.zhuangjialong.integration.department.mapper.DepartmentEntityMapper.BaseResultMap" columnPrefix="dep_">
+    </association>
+    
+     <association property="position" resultMap="com.mfangsoft.zhuangjialong.integration.department.mapper.DepartmentEntityMapper.BaseResultMap" columnPrefix="position_">
+    </association>
+    
+    <association property="roleEntity" resultMap="com.mfangsoft.zhuangjialong.integration.role.mapper.RoleEntityMapper.BaseResultMap" columnPrefix="role_">
+    
+    </association>
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user, account, pwd, create_time, state, user_type, department_id, position_id,phone_num,is_seat
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    user.id, user.user, user.account, user.pwd, user.create_time, user.state,user.is_seat, user.user_type, user.department_id, user.position_id,user.phone_num , role.role_name as role_role_name, role.id as role_id
+    from t_sys_user   user, t_sys_role role , t_sys_user_role user_role
+    where user_role.user_id=user.id and  user_role.role_id=role.id  and user.id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_sys_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert"  useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.user.model.UserEntity">
+    insert into t_sys_user (user, account, pwd, 
+      create_time, state, user_type, 
+      department_id, position_id,phone_num,is_seat)
+    values (#{user,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{user_type,jdbcType=INTEGER}, 
+      #{department_id,jdbcType=BIGINT}, #{position_id,jdbcType=BIGINT},#{phone_num,jdbcType=VARCHAR},#{is_seat,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.user.model.UserEntity">
+    insert into t_sys_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="user != null">
+        user,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="user_type != null">
+        user_type,
+      </if>
+      <if test="department_id != null">
+        department_id,
+      </if>
+      <if test="position_id != null">
+        position_id,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="is_seat != null">
+        is_seat,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="user != null">
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="user_type != null">
+        #{user_type,jdbcType=INTEGER},
+      </if>
+      <if test="department_id != null">
+        #{department_id,jdbcType=BIGINT},
+      </if>
+      <if test="position_id != null">
+        #{position_id,jdbcType=BIGINT},
+      </if>
+       <if test="phone_num != null">
+        #{phone_num,jdbcType=BIGINT},
+      </if>
+       <if test="is_seat != null">
+        #{is_seat,jdbcType=INTEGER},
+      </if>
+      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.user.model.UserEntity">
+    update t_sys_user
+    <set>
+      <if test="user != null">
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="user_type != null">
+        user_type = #{user_type,jdbcType=INTEGER},
+      </if>
+      <if test="department_id != null">
+        department_id = #{department_id,jdbcType=BIGINT},
+      </if>
+      <if test="position_id != null">
+        position_id = #{position_id,jdbcType=BIGINT},
+      </if>
+       <if test="phone_num != null">
+        phone_num=#{phone_num,jdbcType=VARCHAR},
+      </if>
+       <if test="is_seat != null">
+        is_seat=#{is_seat,jdbcType=INTEGER}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.user.model.UserEntity">
+    update t_sys_user
+    set user = #{user,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      user_type = #{user_type,jdbcType=INTEGER},
+      department_id = #{department_id,jdbcType=BIGINT},
+      position_id = #{position_id,jdbcType=BIGINT},
+       phone_num=#{phone_num,jdbcType=VARCHAR},
+        is_seat=#{is_seat,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="closeUser" parameterType="java.lang.Long">
+   update t_sys_user set state = 2 where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="openUser" parameterType="java.lang.Long">
+   update t_sys_user set state = 1 where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="modifyPassword" parameterType="java.util.Map">
+  
+  update t_sys_user  set  pwd = #{new_pwd} where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectUserForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultMap="BaseResultMap">
+	
+	SELECT user.id,
+       user.user,
+       user.account,
+       user.pwd,
+       user.create_time,
+       user.state,
+       user.user_type,
+       user.department_id,
+       user.position_id,
+       user.phone_num,
+       role.role_name AS role_role_name,
+       role.id AS role_id,
+       de.name AS dep_name,
+       pos.name AS position_name,
+       is_seat
+FROM   t_sys_user user 
+                       left join t_sys_user_role ur on ur.user_id = user.id
+                       left join  t_sys_role role on role.id=ur.role_id 
+                       left join t_sys_department de on de.id=user.department_id
+                       left join t_sys_department pos on pos.id=user.position_id
+  where 1=1 
+	
+ 	<if test="param.user!=null">
+ 	
+ 	   and  user.user like CONCAT('%',#{param.user},'%') 
+ 	
+ 	</if>
+ 	
+ 	<if test="param.account!=null">
+ 	
+ 		and user.account = #{param.account}
+ 	
+ 	</if>
+ 	
+ 	<if test="param.phone_num!=null">
+ 	
+ 		and user.phone_num = #{param.phone_num}
+ 	
+ 	</if>
+ 	
+ 	<if test="param.role_id!=null and param.role_id!=''">
+ 	      
+ 	      and de.role_id=#{param.role_id}
+ 	
+ 	</if>
+ 	
+ 	<if test="param.sort!=null">
+ 	order by
+ 	<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	
+ 	  user.${sort.field}  ${sort.dir}
+ 	
+ 	</foreach>
+ 	</if>
+  </select>
+  <select id="getUserByAccount" resultType="com.mfangsoft.zhuangjialong.integration.user.model.UserEntity" parameterType="java.lang.String">
+  
+     select <include refid="Base_Column_List">   </include> from  t_sys_user t where t.account = #{account}
+  
+  </select>
+  
+    <select id="getKFZIdByType" resultType="java.lang.Long">
+     select  id  from  t_sys_user  where user_type = 1
+  </select>
+  
+  <select id="selectUserByDep" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  
+  
+  SELECT user.id,
+       user.user,
+       user.account,
+       user.pwd,
+       user.create_time,
+       user.state,
+       user.user_type,
+       user.department_id,
+       user.position_id,
+       user.phone_num,
+       role.role_name AS role_role_name,
+       role.id AS role_id,
+       de.name AS dep_name,
+       pos.name AS position_name,
+       is_seat
+FROM   t_sys_user user 
+                       left join t_sys_user_role ur on ur.user_id = user.id
+                       left join  t_sys_role role on role.id=ur.role_id 
+                       left join t_sys_department de on de.id=user.department_id
+                       left join t_sys_department pos on pos.id=user.position_id
+                       
+      where user.is_seat=1 and  de.role_id=#{role_id}
+  
+  
+  </select>
+  
+  <update id="resetpassword"  parameterType="java.util.Map">
+  
+    update t_sys_user set  pwd = #{pwd,jdbcType=VARCHAR} where id=#{id}
+  </update>
+</mapper>

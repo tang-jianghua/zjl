@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.bank.mapper.BankEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.bank.model.BankEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pay_account" jdbcType="VARCHAR" property="pay_account"/>
+    <result column="webkit_account" jdbcType="VARCHAR" property="webkit_account"/>
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, account, addr, name,pay_account
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_bank
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_bank
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert"  useGeneratedKeys="true"  keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.bank.model.BankEntity">
+    insert into t_biz_bank ( account, addr, 
+      name,pay_account,webkit_account)
+    values  (#{account,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR},#{pay_account,jdbcType=VARCHAR},#{webkit_account,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective"  useGeneratedKeys="true"  keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.bank.model.BankEntity">
+    insert into t_biz_bank
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+   
+      <if test="account != null">
+        account,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+       <if test="pay_account != null">
+        pay_account,
+      </if>
+       <if test="webkit_account != null">
+        webkit_account,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pay_account != null">
+        #{pay_account,jdbcType=VARCHAR},
+      </if>
+       <if test="webkit_account != null">
+        #{webkit_account,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.bank.model.BankEntity">
+    update t_biz_bank
+    <set>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="pay_account != null">
+        pay_account = #{pay_account,jdbcType=VARCHAR},
+      </if>
+      <if test="webkit_account != null">
+        webkit_account = #{webkit_account,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.bank.model.BankEntity">
+    update t_biz_bank
+      set account = #{account,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+       pay_account = #{pay_account,jdbcType=VARCHAR},
+       webkit_account = #{webkit_account,jdbcType=VARCHAR}
+      
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

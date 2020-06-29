@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">  
+   
+    <!-- For times when you need more complex processing, passing data to the scheduled job -->  
+    
+    <bean name="simpleJobClass" class="com.mfangsoft.zhuangjialong.core.quartz.SpringQtz"></bean>
+    <bean name="orderQuartz" class="com.mfangsoft.zhuangjialong.app.order.util.OrderQuartz"></bean>
+    <bean name="promotionQuartz" class="com.mfangsoft.zhuangjialong.app.promotion.util.PromotionQuartz"></bean>
+    <bean name="ProductCoreForSecKillQuartz" class="com.mfangsoft.zhuangjialong.app.newproductcore.util.ProductCoreForSecKillQuartz"></bean>
+    <bean name="SalesNumQuartz" class="com.mfangsoft.zhuangjialong.app.salesnum.util.SalesNumQuartz"></bean>
+    <bean name="FreeOrderQuartz" class="com.mfangsoft.zhuangjialong.app.freeorder.util.FreeOrderQuartz"></bean>
+    <bean name="OrderShellByQuartz" class="com.mfangsoft.zhuangjialong.integration.order.util.OrderShellByQuartz"></bean>
+    <bean name="ZhekouPriceByQuartz" class="com.mfangsoft.zhuangjialong.integration.promotion.utils.ZhekouPriceByQuartz"></bean>
+    
+    <bean id="ZhekouPriceDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="ZhekouPriceByQuartz" />  
+        <property name="targetMethod" value="updateZhekouPrice" />  
+    </bean>
+    <bean id="OrderShellJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="OrderShellByQuartz" />  
+        <property name="targetMethod" value="execute" />  
+    </bean>
+   <bean id="freeorderJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="FreeOrderQuartz" />  
+        <property name="targetMethod" value="updateFreeOrderTotalNum" />  
+    </bean> 
+   <bean id="ProductCoreForSecKillJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="ProductCoreForSecKillQuartz" />  
+        <property name="targetMethod" value="updateProductPrice" />  
+    </bean> 
+   <bean id="salesnumJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="SalesNumQuartz" />  
+        <property name="targetMethod" value="updateSalesNum" />  
+    </bean> 
+    
+   <bean id="simpleJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="simpleJobClass" />  
+        <property name="targetMethod" value="execute" />  
+    </bean> 
+     
+   <bean id="orderJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="orderQuartz" />  
+        <property name="targetMethod" value="execute" />  
+    </bean>
+    
+    <bean id="promotionJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="promotionQuartz" />  
+        <property name="targetMethod" value="execute" />  
+    </bean>
+    
+    <bean id="SimplecronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="simpleJobDetail" />  
+        <property name="cronExpression" value="0 0/1 * ? * *" />  
+    </bean>  
+     
+    <bean id="productcoreforseckillcronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="ProductCoreForSecKillJobDetail" />  
+        <property name="cronExpression" value="0/1 * * * * ?" />  
+    </bean>  
+    <bean id="salesnumcronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="salesnumJobDetail" />  
+        <property name="cronExpression" value="0 0 1 ? * L" />  
+    </bean>  
+   
+   <bean id="OrdercronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="orderJobDetail" />  
+        <property name="cronExpression" value="0 0/30 * ? * *" />  
+    </bean>
+    
+    <bean id="promotioncronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="promotionJobDetail" />  
+        <property name="cronExpression" value="0 0/3 * ? * *" />  
+    </bean>
+    
+    <bean id="freeordercronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="freeorderJobDetail" />  
+        <property name="cronExpression" value="0 0/1 9-23 * * ?" />  
+    </bean> 
+    
+    <bean id="OrderShellTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="OrderShellJobDetail" />  
+        <property name="cronExpression" value="0 0/1 * ? * *" />  
+    </bean>
+    <bean id="ZhekouPriceTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="ZhekouPriceDetail" />  
+        <property name="cronExpression" value="0 0 23 ? * *" />  
+    </bean>
+    
+    <!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->  
+    <bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">  
+            <list>   
+                <ref bean="SimplecronTrigger" /> 
+                  <ref bean="OrdercronTrigger" /> 
+                  <ref bean="productcoreforseckillcronTrigger" /> 
+                  <ref bean="promotioncronTrigger" /> 
+                  <ref bean="salesnumcronTrigger" /> 
+                  <ref bean="freeordercronTrigger" /> 
+                  <ref bean="OrderShellTrigger" /> 
+                  <ref bean="ZhekouPriceTrigger" /> 
+            </list>  
+        </property>  
+    </bean>  
+   
+</beans>

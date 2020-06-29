@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.series.mapper.BrandSeriesEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.series.model.BrandSeriesEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="classify_id" jdbcType="BIGINT" property="classify_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="creater" jdbcType="BIGINT" property="creater" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="impFlag" jdbcType="VARCHAR" property="impFlag" />
+    <result column="recommended" jdbcType="INTEGER" property="recommended" />
+  </resultMap>
+  
+   <resultMap id="ClassifyResultMap" type="com.mfangsoft.zhuangjialong.integration.series.model.ClassifyModel">
+    <result column="classify_name" jdbcType="VARCHAR" property="classify_name" />
+    <collection property="series" ofType="com.mfangsoft.zhuangjialong.integration.series.model.SeriesModel" >
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="series_name" jdbcType="VARCHAR" property="series_name" />
+       <result column="recommended" jdbcType="INTEGER" property="recommended" />
+      <result column="product_no" jdbcType="INTEGER" property="product_no" />
+    </collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, classify_id, name, creater, sort, impFlag, recommended
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_series
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_brand_series
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.BrandSeriesEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_brand_series (classify_id, name, creater, 
+      sort, impFlag, recommended
+      )
+    values (#{classify_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{creater,jdbcType=BIGINT}, 
+      #{sort,jdbcType=INTEGER}, #{impFlag,jdbcType=VARCHAR}, #{recommended,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.BrandSeriesEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_brand_series
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="classify_id != null">
+        classify_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="impFlag != null">
+        impFlag,
+      </if>
+      <if test="recommended != null">
+        recommended,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="classify_id != null">
+        #{classify_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="impFlag != null">
+        #{impFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="recommended != null">
+        #{recommended,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.BrandSeriesEntity">
+    update t_biz_brand_series
+    <set>
+      <if test="classify_id != null">
+        classify_id = #{classify_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="impFlag != null">
+        impFlag = #{impFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="recommended != null">
+        recommended = #{recommended,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.BrandSeriesEntity">
+    update t_biz_brand_series
+    set classify_id = #{classify_id,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=BIGINT},
+      sort = #{sort,jdbcType=INTEGER},
+      impFlag = #{impFlag,jdbcType=VARCHAR},
+      recommended = #{recommended,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+    <select id="getBrandSeriesEntityList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	select  t1.name,t1.id  from  t_biz_brand_classify t,t_biz_brand_series t1 where  t.id = t1.classify_id and t.brand_id=#{brand_id}
+  </select>
+  
+  <select id="queryBrandSeriesForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultMap="BaseResultMap">
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_series
+  
+  
+  </select>
+  
+  <select id="getClassifySeries" resultType="java.util.Map" parameterType="java.lang.Long" flushCache="false">
+  
+  
+  select c.id, c.name, null as parent_id,c.sort from t_biz_brand_classify c where 1=1
+  <if test="brand_id!=null and brand_id!=''">
+   and c.brand_id=#{brand_id}
+  
+  </if>
+union 
+
+select  s.id,s.name, s.classify_id as parent_id, s.sort from t_biz_brand_series s, t_biz_brand_classify c where s.classify_id=c.id 
+
+ <if test="brand_id!=null and brand_id!=''">
+   and c.brand_id=#{brand_id}
+  
+  </if>
+  
+  order by sort 
+  </select>
+  
+  <select id="getBrandSeriesListByClassify" parameterType="java.util.Map" resultMap="BaseResultMap">
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_series where classify_id=#{classify_id}
+  
+  </select>
+</mapper>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<style>
+.thisTitle thead tr th, .thisTitle thead tr th a {
+	text-align: center;
+	color: #fff;
+}
+.imgContainer1{ 
+    width:316px;
+    height: 160px;
+    margin: 10px 0;
+}
+.imgContainer1 .imgBackground1{
+    width:200px;
+    height: 200px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 200px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width:200px;
+    height: 200px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+	width: 100%;
+    height: 200px;  
+}  
+.imgContainer2{
+    width: 96px;
+    height: 96px;
+    margin: 5px 0;
+}
+.imgContainer2 .imgBackground1{
+    width: 96px;
+    height: 96px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 120px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+    border-radius: 60px;
+}
+.imgContainer2 .imgBackground2{
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    border-radius: 60px;
+}
+.imgContainer2 .k-upload{
+	opacity: 0;
+}
+.imgContainer2 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer2 .k-upload .k-upload-button{
+	width: 120px;
+    height: 120px;  
+}  
+.operator{
+	border:1px solid #CCCCCC;
+	height:35px;
+	font-size:15px;
+	margin-top:15px;
+	text-align:center;
+}
+.operator1{
+	font-size:25px;
+	float:right;
+	width:25px;
+	margin-top:4px;
+	cursor:pointer;
+}
+</style>
+<div ng-controller="addIntegralsStore">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">添加积分商品</div>
+		
+		<div class="idMessage">
+		
+		<div class="col-sm-12" style="height:50px;margin-top:10px;">
+			<label class="control-label col-sm-1">商品名称</label>
+			<div class="col-sm-3">
+				<input id="product_title" placeholder="商品名称" style="width:100%;"/>
+			</div>
+		</div>	
+		<div class="col-sm-12" style="height:210px;">
+			<label class="control-label col-sm-1">商品图片</label>
+   	 		<div class="imgContainer1 col-sm-8">
+                <div class="imgBackground1">
+                	<span class="glyphicon glyphicon-plus"></span>
+                </div>
+               	<div class="imgBackground2" id="integrals_img"></div>
+               	<input type="file" name="file" id="integrals"/>
+               	<input type="hidden" id="integrals_url"/>
+            </div>
+   	 	</div>
+   	 	<div class="col-sm-12" style="height:50px;margin-top:20px;">
+			<label class="control-label col-sm-1">兑换类型</label>
+			<div class="col-sm-4">
+				<div class="col-sm-6">
+					<input id="exchangeType" placeholder="兑换类型" style="width:100%;"/>
+				</div>
+				<div class="col-sm-5" id="trafficDiv" style="display:none;">
+					<input id="traffic" type="number" value="0" style="width:70%;"/>
+					<label style="font-size:20px;">M</label>
+				</div>
+			</div>
+		</div>
+   	 	<div class="col-sm-12" style="height:210px;display:none;" id="operatorDiv">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10" style="padding:0 0 0 0;">
+				<label class="control-label col-sm-1">运营商</label>
+				
+				<div class="col-sm-2">
+					<div ng-repeat="x in items">
+						<div class="col-sm-12 operator" ng-click="operatorClick(this)">
+							<label style="margin-top:7px;">{{x.operator}} <span id="{{x.operator_code}}">0M(0)</span></label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-7" id="flowpackageDiv" style="border:1px solid #CCCCCC;height:200px;display:none;">
+					<div class="col-sm-12" style="height:60px;border-bottom:1px solid #CCCCCC;">
+					
+						<div id="flowpackageSelect">
+							<div ng-repeat="fs in flowpackageSelect">
+								<div class="col-sm-3" style="margin-top:10px;">
+								    <div style="border:1px solid #CCCCCC;text-align:center;height:30px;">
+								    	<label style="margin-top:4px;">{{fs.flow}}M(¥{{fs.price}})</label>
+								    	<div class="operator1" ng-click="deleteflowpackage(this,fs.operator_code)">×</div>
+								    </div>
+								</div>
+							</div>
+						</div>
+						
+						<div id="flowpackageSelect1">
+							<div ng-repeat="fs in flowpackageSelect1">
+								<div class="col-sm-3" style="margin-top:10px;">
+								    <div style="border:1px solid #CCCCCC;text-align:center;height:30px;">
+								    	<label style="margin-top:4px;">{{fs.flow}}M(¥{{fs.price}})</label>
+								    	<div class="operator1" ng-click="deleteflowpackage(this,fs.operator_code)">×</div>
+								    </div>
+								</div>
+							</div>
+						</div>
+						
+						<div id="flowpackageSelect2">
+							<div ng-repeat="fs in flowpackageSelect2">
+								<div class="col-sm-3" style="margin-top:10px;">
+								    <div style="border:1px solid #CCCCCC;text-align:center;height:30px;">
+								    	<label style="margin-top:4px;">{{fs.flow}}M(¥{{fs.price}})</label>
+								    	<div class="operator1" ng-click="deleteflowpackage(this,fs.operator_code)">×</div>
+								    </div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-sm-12" style="height:200px;">
+					
+						<div ng-repeat="f in flowpackage">
+							<div class="col-sm-3" style="height:25px;margin-top:15px;" ng-click="selectFlowpackage(this)">
+							    <div style="border:1px solid #CCCCCC;text-align:center;">
+							   	 <label style="margin-top:4px;">{{f.flow}}M(¥{{f.price}})</label>
+							    </div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+   	 	<div class="col-sm-12" style="height:50px;margin-top:10px;">
+			<label class="control-label col-sm-1">所需积分</label>
+			<div class="col-sm-3">
+				<input id="point" placeholder="所需积分" style="width:100%;"/>
+			</div>
+		</div>
+   	 	<div class="col-sm-12" style="height:50px;margin-top:10px;">
+			<label class="control-label col-sm-1">库存数量</label>
+			<div class="col-sm-3">
+				<input id="product_num" placeholder="库存数量" style="width:100%;"/>
+			</div>
+		</div>
+   	 	<div class="col-sm-12" style="height:50px;margin-top:10px;" id="priceDiv">
+			<label class="control-label col-sm-1">参考价格</label>
+			<div class="col-sm-3">
+				<input id="price" placeholder="参考价格" style="width:100%;"/>
+			</div>
+		</div>
+   	 	<div class="col-sm-12" style="height:50px;margin-top:10px;">
+			<label class="control-label col-sm-1">兑换起止日期</label>
+			<div class="col-sm-6">
+				<input id="start_time"  style="width:48%;"/><span style="font-size:30px;">~</span>
+				<input id="end_time"  style="width:48%;"/>
+			</div>
+		</div>
+   	 	<div class="col-sm-12" style="height:50px;margin-top:10px;">
+			<label class="control-label col-sm-1">有效期限</label>
+			<div class="col-sm-4">
+				<input id="valid_time" type="number" style="width:60%;"/>&nbsp;&nbsp;
+				<input id="valid_unit" style="width:35%;"/>
+			</div>
+		</div>
+		<div class="col-sm-12" style="height:50px;margin-top:10px;display:none;" id="partnerDiv">
+			<label class="control-label col-sm-1">城市合伙人</label>
+			<div class="col-sm-8">
+				<div ng-repeat="p in partner">
+					<div class="col-sm-1"><input type="checkbox" id={{p.id}} ng-click="clickPartner($event,$index)">{{p.principal}}</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 form-group" style="min-height:100px;margin-top:10px;display:none;" id="brandDiv">
+			<label class="control-label col-sm-1">品牌</label>
+			<div class="col-sm-8">
+				<div ng-repeat="b in brand">
+					<div class="col-sm-2"><input type="checkbox" id={{b.id}} ng-click="clickBrand($event,$index)">{{b.brand_name}}</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12" style="height:100px;margin-top:10px;display:none;" id="shopsDiv">
+			<label class="control-label col-sm-1">店铺</label>
+			<div class="col-sm-8">
+				<div ng-repeat="s in shops">
+					<div class="col-sm-3"><input type="checkbox" id={{s.id}} ng-click="clickShops($event,$index)">{{s.shop_name}}</div>
+				</div>
+			</div>
+		</div>
+		
+		 <div class="col-sm-12" style="height:230px;">
+		 	<label class="control-label col-sm-1">商品说明</label>
+		 	<textarea id="textareaValue" cols="90" rows="8"></textarea>
+		 </div>
+			<div style="width:100px;height:50px;margin:auto;">
+				<button ng-click="insertProduct()">确定生成</button>
+			</div>
+	</section>
+</div>

@@ -1,0 +1,154 @@
+.primaryContainer {
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+	min-height: 100%;
+	width: 100%;
+}
+
+#computer {
+	float: left;
+	width: 50%;
+	height: 496px;
+	color: rgb(0, 0, 0);
+	position: relative;
+	top: 0px;
+	left: 0px;
+	z-index: 11;
+	margin-top: 79px;
+	margin-left: 0%;
+	clear: none;
+}
+
+#rounded_3 {
+	float: left;
+	height: 1px;
+	width: 90%;
+	background-color: rgb(149, 149, 149);
+	border-top-left-radius: 0.5px;
+	border-top-right-radius: 0.5px;
+	border-bottom-right-radius: 0.5px;
+	border-bottom-left-radius: 0.5px;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	z-index: 9;
+	margin-top: 26px;
+	margin-left: 5%;
+	clear: both;
+}
+
+#rounded_2 {
+	float: left;
+	height: 460px;
+	width: 35%;
+	background-color: rgba(255, 255, 255, 0.8);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	z-index: 2;
+	margin-top: 39px;
+	margin-left: 6.6333%;
+	clear: none;
+}
+
+#userId {
+	float: left;
+	font-size: 1.5em;
+	width: auto;
+	height: auto;
+	text-align: left;
+	font-weight: normal;
+	line-height: 1em;
+	color: rgb(102, 102, 102);
+	font-style: normal;
+	letter-spacing: normal;
+	text-decoration: none;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	z-index: 8;
+	margin-top: 26px;
+	margin-left: 5%;
+	clear: none;
+}
+
+.bgTops {
+	width: 100%;
+	height: 575px;
+	background-color: #0ca466;
+	top: 0px;
+	left: 0px;
+	margin-top: 141px;
+}
+
+#bg {
+	float: left;
+	height: 575px;
+	color: rgb(0, 0, 0);
+	position: relative;
+	z-index: 1;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	clear: both;
+}
+
+.bgtwo {
+	width: 1000px;
+	height: 575px;
+	margin: 87px auto 140px;
+}
+
+#topic {
+	float: left;
+	font-size: 1.3594609375000002em;
+	position: relative;
+	width: auto;
+	height: auto;
+	text-align: left;
+	font-weight: normal;
+	line-height: 1em;
+	color: rgb(51, 51, 51);
+	font-style: normal;
+	letter-spacing: normal;
+	text-decoration: none;
+	z-index: 13;
+	margin-top: 63px;
+	clear: none;
+}
+
+#line {
+	float: left;
+	width: auto;
+	max-width: 100%;
+	position: relative;
+	height: auto;
+	color: rgb(0, 0, 0);
+	margin-top: 59px;
+	margin-left: 0.065099%;
+	clear: none;
+	padding: 0 21px;
+}
+
+#logo {
+	float: left;
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	color: rgb(0, 0, 0);
+	position: relative;
+	top: 0px;
+	left: 0px;
+	z-index: 15;
+	margin-top: 13px;
+	margin-left: 16.422703%;
+	clear: none;
+}

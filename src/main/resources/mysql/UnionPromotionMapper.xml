@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.UnionPromotionMapper">
+	<resultMap id="BaseResultMap"
+		type="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		<result column="buy_time" jdbcType="DATE" property="buy_time" />
+		<result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+		<result column="rule" jdbcType="VARCHAR" property="rule" />
+		<result column="brand_ids" jdbcType="VARCHAR" property="brand_ids" />
+		<result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="onOffFlag" jdbcType="INTEGER" property="onOffFlag" />
+		<result column="ca_state" jdbcType="INTEGER" property="ca_state" />
+		<result column="discount" jdbcType="DOUBLE" property="discount" />
+		<result column="cash_value" jdbcType="DOUBLE" property="cash_value" />
+		<result column="price" jdbcType="DOUBLE" property="price" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="details" jdbcType="VARCHAR" property="details" />
+		<result column="images" jdbcType="VARCHAR" property="images" />
+		<result column="image" jdbcType="VARCHAR" property="image" />
+		<result column="sales_num" jdbcType="INTEGER" property="sales_num" />
+		
+		<result column="apply_end_time" jdbcType="TIMESTAMP" property="apply_end_time" />
+		<result column="cash_prom_price" jdbcType="DOUBLE" property="cash_prom_price" />
+		<result column="cash_time" jdbcType="BIGINT" property="cash_time" />
+		<result column="cash_start_time" jdbcType="TIMESTAMP" property="cash_start_time" />
+		<result column="cash_end_time" jdbcType="TIMESTAMP" property="cash_end_time" />
+		<result column="cash_prom_num" jdbcType="INTEGER" property="cash_prom_num" />
+		<result column="cash_sell_num" jdbcType="INTEGER" property="cash_sell_num" />
+		<result column="cash_promotion_flag" jdbcType="INTEGER" property="cash_promotion_flag" />
+		
+		<collection property="brands" ofType="com.mfangsoft.zhuangjialong.app.brand.model.Brand" autoMapping="true" >
+			<id column="brand_id" jdbcType="BIGINT" property="brand_id" />
+			<result column="brand_image" jdbcType="VARCHAR" property="brand_image" />
+		</collection>
+		
+		<collection property="unionProducts" ofType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionProduct" autoMapping="true" columnPrefix="p_">
+		</collection>
+		
+	</resultMap>
+
+<resultMap id="DetailsResultMap"
+		type="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+		<result column="images" jdbcType="VARCHAR" property="images" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+		<result column="rule" jdbcType="VARCHAR" property="rule" />
+		<result column="discount" jdbcType="DOUBLE" property="discount" />
+		<result column="cash_value" jdbcType="DOUBLE" property="cash_value" />
+		<result column="brand_ids" jdbcType="VARCHAR" property="brand_ids" />
+		<result column="price" jdbcType="DOUBLE" property="price" />
+		<result column="cash_time" jdbcType="BIGINT" property="cash_time" />
+		<collection property="brands" ofType="com.mfangsoft.zhuangjialong.app.brand.model.Brand" autoMapping="true">
+			<id column="brand_id" jdbcType="BIGINT" property="brand_id" />
+			<result column="brand_image" jdbcType="VARCHAR" property="brand_image" />
+		</collection>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, create_time, start_time, end_time, apply_end_time, rule, brand_ids, partner_id,
+		update_time, onOffFlag,
+		state, discount, cash_value, price, title, details, images,
+		image,count,total_flag,cash_prom_price,cash_start_time,cash_end_time,cash_prom_num,cash_sell_num,cash_promotion_flag
+	</sql>
+
+<select id="selectHaveCashListForCart" resultMap="BaseResultMap">
+   SELECT u.id, u.name, u.discount,u.cash_value,u.start_time,u.end_time ,p.product_id as p_product_id
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u ,t_biz_unionpro_product p
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} 
+  AND  c.state = 0 AND c.promotion_id=u.id AND u.state = 1 
+   AND p.promotion_id = u.id AND  
+    u.start_time &lt; NOW() AND u.end_time &gt; NOW() 
+
+    AND p.product_id IN 
+ 	<foreach collection="productIdList" item="item" open="("
+			separator="," close=")">
+			${item}
+	</foreach> 
+
+AND 
+c.promotion_id NOT IN 
+<foreach collection="r_List" item="item_r" open="("
+			separator="," close=")">
+			${item_r}
+</foreach> 
+  
+  </select>
+  
+  <select id="selectHaveCashOfOneProductForCart" resultMap="BaseResultMap">
+   SELECT u.id, u.name, u.discount,u.cash_value,u.start_time,u.end_time ,p.product_id as p_product_id
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u ,t_biz_unionpro_product p
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} 
+  AND  c.state = 0 AND c.promotion_id=u.id AND u.state = 1 
+   AND p.promotion_id = u.id AND  
+    u.start_time &lt; NOW() AND u.end_time &gt; NOW() 
+    AND p.product_id = #{product_id,jdbcType=BIGINT}
+AND 
+c.promotion_id NOT IN 
+<foreach collection="r_List" item="item_r" open="("
+			separator="," close=")">
+			${item_r}
+</foreach> 
+limit 1
+  
+  </select>
+  
+	<select id="selectUnionList" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		u.`id`,
+		u.`image`,
+		b.`id` AS brand_id,
+		be.`imgurl` AS brand_image,
+		IF(
+    u.cash_promotion_flag = 1
+  AND NOW() &gt;= u.cash_start_time 
+    AND NOW() &lt;= u.cash_end_time,
+    TIMESTAMPDIFF(SECOND,NOW(),u.cash_end_time)*1000,NULL
+  ) cash_time 
+		FROM
+		`t_biz_unionpromotion` u,
+		`t_biz_brand` b,
+		`t_biz_build_enterprise`
+		be,
+		`t_biz_partner` p
+		WHERE
+		u.onOffFlag = 1
+		AND NOW() &gt;= u.`start_time`
+		AND NOW() &lt; u.`end_time`
+		 AND p.`check_state` = 2 
+		 AND b.state !=0
+		AND
+		FIND_IN_SET(b.`id`, u.`brand_ids`) != 0
+		AND u.`partner_id` = p.`id`
+		AND
+		b.`enterprise_id` = be.`id`
+		<if test="region_code != null and region_code != ''">
+			AND
+			FIND_IN_SET(#{region_code,jdbcType=VARCHAR},p.`region_id`) != 0
+		</if>
+		ORDER BY u.`start_time` DESC
+	</select>
+
+
+	<select id="selectCashDetails" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+	SELECT
+	u.cash_value,
+	IF(
+	u.cash_promotion_flag = 1
+	AND NOW() &gt;= cash_start_time
+	AND NOW() &lt;= cash_end_time,
+	u.cash_prom_price,
+	u.price
+	) price ,
+	u.title,
+	u.details,
+	COUNT(c.id) sales_num
+	FROM
+	`t_biz_unionpromotion` u,
+	`t_biz_cash_customer` c
+	WHERE u.`id` = c.`promotion_id`
+	AND u.id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectUnionDetails" parameterType="java.lang.Integer"
+		resultMap="DetailsResultMap">
+		SELECT 
+		  u.`images`,
+		  u.`name`,
+		  u.`start_time`,
+		  u.`end_time`,
+		  u.`rule`,
+		  u.`discount`,
+		  u.`cash_value`,
+		  IF(
+		  u.cash_promotion_flag = 1
+		  AND NOW() &gt;= u.cash_start_time 
+		    AND NOW() &lt;= u.cash_end_time,
+		    u.cash_prom_price,
+		    u.price
+		  ) price ,
+		    IF(
+		    u.cash_promotion_flag = 1
+		  AND NOW() &gt;= u.cash_start_time 
+		    AND NOW() &lt;= u.cash_end_time,
+		    TIMESTAMPDIFF(SECOND,NOW(),u.cash_end_time)*1000,NULL
+		  ) cash_time ,
+		b.id AS brand_id,
+		be.imgurl as brand_image
+		FROM `t_biz_unionpromotion` u
+		LEFT JOIN t_biz_brand b
+		ON FIND_IN_SET(b.id,u.brand_ids)
+		LEFT JOIN t_biz_build_enterprise be
+		ON b.enterprise_id = be.id
+		WHERE u.`id` = #{id,jdbcType=INTEGER}
+		AND b.state != 0
+	</select>
+
+	<select id="selectCashByCustomerId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		SELECT
+		cc.`state` ca_state,
+		u.`cash_value`,
+		u.`end_time`,
+		u.`title`,
+		u.`start_time` ,u.`brand_ids`,cc.create_time buy_time
+		FROM
+		`t_biz_cash_customer` cc
+		LEFT JOIN `t_biz_unionpromotion` u
+		ON cc.`promotion_id` = u.`id`
+		WHERE
+		cc.`customer_id` = #{customer_id,jdbcType=BIGINT}
+		ORDER BY u.`end_time`
+		DESC
+	</select>
+
+	<select id="selectPromotionByProductId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		SELECT
+		u.`id`,
+		u.`name`
+		FROM
+		`t_biz_unionpromotion` u
+		LEFT JOIN `t_biz_unionpro_product` p
+		ON u.`id` = p.`promotion_id`
+		WHERE NOW() &gt;= u.`start_time`
+		AND NOW() &lt; u.`end_time`
+		AND p.`product_id` = #{product_id,jdbcType=BIGINT}
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultType="java.util.Map">
+		select
+		id, name, create_time, DATE_FORMAT(start_time, '%Y-%m-%d') as start_time, DATE_FORMAT(end_time, '%Y-%m-%d') as end_time,DATE_FORMAT(apply_end_time, '%Y-%m-%d %H:%i:%s') as apply_end_time, rule, brand_ids, partner_id,
+		update_time,
+		state, discount, cash_value, price, title, details, images,
+		image,count,total_flag,cash_prom_price,DATE_FORMAT(cash_start_time, '%Y-%m-%d %H:%i:%s') as cash_start_time,DATE_FORMAT(cash_end_time, '%Y-%m-%d %H:%i:%s') as cash_end_time,cash_prom_num,cash_sell_num,cash_promotion_flag
+		from t_biz_unionpromotion
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectBaseInfoByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_biz_unionpromotion
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectListByPrimaryKeyS" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_biz_unionpromotion
+		where id in
+		<foreach collection="idList" index="index" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_biz_unionpromotion
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_biz_unionpromotion (name, create_time, start_time,
+		end_time, rule, brand_ids,
+		partner_id, update_time, state,
+		discount, cash_value, price,
+		title, details, images,
+		image)
+		values (#{name,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP},
+		#{start_time,jdbcType=TIMESTAMP},
+		#{end_time,jdbcType=TIMESTAMP}, #{rule,jdbcType=VARCHAR}, #{brand_ids,jdbcType=VARCHAR},
+		#{partner_id,jdbcType=BIGINT}, #{update_time,jdbcType=TIMESTAMP},
+		#{state,jdbcType=INTEGER},
+		#{discount,jdbcType=DOUBLE}, #{cash_value,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE},
+		#{title,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR},
+		#{images,jdbcType=VARCHAR},
+		#{image,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into t_biz_unionpromotion
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			create_time,
+			<if test="start_time != null">
+				start_time,
+			</if>
+			<if test="end_time != null">
+				end_time,
+			</if>
+			<if test="apply_end_time != null">
+				apply_end_time,
+			</if>
+			<if test="rule != null">
+				rule,
+			</if>
+			<if test="brand_ids != null">
+				brand_ids,
+			</if>
+			<if test="partner_id != null">
+				partner_id,
+			</if>
+			<if test="update_time != null">
+				update_time,
+			</if>
+			<if test="onOffFlag != null">
+				onOffFlag,
+			</if>
+			<if test="discount != null">
+				discount,
+			</if>
+			<if test="cash_value != null">
+				cash_value,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="details != null">
+				details,
+			</if>
+			<if test="images != null">
+				images,
+			</if>
+			<if test="image != null">
+				image,
+			</if>
+			<if test="count != null">
+				count,
+			</if>
+			<if test="total_flag != null">
+				total_flag,
+			</if>
+			
+			<if test="cash_prom_price != null">
+				cash_prom_price,
+			</if>
+			<if test="cash_start_time != null">
+				cash_start_time,
+			</if>
+			<if test="cash_end_time != null">
+				cash_end_time,
+			</if>
+			<if test="cash_prom_num != null">
+				cash_prom_num,
+			</if>
+			<if test="cash_sell_num != null">
+				cash_sell_num,
+			</if>
+			<if test="cash_promotion_flag != null">
+				cash_promotion_flag,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			NOW(),
+			<if test="start_time != null">
+				#{start_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="end_time != null">
+				#{end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="apply_end_time != null">
+				#{apply_end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rule != null">
+				#{rule,jdbcType=VARCHAR},
+			</if>
+			<if test="brand_ids != null">
+				#{brand_ids,jdbcType=VARCHAR},
+			</if>
+			<if test="partner_id != null">
+				#{partner_id,jdbcType=BIGINT},
+			</if>
+			<if test="update_time != null">
+				#{update_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="onOffFlag != null">
+				#{onOffFlag,jdbcType=INTEGER},
+			</if>
+			<if test="discount != null">
+				#{discount,jdbcType=DOUBLE},
+			</if>
+			<if test="cash_value != null">
+				#{cash_value,jdbcType=DOUBLE},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DOUBLE},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="details != null">
+				#{details,jdbcType=VARCHAR},
+			</if>
+			<if test="images != null">
+				#{images,jdbcType=VARCHAR},
+			</if>
+			<if test="image != null">
+				#{image,jdbcType=VARCHAR},
+			</if>
+			<if test="count != null">
+				#{count,jdbcType=INTEGER},
+			</if>
+			<if test="total_flag != null">
+				#{total_flag,jdbcType=INTEGER},
+			</if>
+			
+			<if test="cash_prom_price != null">
+				#{cash_prom_price,jdbcType=DOUBLE},
+			</if>
+			<if test="cash_start_time != null">
+				#{cash_start_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cash_end_time != null">
+				#{cash_end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cash_prom_num != null">
+				#{cash_prom_num,jdbcType=INTEGER},
+			</if>
+			<if test="cash_sell_num != null">
+				#{cash_sell_num,jdbcType=INTEGER},
+			</if>
+			<if test="cash_promotion_flag != null">
+				#{cash_promotion_flag,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+		update t_biz_unionpromotion
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="start_time != null">
+				start_time = #{start_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="end_time != null">
+				end_time = #{end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="apply_end_time != null">
+				apply_end_time = #{apply_end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rule != null">
+				rule = #{rule,jdbcType=VARCHAR},
+			</if>
+			<if test="brand_ids != null">
+				brand_ids = #{brand_ids,jdbcType=VARCHAR},
+			</if>
+			<if test="partner_id != null">
+				partner_id = #{partner_id,jdbcType=BIGINT},
+			</if>
+			<if test="update_time != null">
+				update_time = #{update_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="onOffFlag != null">
+				onOffFlag = #{onOffFlag,jdbcType=INTEGER},
+			</if>
+			<if test="discount != null">
+				discount = #{discount,jdbcType=DOUBLE},
+			</if>
+			<if test="cash_value != null">
+				cash_value = #{cash_value,jdbcType=DOUBLE},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DOUBLE},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="details != null">
+				details = #{details,jdbcType=VARCHAR},
+			</if>
+			<if test="images != null">
+				images = #{images,jdbcType=VARCHAR},
+			</if>
+			<if test="image != null">
+				image = #{image,jdbcType=VARCHAR},
+			</if>
+			<if test="count != null">
+				count = #{count,jdbcType=INTEGER},
+			</if>
+			<if test="total_flag != null">
+				total_flag = #{total_flag,jdbcType=INTEGER},
+			</if>
+			<if test="cash_prom_price != null">
+				cash_prom_price = #{cash_prom_price,jdbcType=DOUBLE},
+			</if>
+			<if test="cash_start_time != null">
+				cash_start_time = #{cash_start_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cash_end_time != null">
+				cash_end_time = #{cash_end_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cash_prom_num != null">
+				cash_prom_num = #{cash_prom_num,jdbcType=INTEGER},
+			</if>
+			<if test="cash_sell_num != null">
+				cash_sell_num = #{cash_sell_num,jdbcType=INTEGER},
+			</if>
+			<if test="cash_promotion_flag != null">
+				cash_promotion_flag = #{cash_promotion_flag,jdbcType=INTEGER},
+			</if>
+			update_time = NOW()
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+		update t_biz_unionpromotion
+		set name = #{name,jdbcType=VARCHAR},
+		create_time = #{create_time,jdbcType=TIMESTAMP},
+		start_time = #{start_time,jdbcType=TIMESTAMP},
+		end_time = #{end_time,jdbcType=TIMESTAMP},
+		rule = #{rule,jdbcType=VARCHAR},
+		brand_ids = #{brand_ids,jdbcType=VARCHAR},
+		partner_id = #{partner_id,jdbcType=BIGINT},
+		update_time = #{update_time,jdbcType=TIMESTAMP},
+		state = #{state,jdbcType=INTEGER},
+		discount = #{discount,jdbcType=DOUBLE},
+		cash_value = #{cash_value,jdbcType=DOUBLE},
+		price = #{price,jdbcType=DOUBLE},
+		title = #{title,jdbcType=VARCHAR},
+		details = #{details,jdbcType=VARCHAR},
+		images = #{images,jdbcType=VARCHAR},
+		image = #{image,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateSellNumByPrimaryKey"
+		parameterType="java.lang.Integer">
+		update t_biz_unionpromotion set cash_sell_num = cash_sell_num + #{cash_sell_num,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryUnionPromotionForPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+		SELECT
+		u.id,u.name,GROUP_CONCAT(be.name) AS brand_name,
+		date_format(u.create_time,'%Y-%m-%d %T') AS create_time,date_format( u.start_time,'%Y-%m-%d %T') AS
+		start_time,apply_end_time,
+		p.principal AS partner_principal,u.total_flag,onOffFlag,
+			<![CDATA[CASE
+				WHEN NOW() < u.start_time THEN 0
+				WHEN NOW() >= u.start_time AND NOW() < u.end_time THEN 1
+				WHEN NOW() >= u.end_time THEN 2
+			END AS state]]>
+		FROM t_biz_unionpromotion u
+		LEFT JOIN t_biz_partner p ON u.partner_id =
+		p.id
+		LEFT JOIN t_biz_enterprise e ON p.enterprise_id = e.id
+		LEFT JOIN
+		t_biz_brand b ON p.id = b.citypartner_id AND
+		FIND_IN_SET(b.id,u.brand_ids)
+		LEFT JOIN t_biz_build_enterprise be ON
+		b.enterprise_id = be.id
+		<if test="param.shop_id !=null">
+			LEFT JOIN t_biz_shop s ON b.id =
+			s.brand_id
+		</if>
+		<where>
+			<if test="param.state!=null and param.state!=''">
+				<choose>
+					<when test="param.state=='0'.toString()">
+						<![CDATA[AND NOW() < u.start_time]]>
+					</when>
+					<when test="param.state=='1'.toString()">
+						<![CDATA[AND NOW() >= u.start_time AND NOW() < u.end_time]]>
+					</when>
+					<when test="param.state=='2'.toString()">
+						<![CDATA[AND NOW() >= u.end_time]]>
+					</when>	
+				</choose>
+			</if>
+			<if test="param.name!=null and param.name!=''">
+				and u.name like CONCAT('%', #{param.name},'%')
+			</if>
+			<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+				and e.enterprise_name like CONCAT('%',
+				#{param.enterprise_name},'%')
+			</if>
+			<if test="param.partner_principal!=null and param.partner_principal!=''">
+				and p.principal like CONCAT('%',
+				#{param.partner_principal},'%')
+			</if>
+			<if test="param.brand_name!=null and param.brand_name!=''">
+				and be.name like CONCAT('%', #{param.brand_name},'%')
+			</if>
+			<if test="param.province!=null and param.province!=''">
+				and left(p.region_id,6)=#{param.province}
+			</if>
+			<if test="param.city!= null and param.city!=''">
+				and SUBSTRING(p.region_id,8,12)=#{param.city}
+			</if>
+			<if test="param.county!=null and param.county!=''">
+				and find_in_set(#{param.county},p.region_id)!=0
+			</if>
+			<if test="param.start_time!=null and param.start_time!=''">
+				and date_format(u.start_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+			</if>
+			<if test="param.end_time!=null and param.end_time!=''">
+				and date_format(u.end_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+			</if>
+			<if test="param.partner_id !=null">
+				and u.partner_id = ${param.partner_id}
+			</if>
+			<if test="param.brand_ids !=null">
+				and FIND_IN_SET(${param.brand_ids},u.brand_ids)
+			</if>
+			<if test="param.enterprise_id !=null">
+				and p.enterprise_id = ${param.enterprise_id}
+			</if>
+			<if test="param.shop_id !=null">
+				AND s.id = ${param.shop_id}
+			</if>
+		</where>
+		GROUP BY u.id order by u.id desc
+
+	</select>
+	
+	<select id="selectUnionCon"  parameterType="java.lang.String" resultType="java.util.Map">
+	
+	select name, cash_value as value  from t_biz_unionpromotion where id in(${ids})
+	
+	</select>
+	<update id="updateOnOffFlag" parameterType="java.lang.Integer">
+		UPDATE t_biz_unionpromotion SET onOffFlag = #{onOffFlag,jdbcType=INTEGER} WHERE id = #{unionPromotionID,jdbcType=INTEGER} 
+	</update>
+</mapper>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<style>
+.imgContainer1 {
+	width: 150px;
+	height: 150px;
+	margin: 5px auto;
+}
+
+.imgContainer1 .imgBackground1 {
+	width: 150px;
+	height: 150px;
+	border: 1px dashed #999999;
+	text-align: center;
+	line-height: 150px;
+	font-size: 100px;
+	background-color: #eeeeee;
+	color: #999999;
+	position: absolute;
+}
+
+.imgContainer1 .imgBackground2 {
+	width: 150px;
+	height: 150px;
+	position: absolute;
+}
+
+.imgContainer1 .k-upload {
+	opacity: 0;
+}
+
+.imgContainer1 .k-upload .k-dropzone {
+	padding: 0px;
+}
+
+.imgContainer1 .k-upload .k-upload-button {
+	width: 100%;
+	height: 150px;
+}
+font {
+	color: red;
+	font-size: 20px;
+}
+.tips{
+    height: 30px;
+    margin: 40px auto 10px;
+    border-bottom: 1px solid #a3a3a7;
+}
+.title{
+	text-align: right;
+}
+.text{
+	color: #8d8d8d;
+    margin-left: 1em; 
+}
+.textArea{
+	width: 100%;
+    height: 80px;
+    overflow: auto;
+}
+</style>
+
+
+<div ng-controller="addStoreCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">
+			门店管理 > <span>创建新门店</span>
+		</div>
+
+	    <div class="idMessage">
+	    	<!-- 基本信息 -->
+	    	<div id="baseInfo">
+	    		<div class="tips">
+					<div class="col-sm-2 title"><h4>基本信息</h4></div>
+					<div class="col-sm-8 text">(基本信息提交后不可修改)</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">门店名称<font>*</font></label>
+						<div class="col-sm-8">
+							<input ng-model="form.business_name" class="k-textbox" placeholder="请输入门店名称"/>
+							<span class="text">门店名不得含有区域地址信息（如，北京市XXX公司）</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">分店名称<font>*</font></label>
+						<div class="col-sm-8">
+							<input ng-model="form.branch_name" class="k-textbox" placeholder="请输入分店名称" />
+							<span class="text">分店名不得含有区域地址信息，不应与门店名有重复</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">区域<font>*</font></label>
+						<div class="col-sm-8" style="padding: 0px;">
+							<div class="col-sm-4">
+								<input id="province" />
+							</div>
+							<div class="col-sm-4">
+								<input id="city" />
+							</div>
+							<div class="col-sm-4">
+								<input id="area" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">详细地址<font>*</font></label>
+						<div class="col-sm-8">
+							<input ng-model="form.address" class="k-textbox" placeholder="请输入详细地址" />
+							<span class="text">不要填写省市信息</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">类目<font>*</font></label>
+						<div class="col-sm-8">
+							<input ng-model="form.address" class="k-textbox" placeholder="请输入分店名称" />
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">定位</label>
+						<div class="col-sm-4">
+							<input class="k-textbox" placeholder="输入搜索位置" id="search_location" />
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2"></label>
+						<div class="col-sm-8">
+							<div class="col-sm-12" style="height: 400px;" id="map_container"></div>
+							<input class="col-sm-12 k-textbox" placeholder="坐标点"
+								readonly="readonly" ng-model="form.lbs" id="search_coordinate"
+								style="margin-top: 10px" />
+						</div>
+					</div>
+				</div>
+			</div>
+				
+			<!-- 服务信息-->
+			<div id="serviceInfo">
+				<div class="tips">
+					<div class="col-sm-2 title"><h4>服务信息</h4></div>
+					<div class="col-sm-8 text">(该部分为公共编辑信息，每个添加了该门店的商户均可提交修改意见，并在审核后选择性采纳)</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">图片列表<font>*</font></label>
+						<div class="col-sm-8">
+							<div class="col-sm-3 imgContainer1">
+								<div class="imgBackground1">
+									<span class="glyphicon glyphicon-plus"></span>
+								</div>
+								<div class="imgBackground2" id="logo_img"></div>
+								<input type="file" name="file" id="logo" /> 
+								<input type="hidden" id="logo_url" />
+							</div>
+							
+							
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">联系方式<font>*</font></label>
+						<div class="col-sm-8">
+							<input ng-model="form.telephone" class="k-textbox" placeholder="请输入联系方式" />
+							<span class="text">固定电话需加区号；区号、分机号均用“-”连接</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">营业时间<font>*</font></label>
+						<div class="col-sm-8" style="padding: 0px;">
+							<div class="col-sm-6">
+								<input id="open_time"/>
+							</div>
+							<div class="col-sm-6">
+								<input id="close_time"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">人均价格<font>*</font></label>
+						<div class="col-sm-8">
+							<input type="number" ng-model="form.avg_price" class="k-textbox" placeholder="请输入人均价格" />
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">推荐</label>
+						<div class="col-sm-8">
+							<textarea ng-model="form.recommend" class="textArea"></textarea>
+							<span class="text">如，推荐菜，推荐景点，推荐房间</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">特色服务<font>*</font></label>
+						<div class="col-sm-8">
+							<textarea ng-model="form.special" class="textArea"></textarea>
+							<span class="text">如，免费停车，WiFi</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="control-label col-sm-2">简介</label>
+						<div class="col-sm-8">
+							<textarea ng-model="form.introduction" class="textArea"></textarea>
+							<span class="text">对品牌或门店的简要介绍</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<button class="k-button k-state-default centerButton" ng-click="formSubmit()">确定</button>
+			
+		</div>
+	</section>
+</div>
+
+

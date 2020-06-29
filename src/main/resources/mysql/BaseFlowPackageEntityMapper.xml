@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.pointmall.mapper.BaseFlowPackageEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseFlowPackageEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="package_num" jdbcType="VARCHAR" property="package_num" />
+    <result column="flow" jdbcType="VARCHAR" property="flow" />
+    <result column="price" jdbcType="VARCHAR" property="price" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="operator_code" jdbcType="VARCHAR" property="operator_code" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, package_num, flow, price, operator, operator_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_flow_package
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_flow_package
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseFlowPackageEntity">
+    insert into t_biz_flow_package (id, package_num, flow, 
+      price, operator, operator_code
+      )
+    values (#{id,jdbcType=BIGINT}, #{package_num,jdbcType=VARCHAR}, #{flow,jdbcType=VARCHAR}, 
+      #{price,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{operator_code,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseFlowPackageEntity">
+    insert into t_biz_flow_package
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="package_num != null">
+        package_num,
+      </if>
+      <if test="flow != null">
+        flow,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="operator_code != null">
+        operator_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="package_num != null">
+        #{package_num,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        #{flow,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operator_code != null">
+        #{operator_code,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseFlowPackageEntity">
+    update t_biz_flow_package
+    <set>
+      <if test="package_num != null">
+        package_num = #{package_num,jdbcType=VARCHAR},
+      </if>
+      <if test="flow != null">
+        flow = #{flow,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operator_code != null">
+        operator_code = #{operator_code,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseFlowPackageEntity">
+    update t_biz_flow_package
+    set package_num = #{package_num,jdbcType=VARCHAR},
+      flow = #{flow,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operator_code = #{operator_code,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

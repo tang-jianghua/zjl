@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<style>
+.title{
+	font-size: 15px;
+	color: black;
+    text-align: right;
+}
+.text{
+	font-size: 18px;
+	color: gray; 
+    text-align: left;
+}
+.button_center{
+	display: inherit;
+    margin: auto;
+}
+.imgContainer{
+	width: 150px; 
+	height: 150px;
+	border: 1px dotted gray; 
+}
+.imgContainer_localPicture{ 
+    width: 90%;
+    height: 150px;
+    margin: 5px auto;
+}
+.imgContainer1 .imgBackground1{
+    width: 85%;
+    height: 150px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 150px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width: 85%;
+    height: 150px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+	width: 100%;
+    height: 150px;   
+} 
+.unCheckedContainer{
+	border: 1px solid #b9b4b4;
+    margin-bottom: 15px;
+    padding-top: 15px;
+}
+
+</style>
+<div ng-controller="builderDetailsCtrl"> 
+   	<section class="well">
+	   	<!-- 标题 -->
+	    <div class="fileAbout backstage">施工信息管理   >
+	    	<span>施工信息详情/审核</span> 
+	    </div>
+	    
+	    <div class="idMessage">
+	    	<div>
+		    	<div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">头像：</label>
+		                <div class="col-sm-2">
+		                	<div id="head_img" class="imgContainer"></div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">评分等级：</label>
+		                <div class="col-sm-6 text">{{details.score}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">施工简介：</label>
+		                <div class="col-sm-6 text">{{details.construct_about}}</div>
+		            </div>
+		        </div>
+	    	</div>
+	    	<!-- 审核详情 -->
+	        <div id="detailsContainer">
+		   		<div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">施工名称：</label>
+		                <div class="col-sm-6 text">{{details.team_name}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">服务区域：</label>
+		                <div class="col-sm-6 text">{{details.region_name}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">服务类型：</label>
+		                <div class="col-sm-6 text">{{details.service_type}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">施工单价：</label>
+		                <div class="col-sm-6 text">{{details.unit}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">认证姓名：</label>
+		                <div class="col-sm-6 text">{{details.name}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">联系方式：</label>
+		                <div class="col-sm-6 text">{{details.phone}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">支付宝账号：</label>
+		                <div class="col-sm-6 text">{{details.ali_account}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group" id="idcardContainer">
+		                <label class="col-sm-4 title">身份认证：</label>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group" id="qualificationContainer">
+		                <label class="col-sm-4 title">资质认证：</label>
+		            </div>
+		        </div>
+	        </div>
+			
+			<!-- 编辑-->
+			<div id="editContainer">
+		   		<div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">施工名称</label>
+		                <div class="col-sm-6"><input ng-model="form.team_name"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">服务区域</label>
+		                <div class="col-sm-3">
+		                	<input id="province"/>
+		                </div>
+		                <div class="col-sm-3">
+		                	<input id="city"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title"></label>
+		                <div class="col-sm-6">
+		                	<input id="area"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">服务类型</label>
+		                <div class="col-sm-6">
+		                	<input id="serverType"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">施工单价</label>
+		                <div class="col-sm-4"><input type="number" ng-model="form.unit_price"  class="k-textbox"/></div>
+		                <label class="col-sm-2">{{form.unit_name}}</label>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">认证姓名</label>
+		                <div class="col-sm-6"><input ng-model="form.name"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">联系方式</label>
+		                <div class="col-sm-6"><input ng-model="form.phone"  class="k-textbox" readonly="readonly"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">支付宝账号</label>
+		                <div class="col-sm-6"><input ng-model="form.ali_account"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group" id="idcardContainer_edit">
+		                <label class="col-sm-4 title">身份认证：</label>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group" id="qualificationContainer_edit">
+		                <label class="col-sm-4 title">资质认证：</label>
+		            </div>
+		        </div>
+	        </div>
+	        
+	        
+	        <!-- 审核 -->
+			<div id="checkStateContainer">
+				<div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">审核状态：</label>
+		                <div class="col-sm-6">
+		                	<input id="checkState"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div id="unCheckedParam" class="">
+			        <div class="form-horizontal form-widgets col-sm-12">
+			            <div class="form-group">
+			                <label class="col-sm-4 title">理由：</label>
+			                <div class="col-sm-6">
+			                	<textarea ng-model="checkForm.info" style="width: 100%;height: 70px;"></textarea>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-12">
+			            <div class="form-group">
+			                <label class="col-sm-4 title">人工热线：</label>
+			                <div class="col-sm-6"><input ng-model="checkForm.phone_num"  class="k-textbox"/></div>
+			            </div>
+			        </div>
+		        </div>
+			</div>
+	        <!--  审核详情 -->
+	        <div id="checkDetailsContainer">
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">审核状态：</label>
+		                <div class="col-sm-6 text">{{details.certification_state}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">审核时间：</label>
+		                <div class="col-sm-6 text">{{details.updatetime}}</div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-12">
+		            <div class="form-group">
+		                <label class="col-sm-4 title">审核跟踪：</label>
+		                <div class="col-sm-6 text">{{details.info}}</div>
+		            </div>
+		        </div>
+	        </div>
+	        
+	        <div>
+	        	<button class="k-button k-state-default button_center" id="editButton" ng-click="formSubmit()">确定</button>
+	        	<button class="k-button k-state-default button_center" id="checkButton" ng-click="stateSubmit()">确定</button>
+	        </div>
+	        
+	        
+        </div>	
+    </section>   
+</div>
+    
+

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<style>
+
+.button_center{
+    display: inherit;
+	margin: 0px auto;
+}
+.imgContainer1{ 
+    width:422px;
+    height: 158px;
+    margin: 5px auto;
+}
+.imgContainer1 .imgBackground1{
+    width:422px;
+    height: 158px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 158px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width:422px;
+    height: 158px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+    width:422px;
+    height: 158px; 
+} 
+.thisButton{
+	display:inline-block;
+}
+</style>
+<div ng-controller="caseCtrl">
+    <!-- 标题 -->
+  	<section class="well">
+  	 <div class="fileAbout backstage">案例管理
+    </div>
+     <div class="idMessage">
+   		<div class="greenLine">
+   			<div id="list1" class="oneList choose" ng-click="chooseList(1)">案例列表</div>
+   			<!-- <div id="list2" class="oneList" ng-click="chooseList(2)">案例资源</div> -->
+   		</div>
+   		
+   		<div id="list1_container">
+	   		<div class="form-horizontal form-widgets col-sm-12 businessl">
+	            <div class="form-group">
+	                <label class="control-label col-sm-1" style="text-alig:left">首图上传</label>
+	                <div class="col-sm-6 outPadding" style="margin-top: 7px;">（【尺寸要求】高度:320px &nbsp;&nbsp; 宽度:750px &nbsp;&nbsp; 大小:80Kb以内  &nbsp;&nbsp; 格式:jpg）</div>
+	            </div>
+	        </div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	            <div class="form-group">
+	                <div class="col-sm-3">
+		   	 			<div class="imgContainer1">
+		                	<div class="imgBackground1">
+		                		<span class="glyphicon glyphicon-plus"></span>
+		                	</div>
+		                	<div class="imgBackground2" id="logo_img"></div>
+		                	<input type="file" name="file" id="logo"/>
+		                	<input type="hidden" id="logo_url"/>
+	                	</div>
+	   	 			</div>
+	            </div>
+	        </div>
+	        <div class="interval">
+	        	<button class="k-button k-state-default " ng-click="addCase()">新增案例</button>
+	        	<div class="towGreen"></div>
+	        </div>
+			<div kendo-grid="grid1"  k-options="mainGridOptions1" ></div>
+   		</div>
+   		
+   		<div id="list2_container">
+	   		<div style="padding: 10px 0px;">
+	   			<button class="k-button k-state-default " ng-click="addCaseResource()">新增资源</button>
+	   		</div>
+			<div kendo-grid="grid2"  k-options="mainGridOptions2" ></div>
+   		</div>
+    </section>
+    <div kendo-window="addCaseWindow" k-title="'添加案例'" k-width="900" k-min-height="400" k-visible="false" k-modal="true">
+		<div class="form-horizontal form-widgets col-sm-11">
+            <div class="form-group">
+		        <label class="control-label col-sm-2"></label>
+		        <div class="col-sm-8">
+		        	<div class="col-sm-12" style="margin-top:7px; padding:10px 74px">（【尺寸要求】高度:280px &nbsp;&nbsp; 宽度:750px &nbsp;&nbsp; 大小:80Kb以内  &nbsp;&nbsp; 格式:jpg）</div>
+		            <div class="imgContainer1">
+		              	<div class="imgBackground1">
+		              		<span class="glyphicon glyphicon-plus"></span>
+		              	</div>
+		              	<div class="imgBackground2" id="casePicture_img"></div>
+		              	<input type="file" name="file" id="casePicture"/>
+		              	<input type="hidden" id="casePicture_url"/>
+		             </div>
+		        </div>
+		    </div>
+		    <div class="form-horizontal form-widgets col-sm-12">
+			    <div class="form-group col-sm-12">
+			    	<div class="col-sm-1"></div>
+			        <label class="control-label col-sm-1">案例名称</label>
+			        <div class="col-sm-6"style="padding:0 30px">
+			            <input class="k-textbox" ng-model="caseForm.name"/>
+			        </div>
+			    </div>
+			    <div class="form-group col-sm-12">
+			    	<div class="col-sm-1"></div>
+			        <label class="control-label col-sm-1">案例链接</label>
+			        <div class="col-sm-6" style="padding:0 30px">
+			            <input class="k-textbox" ng-model="caseForm.link_url"/>
+			        </div>
+			    </div>
+			    <div class="form-group col-sm-12">
+			    	<div class="col-sm-1"></div>
+			        <label class="control-label col-sm-1">合伙人</label>
+			        <div class="col-sm-6" style="padding:0 30px">
+			            <input id="join_partner"/>
+			        </div>
+			    </div>
+		    </div>
+		    <div  class="col-sm-12 flot push">
+				    <button class="k-button k-state-default button_center centerButton " ng-click="addNewCase()">确定</button>
+		    </div>
+		</div>
+    </div>
+    
+    <div kendo-window="addCaseResourceWindow" k-title="'添加案例'" k-width="900" k-min-height="400" k-visible="false" k-modal="true">
+		<div class="form-horizontal form-widgets col-sm-11">
+		    <div class="form-group">
+		        <label class="control-label col-sm-2">案例名称</label>
+		        <div class="col-sm-8">
+		            <input class="k-textbox" ng-model="caseResourceForm.name"/>
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label class="control-label col-sm-2">案例文件</label>
+		        <div class="col-sm-8">
+		            <input type="file" name="file" id="caseResourceUrl"/>
+                	<input type="hidden" id="caseResourceUrl_url"/>
+		        </div>
+		    </div>
+		    <button class="k-button k-state-default button_center" ng-click="addNewCaseResource()">保存</button>
+		</div>
+    </div>
+     </div> 
+</div>
+    
+

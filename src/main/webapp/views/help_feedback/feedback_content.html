@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<style>
+.imgInfo{
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+}
+</style>
+
+<div ng-controller="feedbackContentCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">反馈内容</div>
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-4">
+						<div class="form-group">
+							<label class="control-label col-sm-4">昵称</label>
+							<div class="col-sm-8">
+								<input ng-model="search.userName" class="k-textbox" />
+							</div>
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-sm-4">
+						<div class="form-group">
+							<label class="control-label col-sm-4">联系方式</label>
+							<div class="col-sm-8">
+								<input ng-model="search.phone_num" class="k-textbox" />
+							</div>
+						</div>
+					</div>
+
+					<div class="buttons-wrap clearBoth">
+						<button class="k-button k-state-default" ng-click="search()">查询</button>
+					</div>
+				</div>
+			</div>
+			<div class="fix">
+				<!-- <button class="k-button k-state-default" ng-click="dataExport()" translate="export"> </button>
+     	<button class="k-button k-state-default" ng-click="sendCoupon()">送优惠券</button>
+     	<button class="k-button k-state-default" ng-click="sendRedPackage()">送红包</button> -->
+			</div>
+			<div kendo-grid="grid" k-options="mainGridOptions"></div>
+		</div>
+	</section>
+</div>
+
+

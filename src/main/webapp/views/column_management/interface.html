@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<style>
+.title1{
+	color: #caa359;
+    font-size: 20px;	
+}
+.title2{
+	font-size: 14px;	
+}
+.text{
+	text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #232323;
+    font-family: '微软雅黑';
+    padding: 8px;
+}
+.imgContainer1{ 
+    width:316px;
+    height: 190px;
+    margin: 10px 0;
+}
+.imgContainer1 .imgBackground1{
+    width:316px;
+    height: 135px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 134px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width:316px;
+    height: 135px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+	width: 100%;
+    height: 125px;  
+} 
+
+.imgContainer2{
+    width: 96px;
+    height: 96px;
+    margin: 5px auto;
+}
+.imgContainer2 .imgBackground1{
+    width: 96px;
+    height: 96px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 120px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+    border-radius: 60px;
+}
+.imgContainer2 .imgBackground2{
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    border-radius: 60px;
+}
+.imgContainer2 .k-upload{
+	opacity: 0;
+}
+.imgContainer2 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer2 .k-upload .k-upload-button{
+	width: 120px;
+    height: 120px;  
+} 
+.imgContainer3{
+    width:96px;
+    height:96px;
+    margin: 72px 0 0;
+    border-radius: 60px;
+    border: 2px solid #caa359;
+    position: relative
+}
+.imgContainer3 .imgBackground1{
+    width:80px;
+    height: 80px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height:96px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+    margin:auto;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    border-radius:50px;
+}
+.imgContainer3 .imgBackground2{
+    width:80px;
+    height: 80px;
+    position: absolute;
+    margin:auto;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    border-radius:50px;
+    background-size:60px;
+    background-position:center;
+}
+.imgContainer3 .k-upload{
+	opacity: 0;
+}
+.imgContainer3 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer3 .k-upload .k-upload-button{
+    width:100px;
+    height: 100px;
+}
+.imgContainer3_mid{
+    width: 130px;
+    height: 130px;
+    margin: 39px 0 0;
+    border-radius: 76px;
+    border: 2px solid #caa359;
+    position: relative;
+}
+.imgContainer3_mid .imgBackground1{
+    width:120px;
+    height:103px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 120px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+    margin:auto;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    border-radius:50px;
+}
+.imgContainer3_mid .imgBackground2{
+    width:120px;
+    height:103px;
+    position: absolute;
+    margin:auto;
+    left:0;
+    right:0;
+    bottom:0;
+    top:0;
+    border-radius:50px;
+    background-size:90px;
+    backgund-position:center;
+}
+.imgContainer3_mid .k-upload{
+	opacity: 0;
+}
+.imgContainer3_mid .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer3_mid .k-upload .k-upload-button{
+    width:140px;
+    height:120px;
+}
+.imgContainer4{
+    width:580px;
+    height: 184px;
+    margin: 5px 0;
+}
+.imgContainer4 .imgBackground1{
+    width:580px;
+    height:93px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height:93px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer4 .imgBackground2{
+    width:580px;
+    height: 93px;
+    position: absolute;
+}
+.imgContainer4 .k-upload{
+	opacity: 0;
+}
+.imgContainer4 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer4 .k-upload .k-upload-button{
+	width: 100%;
+    height: 93px;  
+}
+.imgContainer5{
+    width: 200px;
+    height: 420px;
+    margin: 5px 0;
+}
+.imgContainer5 .imgBackground1{
+    width:200px;
+    height:355px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height:355px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer5 .imgBackground2{
+    width:200px;
+    height: 355px;
+    position: absolute;
+}
+.imgContainer5 .k-upload{
+	opacity: 0;
+}
+.imgContainer5 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer5 .k-upload .k-upload-button{
+	width: 100%;
+    height: 355px;  
+}
+.bannerJump{
+	display:block;
+	padding:10px 0;
+	text-align:center;
+}
+.widths{
+	width:50%;
+}
+.whollys{
+	width:200px;
+	height:auto;
+}
+
+</style>
+
+<div ng-controller="interfaceCtrl">
+    <!-- 标题 -->
+   	<section class="well">
+   	    <div class="fileAbout backstage">界面管理
+    </div>
+   <div class="idMessage">
+   		<div>
+	   		<span class="title1">Banner设定</span>
+	   		<span class="title2">（最多可设定5张，【尺寸要求】高度:320px &nbsp;&nbsp; 宽度:750px &nbsp;&nbsp; 大小:150Kb以内  &nbsp;&nbsp; 格式:jpg）</span>
+   		</div>
+        <div class="form-horizontal form-widgets col-sm-12">
+   	 		<div class="form-group" id="bannerContainer">
+   	 			<!-- <div class="col-sm-4">
+	   	 			<div class="imgContainer1">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="banner1_img"></div>
+	                	<input type="file" name="file" id="banner1"/>
+	                	<input type="hidden" id="banner1_url"/>
+	                	<div>
+		                	<input type="text" class="col-sm-12 k-button" ng-model="banner.link1" placeholder="请输入连接地址"/>
+				    		<button class="col-sm-4 btn btn-info k-button" ng-click="contentJump()">内容跳转</button>
+	                	</div>
+                	</div>
+   	 			</div> -->
+   	 			
+   	 		</div>
+        </div>
+
+        <div>
+	   		<span class="title1">栏目图标</span>
+	   		<span class="title2">（【尺寸要求】高度:96px &nbsp;&nbsp; 宽度:96px &nbsp;&nbsp; 大小:20Kb以内  &nbsp;&nbsp; 格式:png）</span>
+   		</div>
+        <div class="form-horizontal form-widgets col-sm-12">
+   	 		<div class="form-group col-sm-8" id="columnContainer">
+   	 			<!-- <div class="col-sm-2">
+	   	 			<div class="imgContainer2">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="logo_img"></div>
+	                	<input type="file" name="file" id="logo"/>
+	                	<input type="hidden" id="logo_url"/>
+                	</div>
+                	<div class="text">轻松选材test</div>
+   	 			</div> -->
+   	 			
+   	 		</div>
+        </div>
+
+        <div style="clear: both;">
+	   		<span class="title1">标签栏图标</span>
+	   		<span class="title2">（【尺寸要求】[DIY设计图标] 高度:98px &nbsp;&nbsp; 宽度:114px &nbsp;&nbsp; [其他图标]  高度:45px &nbsp;&nbsp; 宽度:45px &nbsp;&nbsp; 大小:20Kb以内  &nbsp;&nbsp; 格式:png）</span>
+   		</div>
+        <div class="form-horizontal form-widgets col-sm-12">
+   	 		<div class="form-group" id="labelContainer">
+   	 		    <!-- <div class="col-sm-2">
+	   	 			<div class="imgContainer2">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="logo_img"></div>
+	                	<input type="file" name="file" id="logo"/>
+	                	<input type="hidden" id="logo_url"/>
+                	</div>
+                	<div class="imgContainer2">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="logo2_img"></div>
+	                	<input type="file" name="file" id="logo2"/>
+	                	<input type="hidden" id="logo2_url"/>
+                	</div>
+                	<div class="text">首页test</div>
+   	 			</div> -->
+   	 			
+   	 			
+   	 		</div>
+        </div>
+
+        <div>
+	   		<span class="title1">广告位</span>
+	   		<span class="title2">（【尺寸要求】高度:120px &nbsp;&nbsp; 宽度:750px &nbsp;&nbsp; 大小:150Kb以内  &nbsp;&nbsp; 格式:jpg/png）</span>
+   		</div>
+        <div class="form-horizontal form-widgets col-sm-12">
+   	 		<div class="form-group" id="advertisementContainer">
+   	 		    <!-- <div class="col-sm-7">
+	   	 			<div class="imgContainer4">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="advertisement_img"></div>
+	                	<input type="file" name="file" id="advertisement"/>
+	                	<input type="hidden" id="advertisement_url"/>
+	                	<div>
+		                	<input type="text" class="col-sm-12" ng-model="banner.link1" placeholder="请输入连接地址"/>
+				    		<button class="col-sm-4 btn btn-info" ng-click="contentJump()">内容跳转</button>
+	                	</div>
+                	</div>
+   	 			</div> -->
+   	 		</div>
+        </div>
+        
+        <div>
+	   		<span class="title1">启动广告图</span>
+	   		<span class="title2">（【尺寸要求】高度:2208px &nbsp;&nbsp; 宽度:1242px &nbsp;&nbsp; 大小:200Kb以内  &nbsp;&nbsp; 格式:jpg/png）</span>
+   		</div>
+        <div class="form-horizontal form-widgets col-sm-12">
+   	 		<div class="form-group" id="startAdvertisementContainer">
+   	 		    <!-- <div class="col-sm-7">
+	   	 			<div class="imgContainer5">
+	                	<div class="imgBackground1">
+	                		<span class="glyphicon glyphicon-plus"></span>
+	                	</div>
+	                	<div class="imgBackground2" id="advertisement_img"></div>
+	                	<input type="file" name="file" id="advertisement"/>
+	                	<input type="hidden" id="advertisement_url"/>
+	                	<div>
+		                	<input type="text" class="col-sm-12" ng-model="banner.link1" placeholder="请输入连接地址"/>
+				    		<button class="col-sm-4 btn btn-info" ng-click="contentJump()">内容跳转</button>
+	                	</div>
+                	</div>
+   	 			</div> -->
+   	 		</div>
+        </div>
+        
+        
+        <div style="clear: both;"></div>
+        </div>
+     </section>
+  
+</div>

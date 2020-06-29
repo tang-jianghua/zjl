@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<style>
+.title{
+	font-size: 18px;
+	color: black;
+    text-align: right;
+}
+.text{
+	font-size: 18px;
+	color: gray; 
+    text-align: left;
+}
+.button_center{
+	display: inherit;
+    margin: auto;
+}
+</style>
+<div ng-controller="storeBackInformationCtrl">
+    <!-- 标题 -->
+     <section class="well" style="min-height:720px">
+    <div class="fileAbout backstage">后台信息   >
+      <span> 店铺账号信息</span>
+    </div> 
+   
+    <div class="idMessage">
+    	<div class="form-horizontal form-widgets col-sm-10">
+            <div class="form-group">
+                <label class="col-sm-2 title">店面名称：</label>
+                <div class="col-sm-6 text" ng-cloak>{{shop_name}}</div>
+            </div>
+        </div>
+        
+      <div class="form-horizontal form-widgets col-sm-5">
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">负责人：</label>
+                <div class="col-sm-6"><input ng-model="principal"  class="k-textbox"/></div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">联系方式：</label>
+                <div class="col-sm-6"><input ng-model="phone_num"  class="k-textbox"/></div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">LOGO：</label>
+                <div class="col-sm-6 text">
+                	<div id="logo_img" style="width: 150px; height: 150px;border: 1px dotted gray;"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+      <div class="form-horizontal form-widgets col-sm-7">
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-2 title outPadding"  style="text-align:left">所在区域：</label>
+                <div class="col-sm-6 text" ng-cloak>{{region_str}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-2 title outPadding" style="text-align:left">详细地址：</label>
+                <div class="col-sm-6 text" ng-cloak>{{address}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-2 title">账号：</label>
+                <div class="col-sm-6 text" ng-cloak>{{userEntity.account}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-2 title">密码：</label>
+                <div class="col-sm-6 text">******</div>
+            </div>
+        </div>
+		</div>
+		<div class="form-horizontal form-widgets col-sm-12 flot">
+		<div class="form-group">
+    	<button class="k-button k-state-default button_center centerButton" ng-click="formSubmit()">确定</button>
+    				</div>
+    		</div>
+    		</div>
+    </section>
+</div>
+    
+

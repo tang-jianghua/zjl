@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<style>
+.oneClassHeader{
+    width: 80%;
+    height: 50px;
+    background-color: #caa359;
+    margin: 3px auto;
+    font-size: 20px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px 5px 0px 0px;
+}
+.oneClassHeader:HOVER{
+	background-color: #04a570;
+}
+.oneClass{
+    width: 80%;
+    height: 50px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 20px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+/* .oneClass:HOVER{
+	background-color: #e2e2e2;
+} */
+.oneClass .content{
+	float: left;
+    width: 90%;
+}
+.oneClass .delete{
+	float: right;
+}
+.choose{
+	background-color: #37cec5;
+}
+.addClass{
+    width: 80%;
+    height: 50px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 16px;
+    color: #bdb9b9;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0px 0px 5px 5px;
+}
+.addClass:HOVER{
+	background-color: #e2e2e2;
+}
+
+</style>
+
+<div ng-controller="productClassifyCtrl1">
+    <!-- 标题 -->
+    <div class="k-header">产品属性
+    	<hr/>
+    </div>
+    
+   	<section class="well">
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+            	<div class="col-sm-4">
+			    	<div class="col-sm-12 oneClassHeader">行业分类</div>
+			    	<div id="firstClass">
+			    	
+			    	
+			    	</div>
+			    	<div class="col-sm-12 addClass" ng-click="addClass(1)">+点击增加分类</div>
+   	 		    </div>
+   	 		    
+   	 		    <div class="col-sm-4">
+			    	<div class="col-sm-12 oneClassHeader">品类分类</div>
+			    	<div id="secondClass">
+			    	
+			    	
+			    	</div>
+			    	<div class="col-sm-12 addClass" ng-click="addClass(2)">+点击增加分类</div>
+   	 		    </div>
+   	 		    
+   	 		    <div class="col-sm-4">
+			    	<div class="col-sm-12 oneClassHeader">企业名称</div>
+			    	<div id="thirdClass">
+			    	
+			    	
+			    	</div>
+			    	<div class="col-sm-12 addClass" ng-click="addClass(3)">+点击增加分类</div>
+   	 		    </div>
+            
+               
+            </div>
+        </div>
+        
+     </section>
+
+</div>
+    
+

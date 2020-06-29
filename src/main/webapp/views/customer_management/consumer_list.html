@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<style>
+.button_center{
+    display: inherit;
+	margin: 0px auto;
+}
+</style>
+<div ng-controller="consumerListCtrl">
+   	<section class="well">
+    <!-- 标题 -->
+    <div class="fileAbout backstage">消费者列表
+    </div>
+    <div class="idMessage">
+    	<div class="form-horizontal form-widgets col-sm-12 gray">
+		    <div class="form-group">
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">昵称</label>
+		                <div class="col-sm-8">
+		                    <input ng-model="search.userName"  class="k-textbox"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">联系方式</label>
+		                <div class="col-sm-8">
+		                    <input ng-model="search.phone_num"  class="k-textbox"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">推广人</label>
+		                <div class="col-sm-8">
+		                    <input ng-model="search.seller_name"  class="k-textbox"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">用户属性</label>
+		                <div class="col-sm-8">
+		                	<input id="userProperty"/>
+		                </div>
+		            </div>
+		        </div>
+		        
+		        <div class="form-horizontal form-widgets col-sm-8">
+		            <div class="form-group">
+		                <label class="control-label col-sm-2">区域选择</label>
+		                <div class="col-sm-10">
+		                    <div class="col-sm-4"><input id="province"/></div>
+			                <div class="col-sm-4"><input id="city"/></div>
+			                <div class="col-sm-4"><input id="area"/></div>
+		                </div>
+		            </div>
+		        </div>
+		        
+		        <div class="buttons-wrap">
+		            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+		        </div>
+			</div>
+		</div>
+     
+     <div>
+     	<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+     	<!-- <button class="k-button k-state-default" ng-click="sendCoupon()">送优惠券</button>
+     	<button class="k-button k-state-default" ng-click="sendRedPackage()">送红包</button> -->
+     </div>
+     	<div class="interval">
+     		<div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+     	</div>
+     
+     <div kendo-window="consumerInfoWindow" k-title="'消费者信息'" k-width="600" k-min-height="300" k-visible="false" k-modal="true">
+     	<div>
+           <table class="col-sm-12 table table-striped">
+              <tr>
+                <td colspan="2" rowspan="4" class="col-sm-4">
+                	<img style="width: 150px;height: 150px;" src="{{details.head_url}}" />
+                </td>
+                <td class="col-sm-2 text-center">昵称：</td>
+                <td class="col-sm-2 text-left">{{details.customer_name}}</td>
+                <td class="col-sm-2 text-center">性别：</td>
+                <td class="col-sm-2 text-left">{{details.gender}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 text-center">联系方式：</td>
+                <td class="col-sm-2 text-left">{{details.phone}}</td>
+                <td class="col-sm-2 text-center">生日：</td>
+                <td class="col-sm-2 text-left">{{details.birthday}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 text-center">用户属性：</td>
+                <td class="col-sm-2 text-left">{{details.property}}</td>
+                <td class="col-sm-2 text-center">会员积分：</td>
+                <td class="col-sm-2 text-left">{{details.points}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 text-center">用户邮箱：</td>
+                <td class="col-sm-2 text-left" colspan="3">{{details.email}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 text-right">用户地址：</td>
+                <td class="col-sm-2 text-left" colspan="5">{{details.address}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 text-right">用户喜好：</td>
+                <td class="col-sm-2 text-left" colspan="5">空间：{{details.space}} <br/> 风格：{{details.style}} <br/> 品类：{{details.class_name}}</td>
+              </tr>
+              <tr>
+                <td class="col-sm-2 text-right">消费数据：</td>
+                <td class="col-sm-2 text-left" colspan="5">订单数量：{{details.order_count}}   订单金额：{{details.order_t}}</td>
+              </tr>
+           </table>
+        </div>
+     </div>
+          </section>
+</div>
+    
+

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+     <style>
+.img_info img{
+	float:left;
+	width:50px;
+	height:50px;
+	margin:2px;
+	color:red;
+}
+#stateBtnGroup{
+	padding:10px 0;
+}
+</style>
+<div ng-controller="evaluationListCtrl">
+<section class="well">
+    <!-- 标题 -->
+    <div class="fileAbout backstage">评价中心
+    </div>
+    
+    <div class="idMessage">
+     <div class="form-horizontal form-widgets col-md-12 gray">
+            <div class="form-group">
+		        <div class="form-horizontal form-widgets col-md-12">
+		            <div class="form-group">
+		             <!--
+		                <label class="control-label col-md-1">产品型号</label>
+		                <div class="col-md-3">
+		                    <input ng-model="search.sales_model"  class="k-textbox" placeholder="输入型号搜索"/>
+		                </div>
+		               
+			               <label  class="col-md-1 control-label">订单状态</label>
+				 			<div class="col-md-3"> 
+					 			<select id="combo_dep" kendo-combo-box="combo_dep" k-data-text-field="'name'" k-data-value-field="'id'" style="width: 100%"  >
+						 			<option>已完成的订单</option> 
+						 			<option>待收货</option>
+						 			<option>待发货</option>
+						 			<option>已收货</option>
+						 			<option>未评价</option>
+						 			<option>已评价</option>
+					 			 </select>
+				 			</div> --> 
+			           		
+			           	<label class="control-label col-md-1">产品名称</label>
+		                <div class="col-md-3">
+		                    <input ng-model="search.product_name"  class="k-textbox" placeholder="输入名称／首字母搜索"/>
+		                </div>	
+			           		 
+			           	<label class="control-label col-md-1 {{userRole.userShop}}" >店面名称</label>
+		      			 <div class="col-md-3 {{userRole.userShop}}">
+		         			 <input id="autoComShopName"  ng-model="search.shop_name" />
+		      			 </div>
+		      			 
+		      			<label class="control-label col-md-1 {{userRole.userBrand}}">品牌名称</label>
+		                <div class="col-md-3 {{userRole.userBrand}}">
+		                     <input  id="autoComBrandName" ng-model="search.brand_name" />
+		                </div>
+		                
+		      
+		
+		            </div>
+		            
+		             <div class="form-group">
+		   
+		                <label class="control-label col-md-1 businessr {{userRole.userPartner}}" style="text-align:left;">合伙人名称</label> <!--开发者／企业 显示 -->
+		                <div class="col-md-3 {{userRole.userPartner}}"> 
+		                    <input id="autoComPartnerName" ng-model="search.partner_principal" />
+		                </div>
+		   
+		                
+		                <label class="control-label col-md-1 {{userRole.userEnterpris}}">企业名称</label> <!-- 开发者 显示 -->
+		                <div class="col-md-3 {{userRole.userEnterpris}}">
+		                    <input id="autoComeEnterprisName" ng-model="search.enterprise_name" />
+		                </div>
+		            </div>
+		            
+		            
+		             <div class="form-group">
+		                <label class="control-label col-md-1">省</label>
+		                <div class="col-md-3">
+		                    <input id="province"/>
+		                </div>
+		                
+		                 <label class="control-label col-md-1">市</label>
+		                <div class="col-md-3">
+		                    <input id="city"/>
+		                </div>
+		                
+		                
+		                   <label class="control-label col-md-1">区</label>
+		                <div class="col-md-3">
+		                    <input id="area"/>
+		                </div>
+		            </div>
+		            
+		            <div class="form-group">
+		                 <label class="control-label col-md-1">买家昵称</label>
+		                <div class="col-md-3">
+		                    <input ng-model="search.customer_name"  class="k-textbox" placeholder="输入名称／首字母搜索"/>
+		                </div>
+		                
+		                
+		                <label class="control-label col-md-1">成交时间（始）</label>
+		                <div class="col-md-3">
+		                     <input id="start_time"/>
+		                </div>
+		               	<label class="control-label col-md-1">成交时间（止）</label>
+		                <div class="col-md-3">
+		                    <input id="end_time"/>
+		                </div>    
+		            </div>  
+		        </div>
+        <div class="col-md-12 text-center">
+            <button class="k-button k-primary" ng-click="search()" >搜索</button>
+        </div>
+ 	</div>
+ </div>
+     
+     	<div id="stateBtnGroup" ng-init="state=1">
+	             <button type="button" class=" change_button"  ng-click="customerListReply();state=1" ng-class="{change_button_color:state==1}">来自买家的评价</button>
+	             <button type="button" class=" change_button" ng-click="shopListReply();state=2" ng-class="{change_button_color:state==2}">已回复的评价</button>
+	             <button type="button" class=" change_button" ng-click="delListReplay();state=3" ng-class="{change_button_color:state==3}">已删除的评价</button>
+            <!--  <button type="button"  style="margin-right:5px;" class="k-button"  ng-click="setState()">全部</button> 
+             <button type="button" style="margin-right:5px;" class="k-button" ng-repeat="x in btnStateNames.result" ng-click="setState(x.value)">{{x.name}}</button>  -->
+             <hr style="border-top: 1px solid #caa359;margin-top:-1px;">
+             <div>
+	              <input id="evaluation_state" class=""/>
+	              <input id="evaluation_content_state" class=""/>
+	              <input id="evaluation_img_state" class=""/>
+             </div>
+     
+     <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+
+	 <div kendo-window="replyWin" k-title="'内容回复'" k-width="400" k-height="200" k-visible="false" k-modal="true">
+      	<!--顶部一行的3个数据-->
+      	<div class="row">
+			  <div class="form-group">
+				  <div class="col-md-10" style="margin-left:7px;">
+				    <textarea class="form-control" rows="6" maxlength="200" ng-model="details.content"></textarea>
+				  </div>
+				 
+			  </div>
+		</div>
+		<div class="row text-center" style="padding-top:10px;">
+			 <button type="button"   class="k-button"  ng-click="setReply()">确认回复</button> 
+		</div>
+	</div> 
+	<div id= "delWin" kendo-window="delReplyWin" k-title="'删除评价'" k-width="300" k-height="150" k-visible="false" k-modal="true">
+      	<!--顶部一行的3个数据-->
+      	<div class="row text-center" style="padding-top:30px;">
+			  <div class="form-group">
+				  <label class="control-label col-md-11">确定要删除当前评价吗？</label>
+				 
+			  </div>
+		</div>
+		<div class="row text-center" style="padding-top:40px;">
+			 <div class="form-group">
+				 <button type="button"   class="k-button"  ng-click="setDelReplyItem()">确认</button> 
+				 <button type="button"   class="k-button"  onclick="$('#delWin').data('kendoWindow').close()">取消</button> 
+			 </div>
+		</div>
+	</div> 
+	</section>
+</div>
+    
+

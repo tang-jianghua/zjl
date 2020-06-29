@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+    <div ng-controller="employeeAccountCtrl">
+    
+    <!-- <div class="k-header">用户列表
+    	
+    <hr/>
+  
+    </div> -->
+    	<section class="well">
+    		<div class="fileAbout backstage">用户列表</div>
+    		<div class="idMessage">	
+                <div class="form-horizontal form-widgets col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4"  >姓名</label>
+                        <div class="col-sm-8 col-md-6">
+                            <input   ng-model="search.user"  class="k-textbox"/>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="form-horizontal form-widgets col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="name">用户名</label>
+                        <div class="col-sm-8 col-md-6">
+                            <input type='checkbox'  class='k-checkbox' /> <input id="name" ng-model="search.account"  class="k-textbox"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal form-widgets col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="name">联系方式</label>
+                        <div class="col-sm-8 col-md-6">
+                            <input id="name" value="" ng-model="search.phone_num"  class="k-textbox"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-state-default" ng-click="search()">查询</button>
+                    <button class="k-button k-state-default"  ng-click="winOpen()">新建</button>
+                </div>
+             </div>
+         </section>
+        <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+        <div kendo-window="create_win" k-title="'账号生成'"
+            k-width="900" k-height="300" k-visible="false" k-modal="true">
+           
+           		<div class="form-horizontal col-xs-11">
+	          	<div class="form-group">
+	                <label for="inputEmail3" class="col-xs-1 control-label" >姓名</label>
+		 			<div class="col-xs-3"><input type="text" class="k-textbox" ng-model="user.user"> </div>
+		           	<label for="inputEmail3" class="col-xs-1 control-label">账号名称</label>
+		 			<div class="col-xs-3"><input type="text" class="k-textbox" ng-model="user.account"> </div>
+		 		</div>
+	          	<div class="form-group">
+		           <label for="inputEmail3" class="col-xs-1 control-label">联系方式</label>
+		 			<div class="col-xs-3"><input type="text" class="k-textbox" ng-model="user.phone_num"> </div>
+		 			
+		           	<label for="inputEmail3" class="col-xs-1 control-label">密码</label>
+		 			<div class="col-xs-3"><input type="password" class="k-textbox" ng-model="user.pwd"> </div>
+	           </div>
+	          	<div class="form-group">
+		           	<label for="inputEmail3" class="col-xs-1 control-label">部门</label>
+		 			<div class="col-xs-3"> <select id="combo_dep" kendo-combo-box="combo_dep" k-data-text-field="'name'" k-data-value-field="'id'" k-data-source="depDataSource"style="width: 100%"   ng-model="user.department_id" > </select>
+		 			</div>
+		 			
+		           	<label for="inputEmail3" class="col-xs-1 control-label">岗位</label>
+		 			<div class="col-xs-3">
+		 			<select id="comb_position" kendo-combo-box="sposition"  k-auto-bind="true"   k-data-text-field="'name'" k-data-value-field="'id'"  k-cascade-from="'combo_dep'" k-data-source="positionDataSource"  style="width: 100%"  ng-model="user.position_id" > </select>
+		 			 </div>
+		 		
+	           </div>
+	          <div class="form-group">
+		           	<label for="inputEmail3" class="col-xs-1 control-label">角色</label>
+		 			<div class="col-xs-3">
+		 			 <select id="role" kendo-combo-box="role"  k-auto-bind="true"   k-data-text-field="'role_name'" k-data-value-field="'id'"  k-cascade-from="'comb_position'" k-data-source="roleDataSource"  style="width: 100%"  ng-model="user.role.role_id" > </select>		 
+		 			</div>
+		           	<label class="col-xs-1 control-label">是否客服</label>
+		 			<div class="col-xs-3">
+		 				<input type="radio" name="is_seat" value="1" checked="checked" ng-model="user.is_seat"/>是&nbsp;&nbsp;
+		 				<input type="radio" name="is_seat" value="0" ng-model="user.is_seat"/>否
+		 			</div>
+	           </div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-state-default" ng-click="save()" >确认生成</button>
+                </div>
+       		</div>
+      </div>
+     <div kendo-window="update_win" k-title="'用户编辑'"
+            k-width="900" k-height="300" k-visible="false"  k-close="update_close" k-modal="true">
+            <input type="hidden" class="k-textbox" ng-model="updateuser.id">
+           		<div class="form-horizontal col-xs-11">
+	          	<div class="form-group">
+	                <label for="inputEmail3" class="col-xs-1 control-label" >姓名</label>
+		 			<div class="col-xs-3"><input type="text" class="k-textbox" ng-model="updateuser.user"> </div>
+		           	<label for="inputEmail3" class="col-xs-1 control-label">账号名称</label>
+		 			<div class="col-xs-3"><input type="text" class="k-textbox" ng-model="updateuser.account"> </div>
+		 		</div>
+	          	<div class="form-group">
+		           	<label for="inputEmail3" class="col-xs-1 control-label">联系方式</label>
+		 			<div class="col-xs-3"><input type="text" class="k-textbox" ng-model="updateuser.phone_num"> </div>
+		           	<label for="inputEmail3" class="col-xs-1 control-label">部门</label>
+		 			<div class="col-xs-3"> <select id="update_dep" kendo-combo-box="update_dep"  k-auto-bind="true"  k-data-text-field="'name'"  k-data-value-field="'id'" k-data-source="depUpdateDataSource"style="width: 100%"  > </select>
+		 		</div>
+		 		</div>
+		 	 <div class="form-group">
+		           	<label for="inputEmail3" class="col-xs-1 control-label">岗位</label>
+		 			<div class="col-xs-3">
+		 			<select id="update_position" kendo-combo-box="com_update_position"  k-auto-bind="false" k-data-text-field="'name'" k-data-value-field="'id'" k-cascade-from="'update_dep'" k-data-source="positionUpdateDataSource"  style="width: 100%"   > </select>
+		 			</div>
+		           	<label for="inputEmail3" class="col-xs-1 control-label">角色</label>
+		 			<div class="col-xs-3">
+		 			<select id="role" kendo-combo-box="update_role"  k-auto-bind="false"  k-data-text-field="'role_name'" k-data-value-field="'id'"  k-data-bound="role_data_bound" k-cascade-from="'update_position'" k-data-source="roleUpdateDataSource"  style="width: 100%"   > </select>		 
+		 			</div>
+	           </div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-state-default" ng-click="update()" >确认生成</button>
+                </div>
+       		</div>
+      </div>
+</div>
+    
+

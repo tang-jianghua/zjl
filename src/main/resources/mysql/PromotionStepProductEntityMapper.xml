@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionStepProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="note_time" jdbcType="TIMESTAMP" property="note_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+  </resultMap>
+  
+  <resultMap id="ResultMapBrandAndProduct" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntityStepParam">
+  	<id column="id" jdbcType="BIGINT" property="id" />
+  <collection property="brandProduct" ofType="com.mfangsoft.zhuangjialong.integration.promotion.model.BrandProduct">
+    <id column="brand_id" jdbcType="BIGINT" property="brand_id" />
+   	<result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+	<result column="principal" jdbcType="VARCHAR" property="principal" />
+	<result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+		
+    <collection property="product" ofType="com.mfangsoft.zhuangjialong.app.product.model.Product" columnPrefix="p_">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+  	<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+  	<result column="model" jdbcType="VARCHAR" property="model" />
+  	<result column="promotion_price" jdbcType="DOUBLE" property="promotion_price" />
+  	<result column="old_price" jdbcType="DOUBLE" property="old_price" />
+  	 <result column="promotion_num" jdbcType="INTEGER" property="promotion_num" />
+  	 <result column="sale_num" jdbcType="INTEGER" property="sale_num" />
+  	 <result column="note_id" jdbcType="BIGINT" property="note_id" />
+  	 <result column="note_state" jdbcType="INTEGER" property="note_state" />
+  	  <result column="note_count" jdbcType="INTEGER" property="note_count" />
+  	<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+  	<result column="state" jdbcType="INTEGER" property="state" />
+  	 <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  	  <result column="stock" jdbcType="BIGINT" property="stock" />
+  	  <result column="max_price" jdbcType="DOUBLE" property="max_price" />
+  	  <result column="min_price" jdbcType="DOUBLE" property="min_price" />
+  	  <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+  	  <result column="info" jdbcType="VARCHAR" property="info" />
+  	</collection>
+  	</collection>
+  </resultMap>
+  
+  <resultMap id="BaseResultMapProduct" type="com.mfangsoft.zhuangjialong.app.product.model.Product" >
+	<id column="product_id" jdbcType="BIGINT" property="product_id" />
+	<result column="id" jdbcType="BIGINT" property="id" />
+	<result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+  	<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+  	<result column="brand_id" jdbcType="INTEGER" property="brand_id" />
+  	<result column="model" jdbcType="VARCHAR" property="model" />
+  	<result column="promotion_price" jdbcType="DOUBLE" property="promotion_price" />
+  	<result column="old_price" jdbcType="DOUBLE" property="old_price" />
+  	<result column="min_price" jdbcType="DOUBLE" property="min_price" />
+  	<result column="max_price" jdbcType="DOUBLE" property="max_price" />
+  	 <result column="promotion_num" jdbcType="INTEGER" property="promotion_num" />
+  	 <result column="sale_num" jdbcType="INTEGER" property="sale_num" />
+  	<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+  	<result column="note_id" jdbcType="BIGINT" property="note_id" />
+  	<result column="note_state" jdbcType="INTEGER" property="note_state" />
+  	<result column="note_count" jdbcType="INTEGER" property="note_count" />
+	<result column="state" jdbcType="INTEGER" property="state" />
+	 <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+	 <result column="stock" jdbcType="BIGINT" property="stock" />
+	 <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+	 <result column="bili" jdbcType="INTEGER" property="bili" />
+	 <result column="pstart_time" jdbcType="TIME" property="strtime" />
+	 <result column="title" jdbcType="VARCHAR" property="title" />
+	 <result column="info" jdbcType="VARCHAR" property="info" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, promotion_id, product_id, brand_id, note_time, state, title, info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_step_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectProductOfOnePromotion"  resultMap="BaseResultMapProduct">
+    SELECT sp.product_id, sp.brand_id, bp.product_title AS product_name, img.imgurl AS image_url, c.price AS old_price
+
+FROM t_biz_promotion_step_product sp
+LEFT JOIN t_biz_brand b ON b.id = sp.brand_id 
+LEFT JOIN t_biz_partner pp ON pp.id = b.citypartner_id
+LEFT JOIN t_biz_promotion p ON sp.promotion_id = p.id
+LEFT JOIN t_biz_brand_product bp ON bp.id = sp.product_id
+LEFT JOIN v_prod_min_img img ON img.product_id = sp.product_id 
+LEFT JOIN t_biz_brand_prod_salesattr c ON c.product_id = sp.product_id AND c.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = c.product_id) 
+
+WHERE sp.promotion_id = #{promotion_id,jdbcType=BIGINT} AND sp.state = 1 AND bp.state = 1 AND FIND_IN_SET(#{region_code,jdbcType=VARCHAR}, pp.region_id) and b.state != 0
+
+GROUP BY sp.product_id
+
+  </select>
+  
+   <select id="selectAppPromotionProductforPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+   			resultMap="BaseResultMapProduct">
+    SELECT sp.product_id, sp.brand_id, bp.product_title AS product_name, img.imgurl AS image_url, c.price AS old_price 
+
+FROM t_biz_promotion_step_product sp 
+LEFT JOIN v_prod_min_img img ON img.product_id = sp.product_id 
+LEFT JOIN t_biz_brand_prod_salesattr c ON c.product_id = sp.product_id AND c.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = c.product_id) 
+LEFT JOIN t_biz_brand_product bp ON bp.id = sp.product_id
+LEFT JOIN t_biz_brand b ON b.id = sp.brand_id
+
+WHERE  sp.state = 1 AND b.state!=0 AND
+sp.promotion_id = #{param.id,jdbcType=BIGINT}
+	
+	<if test="param.brand_id!=null and param.brand_id!=''">
+		AND b.id = #{param.brand_id,jdbcType=BIGINT}
+	</if>
+GROUP BY sp.product_id	
+  </select>
+  
+  <select id="selectProductOfOneStepPromotionForBrand" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepProductEntity" 
+  		resultType="com.mfangsoft.zhuangjialong.app.product.model.Product">
+	
+	SELECT 
+pp.id, pp.promotion_id, pp.product_id,
+ bp.product_title AS product_name, pp.state,
+ps.price AS min_price , ps2.price AS max_price, img.imgurl AS image_url
+, SUM(ps3.stock) AS stock
+
+FROM  t_biz_promotion_step_product pp
+LEFT JOIN  t_biz_brand_product bp  ON  pp.product_id = bp.id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = bp.id AND ps.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id) 
+LEFT JOIN t_biz_brand_prod_salesattr ps2 ON ps2.product_id = bp.id AND ps2.price = (SELECT MAX(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps2.product_id) 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = bp.id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN t_biz_brand_prod_salesattr ps3 ON ps3.product_id = pp.product_id
+
+WHERE pp.promotion_id = #{promotion_id,jdbcType=BIGINT} AND 
+pp.brand_id = #{brand_id,jdbcType=BIGINT} 
+AND bp.state = 1 
+AND pp.state != 4
+
+GROUP BY pp.product_id
+ORDER BY pp.state
+  </select>
+  
+  <select id="selectProductOfOneStepPromotionForPlatform" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionEntityStepParam" 
+  		resultMap="ResultMapBrandAndProduct">
+  		SELECT pp.promotion_id as id,
+b.id AS brand_id,e.name AS brand_name, b.principal, b.phone_num,
+pp.id AS p_id, pp.promotion_id AS p_promotion_id,
+bp.id AS p_product_id, bp.product_title AS p_product_name,
+pp.state AS p_state, pp.info AS p_info,
+ps.price AS p_min_price , ps2.price AS p_max_price, img.imgurl AS p_image_url, SUM(ps3.stock) AS p_stock
+
+FROM  t_biz_promotion_step_product pp
+LEFT JOIN  t_biz_brand_product bp  ON  pp.product_id = bp.id 
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.product_id = bp.id AND ps.price = (SELECT MIN(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps.product_id) 
+LEFT JOIN t_biz_brand_prod_salesattr ps2 ON ps2.product_id = bp.id AND ps2.price = (SELECT MAX(price) FROM t_biz_brand_prod_salesattr WHERE product_id = ps2.product_id) 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = bp.id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+LEFT JOIN t_biz_brand_prod_salesattr ps3 ON ps3.product_id = pp.product_id
+LEFT JOIN t_biz_brand b ON b.id = pp.brand_id
+LEFT JOIN t_biz_build_enterprise e ON e.id = b.enterprise_id
+LEFT JOIN t_biz_partner p on p.id = b.citypartner_id
+WHERE 
+pp.promotion_id = #{id,jdbcType=BIGINT} 
+AND bp.state = 1
+  	
+  	<if test="brand_id_long!=null and brand_id_long!=''">
+		AND b.id = #{brand_id_long}
+	</if>
+	
+	<if test="partner_id_long!=null and partner_id_long!=''">
+		AND b.citypartner_id = #{partner_id_long}
+	</if>
+	
+	<if test="enterprise_id!=null and enterprise_id!=''">
+		AND p.enterprise_id = #{enterprise_id}
+	</if>
+	
+	<if test="stateList!=null and stateList!=''">
+		AND pp.state in 
+		<foreach collection="stateList" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>
+	</if>
+  	
+  	GROUP BY pp.product_id	
+  	ORDER BY b.id, pp.state
+  </select>
+  
+   <select id="selectProductStateForBrandId" resultType="java.lang.Integer">
+	 SELECT IFNULL(COUNT(1),0)
+    FROM t_biz_promotion_step_product pp
+    LEFT JOIN t_biz_brand_product bp ON pp.product_id = bp.id
+    WHERE pp.promotion_id = #{promotion_id,jdbcType=BIGINT} AND pp.brand_id = #{brand_id,jdbcType=BIGINT} AND pp.state in (1,3,5) and bp.state = 1
+  </select>
+  
+  <delete id="deleteByBrandIdForTimePart" >
+    delete from t_biz_promotion_step_product
+    where promotion_id = #{promotion_id,jdbcType=BIGINT} and brand_id = #{brand_id,jdbcType=BIGINT} 
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_promotion_step_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_step_product (promotion_id, product_id, brand_id, 
+      note_time, state)
+    values (#{promotion_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, #{brand_id,jdbcType=BIGINT}, 
+      #{note_time,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_step_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="note_time != null">
+        note_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="note_time != null">
+        #{note_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepProductEntity">
+    update t_biz_promotion_step_product
+    <set>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="note_time != null">
+        note_time = #{note_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+       <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepProductEntity">
+    update t_biz_promotion_step_product
+    set promotion_id = #{promotion_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      note_time = #{note_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

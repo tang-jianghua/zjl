@@ -1,0 +1,372 @@
+/* angular页面乱码问题解决 */
+[ng:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display:none !important;
+}
+
+/*对所有标题剧中的更改  */
+.k-grid .k-grid-header tr th.k-header{
+	color:#fff !important;
+}
+.k-grid .k-link{
+	text-align:center;
+}
+/*所有按钮为绿色  */
+.k-button{
+	background-color:#caa359 !important;
+	color:#fff;
+}
+.change_button{
+	background-color: #fff !important;
+    border: 1px solid #caa359 !important;
+    color: #caa359 !important;
+    margin: 0;
+    padding: 5px 14px 4px;
+    font-family: inherit;
+    line-height: 1.72em;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    border-bottom: none;
+}
+.change_button_color{
+	background-color: #caa359 !important;
+    color: #fff !important;
+}
+/* 所有经过按钮的效果 */
+.k-button:hover{
+	background-color:#fff !important;
+	border:1px solid #caa359 !important;
+	color:#caa359 !important;
+}
+ .k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover{
+	background-color:#caa359;
+	background-image:none;
+} 
+/* 让按钮居中 */
+.centerButton{
+	margin:0 auto;
+	display:block;
+}
+/*内容跳转设定居中 */
+.operation{
+	color:#0084ff !important;
+	text-align:center;
+}
+.operation:hover{
+	 cursor:pointer;
+}
+/*所有表格文字居中 */
+  table tr td{
+	text-align:center;
+	color:#7a7979;
+}
+ .k-grid table thead tr th{
+ 	color:#fff;
+ 	text-align:center;
+ }
+ .k-grid-content table thead tr .k-header{
+ 	color:#fff;
+ 	text-align:center;
+ }
+
+/*所属分类的框的样式 */
+.thisClassify{
+	background:#fff;
+	border:#ccc 1px solid;
+	float:right;
+}
+/*左2分 */
+.leftHaltTwo{
+	width:20%;
+	float:left;
+}
+/*右8分 */
+.rightHaltEight{
+	width:80%;
+	float:right;
+}
+/*去掉栅格化的padding值 */
+.outPadding{
+	padding:0;
+}
+/*给标题框加绿色的下横线 */
+.greenLine{
+	height: 35px;
+	background:#eee;
+	margin-bottom:10px;
+}
+/*将标题框和下方文字间隔出来 */
+.interval{
+	padding:15px 0;
+}
+/*将一级栏目和内容分开 */
+.idMessage{
+	padding:10px 0;
+}
+/*对表格内的小标题设置*/
+table tr td .subTitle{
+	font-size:17px;
+	margin-left:13px;
+	display:inline-block;
+}
+/*营业执照居中*/
+.business{
+	text-align:center;
+}
+.businessr{
+	padding-right:0;
+}
+.businessl{
+	padding-left:0;
+}
+/*对标签栏的控制 */
+.businessrr{
+	padding-right:0;
+	margin-left:23px;	
+}
+/*让所有按钮分开*/
+.splitButtona{/*三个按钮*/
+	width:33%;
+	float:left;
+}
+.splitButtonTwo{/*一长一短两个按钮——短的*/
+	width:40%;
+	float:left;
+}
+.splitButtonTwob{/*一长一短两个按钮——长的*/
+	width:60%;
+	float:left;
+}
+.splitButtonTwoc{/*两个按钮*/
+	width:50%;
+	float:left;
+}
+/*清除浮动*/
+.clearBoth{
+	clear:both;
+}
+/*加title的绿横线*/
+.fileAbout{
+	padding:0 0 10px 5px;
+	border-bottom:1px solid #caa359;
+	font-size:18px;
+	font-weight:700;
+}
+/*加灰色的线*/
+.gray{
+	border-bottom:1px solid #b8b8b8;
+	margin-bottom: 10px;
+    padding: 10px 0 20px;
+}
+/*按钮的切换*/
+.oneList{
+    width: 120px;
+    height: 35px;
+    line-height: 35px;
+    float: left;
+    text-align: center;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #eeeeee;
+    color: #0d0d0d;
+    border: none;
+}
+.choose{
+	color: #caa359;
+    background:#f5f5f5;
+    border-top: 2px solid #caa359;
+    
+}
+/*二级标题的绿线*/
+.towGreen{
+	border:1px solid #caa359;
+	margin-top:-1px;
+}
+/*上下居中*/
+.k-window-content table tbody tr td{
+	vertical-align: middle !important;
+	color:#7a7979;
+}
+table tbody tr td span{
+	color:#7a7979;
+}
+.k-widget .k-grid-content table tr td .list-unstyled li{
+	text-align:left;
+	padding:0 10px;
+}
+/*城市页的排版*/
+#openCity div{
+	float:left;
+	width:10%;
+	background-color:#caa359;
+	text-align: center;
+	margin:0 5px 0 0;
+	height:30px;
+	line-height:30px;
+}
+#openCity div label:nth-child(1){
+	font-size: 15px;
+    color:#fff;
+    width:70%;
+    font-weight:700;
+}
+#openCity div label:nth-child(2){
+	font-size: 15px;
+    font-weight: bold;
+    color:#fff;
+    cursor: pointer;
+    width:20%;
+}
+/*将文字像下推7px*/
+.push{
+	padding-top:7px;
+}
+/*左推*/
+.pushLeft{
+	padding-left:100px;
+}
+/*左浮动*/
+.flot{
+	float:left;
+}
+.rght{
+	float:right;
+}
+/*时间边控*/
+.issused>span{
+	 width:100%;
+}
+/*让对勾浮动*/
+ .trueLeft{
+ padding-left:8px;
+	/*float:left;
+	line-height:40px;*/
+} 
+.errorRight{
+	float:right;
+	padding-right:10px;
+/* 	line-height:40px; */
+}
+/*秒杀大背景*/
+.seckillBig{
+	padding:10px 0;
+	background:#eaeded;
+	float:left;
+}
+/*消除缩进*/
+input.retract{
+	text-indent:0em;
+}
+/*高度50*/
+.fix{
+	height:50px;
+}
+/*图片处理*/
+.format{
+	width:114px;
+	height:90px;
+}
+ /*产品属性*/
+ .fabric{
+ 	padding:0px;
+ 	height:60px;
+ 	 line-height: 60px;
+ }
+/*table*/
+.k-widget .k-grid-header{
+	padding-right:0 !important;
+}
+.idMessage .k-widget .k-grid-content{
+	overflow:auto;
+}
+/*多选*/
+.k-multiselect .k-multiselect-wrap #join_class_taglist li{
+	padding:0.1em 1.5em 0.1em 0.4em;
+}
+.bigTitle {
+    color: green;
+    font-size: 20px;
+    cursor: pointer;
+    height: 50px;
+    border-top: 1px solid #caa359;
+    line-height: 50px;
+    clear: both;
+}
+.listMenu {
+    height: 40px;
+}
+.listMenu ul li {
+	float: left;
+    list-style-type: none;
+    height: 40px;
+    width: 20%;
+    line-height: 40px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+.timeChoose{
+    background-color: #fff;
+    border: 1px solid #caa359;
+    color: #caa359;
+}
+.searchForm {
+    float: right;
+    line-height: 40px;
+}
+.bigTitle1{
+    height: 40px;
+    line-height: 40px;
+    background-color: #caa359;
+    color: white;
+    font-size: 18px;
+    margin: 10px 0px;
+    text-align: center;
+    clear: both;
+}
+.bigTitle2{
+    height: 40px;
+    line-height: 40px;
+    background-color: #caa359;
+    color: white;
+    font-size: 18px;
+    clear: both;
+    border-radius:10px;
+}
+.bafont{
+	width:150px;
+	height:150px;
+	margin:auto;
+}
+.cent{
+	line-height:28px;
+}
+.k-widget .k-grid-content{/*行条有scorll  冲*/
+	overflow-y: auto;
+}
+.k-window div.k-window-content{/*auto 变成 hidden 冲*/
+	overflow:hidden;
+}
+/*table*/
+ .allTable table tr td:nth-child(odd){
+	text-align:right;
+}
+  .allTable table  tr td:nth-child(even){
+	text-align:left;
+}
+.horizontal{
+	width:100%;
+	height:auto;
+}
+.well{
+	  transition:all 0.4s;
+}
+.well:hover{
+	box-shadow: -7px 10px 19px #d6d6d6;
+}

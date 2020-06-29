@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.sendflow.mapper.FlowBackEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBackEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="batch_no" jdbcType="VARCHAR" property="batch_no" />
+    <result column="success_count" jdbcType="INTEGER" property="success_count" />
+    <result column="faill_count" jdbcType="INTEGER" property="faill_count" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, batch_no, success_count, faill_count, code, msg, create_time, mobile
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_flow_back
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_flow_back
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBackEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_flow_back (batch_no, success_count, faill_count, 
+      code, msg, create_time, 
+      mobile)
+    values (#{batch_no,jdbcType=VARCHAR}, #{success_count,jdbcType=INTEGER}, #{faill_count,jdbcType=INTEGER}, 
+      #{code,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{mobile,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBackEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_flow_back
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="batch_no != null">
+        batch_no,
+      </if>
+      <if test="success_count != null">
+        success_count,
+      </if>
+      <if test="faill_count != null">
+        faill_count,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="msg != null">
+        msg,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="batch_no != null">
+        #{batch_no,jdbcType=VARCHAR},
+      </if>
+      <if test="success_count != null">
+        #{success_count,jdbcType=INTEGER},
+      </if>
+      <if test="faill_count != null">
+        #{faill_count,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBackEntity">
+    update t_biz_flow_back
+    <set>
+      <if test="batch_no != null">
+        batch_no = #{batch_no,jdbcType=VARCHAR},
+      </if>
+      <if test="success_count != null">
+        success_count = #{success_count,jdbcType=INTEGER},
+      </if>
+      <if test="faill_count != null">
+        faill_count = #{faill_count,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBackEntity">
+    update t_biz_flow_back
+    set batch_no = #{batch_no,jdbcType=VARCHAR},
+      success_count = #{success_count,jdbcType=INTEGER},
+      faill_count = #{faill_count,jdbcType=INTEGER},
+      code = #{code,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      mobile = #{mobile,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

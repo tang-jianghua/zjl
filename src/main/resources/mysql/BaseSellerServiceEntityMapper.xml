@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.mapservice.mapper.BaseSellerServiceEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseSellerServiceEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="service_type" jdbcType="INTEGER" property="service_type" />
+    <result column="seller_id" jdbcType="BIGINT" property="seller_id" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="lbs" jdbcType="VARCHAR" property="lbs" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, service_type, seller_id, class_id, brand_id, shop_id, region_code, lbs, content, 
+    create_time, update_time, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_seller_service
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_seller_service
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseSellerServiceEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_seller_service (service_type, seller_id, class_id, 
+      brand_id, shop_id, region_code, 
+      lbs, content, create_time, 
+      update_time, state)
+    values (#{service_type,jdbcType=INTEGER}, #{seller_id,jdbcType=BIGINT}, #{class_id,jdbcType=BIGINT}, 
+      #{brand_id,jdbcType=BIGINT}, #{shop_id,jdbcType=BIGINT}, #{region_code,jdbcType=VARCHAR}, 
+      #{lbs,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{update_time,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseSellerServiceEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_seller_service
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="service_type != null">
+        service_type,
+      </if>
+      <if test="seller_id != null">
+        seller_id,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="shop_id != null">
+        shop_id,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="lbs != null">
+        lbs,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="service_type != null">
+        #{service_type,jdbcType=INTEGER},
+      </if>
+      <if test="seller_id != null">
+        #{seller_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="lbs != null">
+        #{lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseSellerServiceEntity">
+    update t_biz_seller_service
+    <set>
+      <if test="service_type != null">
+        service_type = #{service_type,jdbcType=INTEGER},
+      </if>
+      <if test="seller_id != null">
+        seller_id = #{seller_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        shop_id = #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="lbs != null">
+        lbs = #{lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseSellerServiceEntity">
+    update t_biz_seller_service
+    set service_type = #{service_type,jdbcType=INTEGER},
+      seller_id = #{seller_id,jdbcType=BIGINT},
+      class_id = #{class_id,jdbcType=BIGINT},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      shop_id = #{shop_id,jdbcType=BIGINT},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      lbs = #{lbs,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

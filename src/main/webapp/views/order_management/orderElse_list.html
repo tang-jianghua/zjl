@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<style>
+</style>
+<div ng-controller="orderElseListCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">订单详情</div>
+		<div class="idMessage">
+			<div class="greenLine">
+				<div id="list_1" class="oneList " ng-click="chooseList(1)">产品订单</div>
+				<div id="list_2" class="oneList " ng-click="chooseList(2)">店面定金订单</div>
+				<div id="list_3" class="oneList " ng-click="chooseList(3)" ng-show="list3_show">特权现金券订单</div>
+				<div id="list_4" class="oneList " ng-click="chooseList(4)" ng-show="list4_show">卡券列表</div>
+			</div>
+			<div class="form-horizontal form-widgets col-md-12 gray">
+				<div class="form-group">
+					<div class="row">
+						<div class="form-horizontal form-widgets col-md-4 {{userRole.isShowPromotionSearchInput}}">
+							<div class="form-group">
+								<label class="control-label col-md-4">活动名称</label>
+								<div class="col-md-8">
+									<input ng-model="search.promotion_name" class="k-textbox"
+										placeholder="输入名称／首字母搜索" />
+								</div>
+							</div>
+						</div>
+
+
+						<div
+							class="form-horizontal form-widgets col-md-4 {{userRole.userEnterpris}}">
+							<div class="form-group">
+								<label class="control-label col-md-4 ">企业名称</label>
+								<!-- 开发者 显示 -->
+								<div class="col-md-8">
+									<input id="autoComeEnterprisName"
+										ng-model="search.enterprise_name" />
+								</div>
+							</div>
+						</div>
+
+						<div
+							class="form-horizontal form-widgets col-md-4 {{userRole.userPartner}}">
+							<div class="form-group">
+								<label class="control-label col-md-4">合伙人名称</label>
+								<!--开发者／企业 显示 -->
+								<div class="col-md-8">
+									<input id="autoComPartnerName" ng-model="search.principal" />
+								</div>
+							</div>
+						</div>
+
+						<div
+							class="form-horizontal form-widgets col-md-4 {{userRole.userBrand}}">
+							<div class="form-group">
+								<label class="control-label col-md-4">品牌名称</label>
+								<div class="col-md-8">
+									<input id="autoComBrandName" ng-model="search.brand_name" />
+								</div>
+							</div>
+						</div>
+
+						<div
+							class="form-horizontal form-widgets col-md-4 {{userRole.userShop}}">
+							<div class="form-group">
+								<label class="control-label col-md-4">店面名称</label>
+								<div class="col-md-8">
+									<input id="autoComShopName" ng-model="search.shop_name" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-horizontal form-widgets col-md-4">
+							<div class="form-group">
+								<label class="control-label col-md-4">买家昵称</label>
+								<div class="col-md-8">
+									<input ng-model="search.customer_name" class="k-textbox"
+										placeholder="" />
+								</div>
+							</div>
+						</div>
+
+						<div class="form-horizontal form-widgets col-md-4">
+							<div class="form-group">
+								<label class="control-label col-md-4">订单编号</label>
+								<div class="col-md-8">
+									<input ng-model="search.order_code" class="k-textbox"
+										placeholder="输入名称／首字母搜索" />
+								</div>
+							</div>
+						</div>
+
+						<div class="form-horizontal form-widgets col-md-4">
+							<div class="form-group">
+								<label class="control-label col-md-4">成交时间（始）</label>
+								<div class="col-md-8">
+									<input id="start_time" />
+								</div>
+							</div>
+						</div>
+
+						<div class="form-horizontal form-widgets col-md-4">
+							<div class="form-group">
+								<label class="control-label col-md-4">成交时间（止）</label>
+								<div class="col-md-8">
+									<input id="end_time" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 text-center">
+					<button class="k-button k-primary text-right" ng-click="search()">搜索</button>
+				</div>
+			</div>
+			<div>
+			 	<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+			 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+				<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+				<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+				<hr class="towGreen">
+			</div>
+			<div class="interval"></div>
+			<div kendo-grid="grid" k-options="mainGridOptions" id="gridOrderElse"></div>
+	</section>
+</div>
+

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionZhekouProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionZhekouProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="zhekou_id" jdbcType="BIGINT" property="zhekou_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, zhekou_id, product_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_zhekou_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_promotion_zhekou_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionZhekouProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_zhekou_product (zhekou_id, product_id)
+    values (#{zhekou_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionZhekouProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_zhekou_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="zhekou_id != null">
+        zhekou_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="zhekou_id != null">
+        #{zhekou_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionZhekouProductEntity">
+    update t_biz_promotion_zhekou_product
+    <set>
+      <if test="zhekou_id != null">
+        zhekou_id = #{zhekou_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionZhekouProductEntity">
+    update t_biz_promotion_zhekou_product
+    set zhekou_id = #{zhekou_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectedExistZhekouPromotionBrandProduct" resultType="java.lang.String" parameterType="java.util.Map">
+		  SELECT DISTINCT(up.product_id)
+
+FROM t_biz_promotion_zhekou u
+ 
+LEFT JOIN t_biz_promotion_zhekou_product up ON up.zhekou_id = u.id 
+
+WHERE u.state = 1 AND u.brand_id = ${brand_id} AND
+((u.start_time &lt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &gt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.start_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.start_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.end_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')))
+	
+	</select>
+	
+	<select id="selectAllProductForPromotionForBrandByPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+	SELECT 
+p.id,p.product_title product_name,GROUP_CONCAT(c.name) classify,GROUP_CONCAT(s.name) series, img.imgurl, temp.stock, MIN(ps1.price) AS min_price , MAX(ps2.price) AS max_price
+		FROM t_biz_brand_product p
+		LEFT JOIN t_biz_brand_prod_series ps ON p.id = ps.product_id
+		LEFT JOIN t_biz_brand_series s ON ps.series_id = s.id
+		LEFT JOIN t_biz_brand_classify c ON s.classify_id = c.id
+		LEFT JOIN t_biz_brand_prod_salesattr ps1 ON ps1.product_id = p.id AND ps1.id = (SELECT id FROM t_biz_brand_prod_salesattr WHERE product_id = ps1.product_id  AND price IS NOT NULL AND data_flag != 'del' ORDER BY price ASC LIMIT 1) 
+LEFT JOIN t_biz_brand_prod_salesattr ps2 ON ps2.product_id = p.id AND ps2.id = (SELECT id FROM t_biz_brand_prod_salesattr WHERE product_id = ps2.product_id AND price IS NOT NULL AND data_flag != 'del' ORDER BY price ASC LIMIT 1) 
+LEFT JOIN (SELECT product_id,SUM(stock) AS stock FROM t_biz_brand_prod_salesattr WHERE data_flag != 'del' GROUP BY product_id) temp ON temp.product_id = p.id
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = p.id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id)
+
+		<where>
+			p.state = 1 and ps1.data_flag != 'del' AND ps2.data_flag != 'del' AND ps1.id IS NOT NULL AND ps2.id IS NOT NULL
+			<if test="param.brand_id != null">
+				AND p.brand_id = ${param.brand_id}
+			</if>
+			<if test="param.existProductList != null">
+				AND p.id NOT IN 
+				<foreach collection="param.existProductList" item="item" open="(" separator="," close=")">
+					${item}
+				</foreach>
+			</if>
+			<if test="param.product_name != null and param.product_name !=''">
+				AND p.product_title like CONCAT('%',#{param.product_name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="param.classify_id != null and param.classify_id != ''">
+				AND c.id = ${param.classify_id}
+			</if>
+			<if test="param.series_id != null and param.series_id != ''">
+				AND s.id = ${param.series_id}
+			</if>
+		</where>
+		GROUP BY p.id
+
+  </select>
+  
+</mapper>

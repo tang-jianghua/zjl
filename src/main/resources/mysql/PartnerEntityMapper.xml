@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.partner.mapper.PartnerEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.partner.model.PartnerEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="principal" jdbcType="VARCHAR" property="principal" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="enterprise_id" jdbcType="BIGINT" property="enterprise_id" />
+    <result column="region_id" jdbcType="VARCHAR" property="region_id" />
+    <result column="region_name" jdbcType="VARCHAR" property="region_name" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sys_user_id" />
+    <result column="commerce_id" jdbcType="BIGINT" property="commerce_id" />
+    <result column="bank_id" jdbcType="BIGINT" property="bank_id" />
+    <result column="creater" jdbcType="BIGINT" property="creater" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+     <result column="check_state" jdbcType="INTEGER" property="check_state" />
+     <result column="isglobal" jdbcType="INTEGER" property="isglobal"/>
+     <result  column="close_time" jdbcType="VARCHAR" property="close_time"/>
+    <association property="enterpriseEntity" columnPrefix="ent_" resultMap="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.EnterpriseEntityMapper.BaseResultMap">
+    
+    
+    
+    </association>
+    
+    
+    <association property="userEntity" columnPrefix="user_" resultMap="com.mfangsoft.zhuangjialong.integration.user.mapper.UserEntityMapper.BaseResultMap"></association>
+    <association property="bankInfo" resultMap="com.mfangsoft.zhuangjialong.integration.bank.mapper.BankEntityMapper.BaseResultMap" columnPrefix="bank_"></association>
+    <association property="commerceInfo" resultMap="com.mfangsoft.zhuangjialong.integration.commerce.mapper.CommerceEntityMapper.BaseResultMap" columnPrefix="com_"></association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, principal, phone_num, enterprise_id, region_id, sys_user_id, commerce_id, bank_id, 
+    creater, create_time, update_time, updater,check_state,isglobal
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_partner
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectClassByPartnerId" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.app.buildClass.model.BuildClass">
+		SELECT DISTINCT(be.`class_id`),bc.`name` as class_name FROM `t_biz_brand` tbb 
+		LEFT JOIN `t_biz_build_enterprise` be
+		ON tbb.`enterprise_id`= be.`id`
+		LEFT JOIN `t_biz_build_class` bc
+		ON be.`class_id` = bc.`id`
+		WHERE tbb.`citypartner_id` = #{partner_id,jdbcType=BIGINT}
+		ORDER BY bc.`id`
+  </select>
+    <select id="selectBySysUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+       SELECT p.id 
+    FROM t_biz_partner p
+    WHERE p.sys_user_id= #{sys_user_id,jdbcType=BIGINT} limit 1
+  </select>
+  
+  <select id="selectAllPartner"  resultType="com.mfangsoft.zhuangjialong.integration.partner.model.PartnerModle">
+       SELECT p.id , p.principal 
+    FROM t_biz_partner p 
+    where p.check_state = 2
+  </select>
+  
+   <select id="selectAllByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    t.id, t.principal, t.phone_num, t.enterprise_id, t.region_id, t.sys_user_id, t.commerce_id, t.bank_id, 
+    t.creater, t.create_time, t.update_time, t.updater,t.check_state, isglobal,
+    
+       b.id as bank_id, b.account as bank_account, b.addr as bank_addr, b.name as bank_name,b.pay_account as bank_pay_account,b.webkit_account as bank_webkit_account,
+    
+       com.id as com_id, com.biz_num as com_biz_num, com.biz_url as com_biz_url, com.open_acount as com_open_acount, com.open_acount_url com_open_acount_url, com.tax_num com_tax_num, com.tax_url as com_tax_url,
+    
+    user.id as user_id, user.account as user_account,
+    ent.id as ent_id, ent.principal as ent_principal, ent.phone_num as ent_phone_num, ent.class_id as ent_class_id, ent.commerce_id as ent_commerce_id, ent.imgurl as ent_imgurl, ent.bank_info_id as ent_bank_info_id, ent.create_time as ent_create_time, 
+    ent.creater as ent_creater, ent.update_time as ent_update_time, ent.updater as ent_updater, ent.sys_user_id as ent_sys_user_id, ent.enterprise_name as ent_enterprise_name, ent.brand_name as ent_brand_name,ent.addr as ent_addr,ent.build_enterpise as ent_build_enterpise
+   
+    from t_biz_partner t, t_biz_commerce com ,t_biz_bank b,
+    t_sys_user user,t_biz_enterprise ent
+    where t.commerce_id=com.id and t.bank_id=b.id and user.id=t.sys_user_id and ent.id=t.enterprise_id
+     and t.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_partner
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.PartnerEntity">
+    insert into t_biz_partner ( principal, phone_num, 
+      enterprise_id, region_id, sys_user_id, 
+      commerce_id, bank_id, creater, 
+      create_time, update_time, updater,check_state,isglobal,close_time
+      )
+    values ( #{principal,jdbcType=VARCHAR}, #{phone_num,jdbcType=VARCHAR}, 
+      #{enterprise_id,jdbcType=BIGINT}, #{region_id,jdbcType=VARCHAR}, #{sys_user_id,jdbcType=BIGINT}, 
+      #{commerce_id,jdbcType=BIGINT}, #{bank_id,jdbcType=BIGINT}, #{creater,jdbcType=BIGINT}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}, #{updater,jdbcType=BIGINT},
+      #{check_state,jdbcType=INTEGER},#{isglobal,jdbcType=INTEGER},#{close_time,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.PartnerEntity">
+    insert into t_biz_partner
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+     
+      <if test="principal != null">
+        principal,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="enterprise_id != null">
+        enterprise_id,
+      </if>
+      <if test="region_id != null">
+        region_id,
+      </if>
+      <if test="sys_user_id != null">
+        sys_user_id,
+      </if>
+      <if test="commerce_id != null">
+        commerce_id,
+      </if>
+      <if test="bank_id != null">
+        bank_id,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="check_state!=null">
+       check_state,
+      </if>
+      <if test="isglobal!=null">
+       isglobal,
+      </if>
+      <if test="close_time!=null">
+       close_time
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     
+      <if test="principal != null">
+        #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="enterprise_id != null">
+        #{enterprise_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_id != null">
+      getcitycode(#{region_id,jdbcType=VARCHAR})
+        ,
+      </if>
+      <if test="sys_user_id != null">
+        #{sys_user_id,jdbcType=BIGINT},
+      </if>
+      <if test="commerce_id != null">
+        #{commerce_id,jdbcType=BIGINT},
+      </if>
+      <if test="bank_id != null">
+        #{bank_id,jdbcType=BIGINT},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+        <if test="check_state!=null">
+        #{check_state,jdbcType=INTEGER},
+      </if>
+      <if test="isglobal!=null">
+        #{isglobal,jdbcType=INTEGER},
+      </if>
+      
+       <if test="close_time!=null">
+        #{close_time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.PartnerEntity">
+    update t_biz_partner
+    <set>
+      <if test="principal != null">
+        principal = #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="enterprise_id != null">
+        enterprise_id = #{enterprise_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_id != null">
+      
+        region_id =  getcitycode(#{region_id,jdbcType=VARCHAR}),
+      </if>
+      <if test="sys_user_id != null">
+        sys_user_id = #{sys_user_id,jdbcType=BIGINT},
+      </if>
+      <if test="commerce_id != null">
+        commerce_id = #{commerce_id,jdbcType=BIGINT},
+      </if>
+      <if test="bank_id != null">
+        bank_id = #{bank_id,jdbcType=BIGINT},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="check_state">
+      check_state=#{check_state,jdbcType=INTEGER},
+      </if>
+       <if test="isglobal!=null">
+        isglobal=#{isglobal,jdbcType=INTEGER},
+      </if>
+       <if test="close_time!=null">
+        close_time=#{close_time,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.partner.model.PartnerEntity">
+    update t_biz_partner
+    set principal = #{principal,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      enterprise_id = #{enterprise_id,jdbcType=BIGINT},
+      region_id =  getcitycode(#{region_id,jdbcType=VARCHAR}),
+      sys_user_id = #{sys_user_id,jdbcType=BIGINT},
+      commerce_id = #{commerce_id,jdbcType=BIGINT},
+      bank_id = #{bank_id,jdbcType=BIGINT},
+      creater = #{creater,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      check_state=#{updater,jdbcType=INTEGER},
+      isglobal=#{isglobal,jdbcType=INTEGER},
+      close_time=#{close_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="queryPartnerForPage"  resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+
+
+	select p.principal,p.phone_num,p.id,en.enterprise_name,p.check_state,
+	
+	date_format(p.create_time, '%Y-%m-%d %T') as  create_time,
+	date_format(p.update_time, '%Y-%m-%d %T') as update_time,
+
+	group_concat(re.name order by re.code asc) as region_name,
+	u.account, u.state 
+	from t_biz_partner p left join t_biz_enterprise en on en.id=p.enterprise_id 
+	
+	left join t_biz_build_enterprise be on be.id=en.build_enterpise
+	
+	left join t_sys_user u on  u.id=p.sys_user_id
+	left join region re on 
+	
+	<if test="param.open_city!=null and param.open_city!=null">
+	 find_in_set(re.code,left(p.region_id,13))!=0 
+	</if>
+	
+	<if test="param.no_open_city!=null and param.no_open_city!=''">
+	 find_in_set(re.code,p.region_id)!=0 
+	</if>
+	
+	
+	where 1=1
+
+<if test="param.user_name!=null and param.user_name!=''">
+  
+ and p.principal  like CONCAT('%',#{param.user_name},'%')    
+
+</if>
+
+<if test="param.account!=null and param.account!=''">
+and u.account  like   CONCAT('%', #{param.account},'%') 
+
+</if>
+
+<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+and en.enterprise_name  like   CONCAT('%', #{param.enterprise_name},'%') 
+</if>
+
+<if test="param.phone_num!=null and param.phone_num!=''">
+
+and  p.phone_num  like CONCAT('%', #{param.phone_num},'%') 
+</if>
+
+<if test="param.currentUser!=null and param.currentUser!=''">
+
+and  p.enterprise_id  = #{param.currentUser}
+</if>
+
+<if test="param.check_state!=null and param.check_state!=''">
+
+ and p.check_state=#{param.check_state}
+
+</if>
+
+group by p.id order by p.id desc
+  </select>
+  
+  <select id="getPartnerEntity" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_partner where sys_user_id=#{userId}
+  </select>
+  
+  <select id="getPartnerName" resultMap="BaseResultMap">
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_partner
+  </select>
+</mapper>

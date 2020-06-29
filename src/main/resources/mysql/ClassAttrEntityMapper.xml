@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.ClassAttrEntityMapper">
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.ClassAttrEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="isenum" jdbcType="INTEGER" property="isenum" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="iscascading" jdbcType="INTEGER" property="iscascading" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ismultiple, name, isenum, class_id, iscascading, iswrite, cascading_attr_id
+  </sql>
+  
+  <select id="getClassAttrEntityByClassId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  
+       select <include refid="Base_Column_List"></include> from t_biz_class_attr where class_id=#{class_id} or class_id=0
+  </select>
+</mapper>

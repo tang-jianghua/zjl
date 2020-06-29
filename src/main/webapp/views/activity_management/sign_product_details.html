@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<style>
+.operateContainer{
+	float: right;
+    margin: 10px;
+}
+.oneProduct div{
+	width: 170px;
+    margin: auto;
+}
+.oneProduct .operate{
+	height: 40px;
+	font-size: 24px;
+    color: #caa359;
+    padding:5px;
+}
+.oneProduct .operate div{
+	width: 23px;
+	height: 23px;
+    float: right;
+    border-radius: 5px;
+    border: 1px solid #caa359;
+}
+.oneProduct .operate div input{
+	width: 20px;
+	height: 20px;
+    margin: 1px;
+}
+.oneProduct .image{
+    height: 170px;
+    border: 1px solid gray;
+}
+.oneProduct .title{
+	font-size: 14px;
+    color: black;
+    font-family: '微软雅黑';
+    height: 66px;
+    overflow: hidden;
+}
+.oneProduct .text{
+	font-size: 12px;
+    color: #484545;
+}
+.oneProduct .info{
+    height: 70px;
+    border: 1px solid #b7b4b4;
+    background-color: #cccaca;
+    overflow-y: auto;
+}
+.redText{
+	font-size: 15px;
+	color: red; 
+}
+.button_center {
+	display: inherit;
+	margin: 10px auto;
+}
+</style>
+<div ng-controller="signProductDetailsCtrl">
+    <!-- 标题 -->
+    <section class="well" style="min-height: 600px;">
+	    <div class="fileAbout backstage">
+		    <div>产品管理</div>
+		    <div id="productSetButton" style="float: right;margin: -35px 10px;">
+		    	<button class="k-button k-state-default" ng-click="productSet()">产品设置</button>
+		    </div>
+	    </div>
+	    
+	   	<div class="idMessage">
+	   		<div class="col-sm-12 bigTitle1">
+	   			<div class="col-sm-2">活动时间</div>
+	   			<div class="col-sm-10 listMenu" id="timeRange">
+		   			<!-- <ul>
+						<li id="jump_1" ng-click="chooseJump(1)" class="timeChoose">02:00~03:00</li>
+						<li id="jump_2" ng-click="chooseJump(2)">04:00</li>
+						<li id="jump_3" ng-click="chooseJump(3)">06:00</li>
+						<li id="jump_4" ng-click="chooseJump(4)">08:00</li>
+						<li id="jump_5" ng-click="chooseJump(5)">10:00</li>
+					</ul> -->
+	   			</div>
+			</div>
+			
+			<!-- 产品审核 -->
+			<div id="productCheck">
+				<!-- 未审核 -->
+				<div id="container_state0">
+					<div class="col-sm-12 bigTitle2">
+						<div class="col-sm-1">未审核</div>
+					</div>
+					<div class="operateContainer">
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state0',true)">全选</button>
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state0',false)">取消</button>
+			            <button class="k-button k-state-default" ng-click="removeProduct('checkbox_state0')">取消报名</button>
+					</div>
+					<div class="col-sm-12 seckillBig" id="product_state0">
+						<!-- <div class="col-sm-3 oneProduct push">
+							<div class="image">
+								<div class="operate"> 
+									<div><input type="checkbox"/></div>
+								</div>
+							</div>
+							<div class="title">米黄色拼花产品    欧式   仿古喷墨产品</div>
+							<div class="text">库存：2899件  <span class="redText">98.8</span>元/199.8元</div>
+						</div> -->
+						
+					</div>
+			   		<div style="clear: both;"></div>
+		        </div>
+		        <!-- 审核通过 -->
+				<div id="container_state1">
+					<div class="col-sm-12 bigTitle2">
+						<div class="col-sm-1">审核通过 </div>
+					</div>
+					<div class="operateContainer">
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state1',true)">全选</button>
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state1',false)">取消</button>
+			            <button class="k-button k-state-default" ng-click="modifyProductState('checkbox_state1',5)">申请取消</button>
+					</div>
+					<div class="col-sm-12 seckillBig" id="product_state1">
+						
+					</div>
+			   		<div style="clear: both;"></div>
+		        </div>
+		        <!-- 审核未通过 -->
+				<div id="container_state2">
+					<div class="col-sm-12 bigTitle2">
+						<div class="col-sm-1">审核未通过</div>
+					</div>
+					<div class="operateContainer">
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state2',true)">全选</button>
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state2',false)">取消</button>
+			            <button class="k-button k-state-default" ng-click="removeProduct('checkbox_state2')">批量删除</button>
+					</div>
+					<div class="col-sm-12 seckillBig" id="product_state2">
+						
+					</div>
+		        </div>
+		        <!-- 申请取消 -->
+				<div id="container_state5">
+					<div class="col-sm-12 bigTitle2">
+						<div class="col-sm-1">申请取消 </div>
+					</div>
+					<!-- <div class="operateContainer">
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state5',true)">全选</button>
+						<button class="k-button k-state-default" ng-click="allChoose('checkbox_state5',false)">取消</button>
+					</div> -->
+					<div class="col-sm-12 seckillBig" id="product_state5">
+						
+					</div>
+			   		<div style="clear: both;"></div>
+		        </div>
+			</div>
+			<!-- 产品查看 -->
+			<div id="productLook">
+			
+			</div>
+			<div style="clear: both;"></div>
+	   	
+	   	
+	   	</div>
+    </section>
+</div>
+    
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.constructAppointment.mapper.ConstructStateRelationMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="construct_appointment_id" jdbcType="BIGINT" property="construct_appointment_id" />
+    <result column="state_code" jdbcType="VARCHAR" property="state_code" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+  </resultMap>
+  
+    <resultMap id="StateResultMap" type="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation">
+    <result column="state_code" jdbcType="VARCHAR" property="state_code" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, construct_appointment_id, state_code, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_construct_state_relation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAllState"  resultMap="BaseResultMap">
+    select state_code,state
+    from t_biz_construct_state
+  </select>
+   <select id="selectByAppointmentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_construct_state_relation r
+    where construct_appointment_id =#{construct_appointment_id,jdbcType=BIGINT} 
+    AND r.create_time = (SELECT MAX(create_time) FROM t_biz_construct_state_relation WHERE construct_appointment_id = #{construct_appointment_id,jdbcType=BIGINT} )
+  </select>
+     <select id="selectStateByAppointmentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT 
+   r.*,s.`state`
+    FROM t_biz_construct_state_relation r
+    LEFT JOIN `t_biz_construct_state` s
+    ON r.`state_code` = s.`state_code`
+    WHERE construct_appointment_id =#{construct_appointment_id,jdbcType=BIGINT}  
+    ORDER BY r.`id` desc LIMIT 1
+</select>
+  <select id="selectWhetherCancleByConstructAppointmentId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+   SELECT COUNT(*)
+	FROM t_biz_construct_state_relation
+	WHERE state_code = '6001' 
+	AND construct_appointment_id =#{construct_appointment_id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_construct_state_relation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_construct_state_relation (construct_appointment_id, state_code, 
+      create_time)
+    values (#{construct_appointment_id,jdbcType=BIGINT}, #{state_code,jdbcType=VARCHAR}, 
+      #{create_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_construct_state_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="construct_appointment_id != null">
+        construct_appointment_id,
+      </if>
+      <if test="state_code != null">
+        state_code,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="construct_appointment_id != null">
+        #{construct_appointment_id,jdbcType=BIGINT},
+      </if>
+      <if test="state_code != null">
+        #{state_code,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation">
+    update t_biz_construct_state_relation
+    <set>
+      <if test="construct_appointment_id != null">
+        construct_appointment_id = #{construct_appointment_id,jdbcType=BIGINT},
+      </if>
+      <if test="state_code != null">
+        state_code = #{state_code,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation">
+    update t_biz_construct_state_relation
+    set construct_appointment_id = #{construct_appointment_id,jdbcType=BIGINT},
+      state_code = #{state_code,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

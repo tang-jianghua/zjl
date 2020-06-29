@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.mfangsoft.zhuangjialong.integration.coupons.mapper.BrandCouponsEntityMapper">
+	<resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="scope_type" jdbcType="INTEGER" property="scope_type" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="coupons_price" jdbcType="DOUBLE" property="coupons_price" />
+    <result column="surplus_count" jdbcType="INTEGER" property="surplus_count" />
+    <result column="total_count" jdbcType="INTEGER" property="total_count" />
+    <result column="step_value" jdbcType="DOUBLE" property="step_value" />
+    <result column="details" jdbcType="VARCHAR" property="details" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="value" jdbcType="DOUBLE" property="value" />
+    <result column="user_id" jdbcType="BIGINT" property="user_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="limit_count" jdbcType="INTEGER" property="limit_count" />
+    <result column="random_count" jdbcType="INTEGER" property="random_count" />
+  </resultMap>
+  
+  <resultMap id="BaseInfoResultMap" type="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel">
+  	<id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="value" jdbcType="DOUBLE" property="value" />
+    <result column="scope_type" jdbcType="INTEGER" property="scope_type" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="coupons_price" jdbcType="DOUBLE" property="coupons_price" />
+    <result column="surplus_count" jdbcType="INTEGER" property="surplus_count" />
+    <result column="total_count" jdbcType="INTEGER" property="total_count" />
+    <result column="step_value" jdbcType="DOUBLE" property="step_value" />
+    <result column="details" jdbcType="VARCHAR" property="details" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="isused" jdbcType="TINYINT" property="isused" />
+    
+  </resultMap>
+  
+   <sql id="Base_Column_List">
+    id, name, scope_type, imgurl, coupons_price, surplus_count, total_count, step_value, details,
+    type, start_time, end_time, state, value, user_id, create_time, limit_count, random_count
+  </sql>
+
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		 resultType="com.mfangsoft.zhuangjialong.integration.coupons.model.BrandCouponsEntity">
+		select
+		<include refid="Base_Column_List" />
+		from t_biz_brand_coupons
+		where id = #{id,jdbcType=BIGINT};
+	</select>
+
+	<select id="selectInfoById" parameterType="java.lang.Long" resultMap="BaseInfoResultMap">
+		SELECT cc.id, bc.name, bc.value, bc.imgurl, bc.step_value, bc.start_time, bc.end_time, bc.type,cc.customer_id, cc.isused
+FROM t_biz_customer_coupons cc
+LEFT JOIN t_biz_brand_coupons bc ON cc.coupons_id = bc.id
+WHERE cc.id = #{id,jdbcType=BIGINT}
+AND cc.isused = FALSE
+AND bc.state = 1
+	</select>
+	
+	<select id="selectCouponsByCustomerId" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel"
+		resultType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel">
+SELECT * FROM (
+SELECT cc.id,cc.coupons_id, cc.convert_code, bc.NAME , bc.VALUE, bc.imgurl,bc.step_value, bc.start_time, bc.end_time, bc.type, bc.scope_type, cc.customer_id, cc.isused,
+IF(cc.isused IS TRUE,3,IF(bc.end_time &lt; NOW(),4,IF(bc.end_time &lt; DATE_ADD(NOW(), INTERVAL 3 DAY),1,2))) AS note,
+-- 1即将到期  2有效 3已使用 4已过期
+(SELECT GROUP_CONCAT(be.name) 
+FROM t_biz_scope_coupons sc 
+LEFT JOIN t_biz_brand b ON b.id = sc.brand_id
+LEFT JOIN t_biz_build_enterprise be ON be.id = b.enterprise_id
+WHERE sc.coupons_id = cc.coupons_id
+GROUP BY sc.coupons_id) AS brand_name
+
+FROM t_biz_customer_coupons cc
+LEFT JOIN t_biz_brand_coupons bc ON cc.coupons_id = bc.id
+
+WHERE cc.customer_id = #{customer_id,jdbcType=BIGINT}
+-- AND bc.state = 1
+AND bc.TYPE =  #{type,jdbcType=INTEGER} 
+
+	<if test="scope_type!=null and scope_type!=''">
+		and bc.scope_type = #{scope_type,jdbcType=INTEGER}
+	</if>
+
+) temp 
+ORDER BY temp.note ASC
+
+	</select>
+
+	<select id="selectRedBagByCustomerId" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel"
+		resultType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel">
+		
+		SELECT * FROM (
+SELECT cc.id,cc.coupons_id, cc.convert_code, bc.NAME , bc.VALUE, bc.imgurl,bc.step_value, bc.start_time, bc.end_time, bc.type, bc.scope_type, cc.customer_id, cc.isused,
+IF(cc.isused IS TRUE,3,IF(bc.end_time &lt; NOW(),4,IF(bc.end_time &lt; DATE_ADD(NOW(), INTERVAL 3 DAY),1,2))) AS note,
+-- 1即将到期  2有效 3已使用 4已过期
+(SELECT GROUP_CONCAT(be.name) 
+FROM t_biz_scope_coupons sc 
+LEFT JOIN t_biz_brand b ON b.id = sc.brand_id
+LEFT JOIN t_biz_build_enterprise be ON be.id = b.enterprise_id
+WHERE sc.coupons_id = cc.coupons_id
+GROUP BY sc.coupons_id) AS brand_name
+
+FROM t_biz_customer_coupons cc
+LEFT JOIN t_biz_brand_coupons bc ON cc.coupons_id = bc.id
+
+WHERE cc.customer_id = #{customer_id,jdbcType=BIGINT}
+-- AND bc.state = 1
+AND bc.TYPE = 1 
+
+	<if test="scope_type!=null and scope_type!=''">
+		and bc.scope_type = #{scope_type,jdbcType=INTEGER}
+	</if>
+	
+) temp 
+ORDER BY temp.note ASC
+
+	</select>
+	
+	<select id="selectRedbagsForCartShop"
+		resultType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel">
+		SELECT cc.id, bc.scope_type,bc.imgurl, bc.NAME, bc.VALUE,bc.step_value, bc.start_time, bc.end_time, bc.type
+
+FROM t_biz_customer_coupons cc
+
+LEFT JOIN t_biz_brand_coupons bc ON cc.coupons_id = bc.id
+LEFT JOIN t_biz_scope_coupons sc ON sc.coupons_id = bc.id AND sc.brand_id = #{brand_id,jdbcType=BIGINT}
+		
+WHERE cc.customer_id = #{customer_id,jdbcType=BIGINT} 
+AND cc.isused = FALSE 
+AND cc.id NOT IN 
+<foreach collection="usedIds" item="item" open="(" separator="," close=")">
+	${item}
+</foreach>
+AND (sc.id IS NOT NULL OR bc.scope_type = 1)
+AND bc.TYPE = 1 
+AND bc.start_time &lt; NOW() AND bc.end_time &gt; NOW()
+-- AND bc.state = 1
+GROUP BY cc.coupons_id
+ORDER BY bc.scope_type ASC 
+	</select>
+
+	<select id="selectCouponsForCartShop"
+		resultType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel">
+		SELECT cc.id, bc.scope_type,bc.imgurl, bc.NAME, bc.VALUE,bc.step_value, bc.start_time, bc.end_time, bc.type
+
+FROM t_biz_customer_coupons cc
+
+LEFT JOIN t_biz_brand_coupons bc ON cc.coupons_id = bc.id
+LEFT JOIN t_biz_scope_coupons sc ON sc.coupons_id = bc.id AND sc.brand_id = #{brand_id,jdbcType=BIGINT}
+
+WHERE cc.customer_id = #{customer_id,jdbcType=BIGINT} 
+AND cc.isused = FALSE 
+AND cc.id NOT IN 
+<foreach collection="usedIds" item="item" open="(" separator="," close=")">
+	${item}
+</foreach>
+AND (sc.id IS NOT NULL OR bc.scope_type = 1)
+	<if test="type!=null and type!=''">
+		and bc.TYPE = #{type,jdbcType=INTEGER}
+	</if>
+AND bc.start_time &lt; NOW() AND bc.end_time &gt; NOW()
+	<if test="step_value!=null and step_value!=''"> 
+		and step_value &lt; #{step_value,jdbcType=INTEGER}
+	</if>
+-- AND bc.state = 1
+GROUP BY cc.coupons_id
+ORDER BY bc.scope_type ASC 
+	</select>
+
+	<select id="selectCouponsForBrandMain" parameterType="java.lang.Long"
+		resultType="com.mfangsoft.zhuangjialong.app.coupons.model.BrandCouponsModel">
+SELECT
+		bc.id AS coupons_id,
+		bc.value,
+		IF(bc.`coupons_price`=0,FALSE,TRUE) enable_buy,
+		bc.`coupons_price`,
+		bc.`step_value`,
+		bc.`start_time` AS c_start,
+		bc.end_time AS c_end
+		FROM
+		`t_biz_brand_coupons` bc
+		LEFT JOIN `t_biz_scope_coupons` sc
+		ON bc.`id`=sc.`coupons_id`
+		WHERE NOW()&gt;= bc.start_time
+		AND NOW() &lt;= bc.end_time
+		AND bc.`type`= 2
+		AND bc.state = 1
+		AND bc.surplus_count &gt; 0
+		AND bc.`scope_type` = 2
+		AND sc.brand_id =  #{id,jdbcType=BIGINT}
+		GROUP BY bc.id
+		ORDER BY bc.`value`
+	</select>
+
+	<select id="selectRedBagsForBrandMain" parameterType="java.lang.Long"
+		resultType="com.mfangsoft.zhuangjialong.app.coupons.model.BrandCouponsModel">
+	SELECT
+		bc.id AS coupons_id,
+		bc.value,
+		IF(bc.`coupons_price`=0,FALSE,TRUE) enable_buy,
+		bc.`coupons_price`
+		FROM
+		`t_biz_brand_coupons` bc
+		LEFT JOIN `t_biz_scope_coupons` sc
+		ON bc.`id`=sc.`coupons_id`
+		WHERE NOW() &gt;= bc.start_time
+		AND NOW() &lt;= bc.end_time
+		AND bc.`type`= 1
+		AND bc.state = 1
+		AND bc.surplus_count &gt; 0
+		AND bc.`scope_type` = 2
+		AND sc.brand_id = #{id,jdbcType=BIGINT}
+		GROUP BY bc.id
+		ORDER BY bc.`value`
+	</select>
+    
+	<select id="selectPreExpireCouponsRedbagsForMessage"
+		resultType="com.mfangsoft.zhuangjialong.integration.coupons.model.CouponsRedbagMessage">
+		
+		SELECT cu.id AS customer_id,cu.name,c.end_time, c.value ,u.pushstr,u.platform, c.type
+		FROM 
+		t_biz_customer_coupons cc
+		 LEFT JOIN t_biz_brand_coupons c ON c.id = cc.coupons_id
+		LEFT JOIN t_app_customer cu ON cu.id = cc.customer_id
+		LEFT JOIN t_biz_userequipment u ON u.customer_id = cc.customer_id
+		WHERE cc.isused IS FALSE AND c.end_time &gt; NOW() AND c.end_time &lt;
+		DATE_ADD(NOW(), INTERVAL 1 DAY) AND cc.customer_id IS NOT NULL AND
+		c.step_value IS NOT NULL 
+		
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		t_biz_brand_coupons
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+
+	<update id="updateUseStateByPrimaryKeyList" parameterType="java.util.List">
+		UPDATE t_biz_customer_coupons SET 
+		<if test="shop_id!=null and shop_id!=''">
+				shop_id= #{shop_id,jdbcType=BIGINT},
+		</if>
+		isline = #{isline,jdbcType=TINYINT},isused = #{isused,jdbcType=TINYINT},use_time=NOW(),product_order_code = #{product_order_code,jdbcType=VARCHAR}
+		WHERE id IN
+		<foreach collection="idList" item="item" open="(" separator=","
+			close=")">
+			${item}
+		</foreach>
+	</update>
+
+	<update id="updateUseStaterebackbyList" parameterType="java.util.List">
+		UPDATE t_biz_customer_coupons SET  shop_id = NULL,isline = NULL,isused = FALSE,use_time=NULL ,product_order_code = NULL
+		WHERE id IN
+		<foreach collection="idList" item="item" open="(" separator=","
+			close=")">
+			${item}
+		</foreach>
+	</update>
+	
+    	<update id="updateSurplusById" parameterType="com.mfangsoft.zhuangjialong.app.coupons.model.BrandCouponsModel">
+		update t_biz_brand_coupons set surplus_count = #{surplus_count,jdbcType=INTEGER} where id = #{coupons_id,jdbcType=BIGINT}
+	</update>
+    
+
+
+	<select id="queryCouponsAboutUseState" resultType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.CustomerCouponsModel">
+		select * from t_biz_customer_coupons WHERE id IN
+		<foreach collection="idList" item="item" open="(" separator=","
+			close=")">
+			${item}
+		</foreach>
+		and isused = #{isused,jdbcType=TINYINT}
+	</select>
+	<select id="queryCouponsForPage" resultType="java.util.Map"	parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+		SELECT c.id,c.scope_type,c.state,
+		c.type, c.coupons_price,c.`name`,group_concat(be.`name`) as  brand_name,c.`value`, c.total_count as publish_count,date_format(c.start_time, '%Y-%m-%d %T') AS start_time,
+		date_format(c.end_time, '%Y-%m-%d %T') AS end_time,c.total_count- c.surplus_count as  re_count,use_count.use_count
+		FROM 
+		t_biz_brand_coupons c
+		
+		Left join t_biz_scope_coupons sc on sc.coupons_id=c.id
+		LEFT JOIN t_biz_brand b ON sc.brand_id = b.id
+		LEFT JOIN t_biz_build_enterprise be ON b.enterprise_id = be.id
+		LEFT JOIN (
+			SELECT  t.coupons_id,count(id) as use_count FROM t_biz_customer_coupons t WHERE  isused = 1 GROUP BY t.coupons_id
+		) use_count ON c.id = use_count.coupons_id
+		<where>
+			<if test="param.type!=null and param.type!=''">
+				c.type=#{param.type}
+			</if>
+			<if test="param.name!=null and param.name!=''">
+				and c.name like CONCAT('%', #{param.name},'%')
+			</if>
+			<if test="param.start_time!=null and param.start_time!=''">
+				and date_format(c.start_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+			</if>
+			<if test="param.end_time!=null and param.end_time!=''">
+				and date_format(c.end_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+			</if>
+			<if test="param.brand_id != null">
+				and sc.brand_id = ${param.brand_id}
+			</if>
+			<if test="param.brand_name != null and param.brand_name != ''">
+				and be.name like CONCAT('%', #{param.brand_name},'%')
+			</if>
+			<if test="param.scope_type!=null and param.scope_type!=''">
+			
+			     and c.scope_type=#{param.scope_type}
+			
+			</if>
+		</where>
+		group by c.id ORDER BY c.id desc
+	</select>
+    <select id="queryCouponsByName" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    
+    
+       select date_format(min(bc.start_time),'%Y-%m-%d %T') as min_start_time,date_format(max(bc.end_time),'%Y-%m-%d %T') as max_end_time  from t_biz_brand_coupons bc 
+       
+       left join t_biz_scope_coupons sc on sc.coupons_id=bc.id
+       
+       where 1=1 and state = 1 and surplus_count &gt; 0
+       
+       <if test="brand_id!=null and brand_id!=''">
+       
+         and sc.brand_id=#{brand_id}
+       
+       </if>
+       <if test="value!=null and value!=''">
+       
+        and value=#{value} 
+               
+       </if>
+       <if test="type!=null and type!=''">
+       
+        and type=#{type}
+       
+       </if> 
+       <if test="id!=null and  id!=''">
+       
+        and bc.id!=#{id}
+       
+       </if>
+       <if test="scope_type!=null and scope_type!=''">
+       
+        and scope_type=#{scope_type}
+       
+       </if>
+    
+    </select>
+    
+    <select id="selectCustomerCouponsPage" resultType="java.util.Map"	parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+    
+    
+    select  cc.id, bc.name,bc.value,date_format(cc.use_time,'%Y-%m-%d %T') as use_time,bc.type, ac.name as customer_name,cc.convert_code, 
+    
+     if(bc.type=2,'../../images/coupons.jpg','../../images/red.jpg') AS imgurl
+    from  t_biz_customer_coupons cc
+left join t_app_customer ac on ac.id=cc.customer_id
+left join t_biz_brand_coupons bc on bc.id= cc.coupons_id
+left join t_biz_scope_coupons sc on bc.id=sc.coupons_id
+left join t_biz_brand b on b.id=sc.brand_id
+left join t_biz_shop s on s.brand_id = b.id
+
+where 1=1
+
+<if test="param.name!=null and param.name!=''">
+
+ and bc.name like CONCAT('%', #{param.name},'%')
+
+</if>
+
+
+<if test="param.convert_code!=null and param.convert_code!=''">
+
+ and cc.convert_code =#{param.convert_code}
+
+</if>
+
+<if test="param.type!=null and param.type!=''">
+
+ and bc.type =#{param.type}
+
+</if>
+    
+  <if test="param.customer_name!=null and param.customer_name!=''">
+
+ and ac.name like CONCAT('%', #{param.customer_name},'%')
+
+</if> 
+
+ <if test="param.shop_id!=null and param.shop_id!=''">
+
+ and (cc.shop_id =#{param.shop_id} or s.id = #{param.shop_id})
+
+</if> 
+    
+    order by cc.use_time desc
+    
+    </select>
+    
+    
+    
+    <select id="selectCustomerCouponsByCode" resultType="java.lang.Long"	parameterType="java.util.Map">
+    
+    
+    select  cc.id  from  t_biz_customer_coupons cc
+left join t_app_customer ac on ac.id=cc.customer_id
+left join t_biz_brand_coupons bc on bc.id= cc.coupons_id
+left join t_biz_scope_coupons sc on bc.id=sc.coupons_id
+left join t_biz_brand b on b.id=sc.brand_id
+left join t_biz_shop s on s.brand_id = b.id
+where 1=1 and cc.isused=0 and  s.id =#{shop_id} and cc.convert_code=#{convert_code} 
+    </select>
+    
+    <update id="deleteSurplusById" >
+		update t_biz_brand_coupons set surplus_count = IF(surplus_count - #{surplus_count,jdbcType=INTEGER} > 0, surplus_count - #{surplus_count,jdbcType=INTEGER} , 0)
+		 where id = #{coupons_id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="queryFirstPageCouponsListForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+	
+	SELECT c.id, c.name, c.imgurl, c.type, c.coupons_price, c.step_value, c.value, c.scope_type, date_format(c.start_time,'%Y-%m-%d %T') as start_time, date_format(c.end_time,'%Y-%m-%d %T') as end_time, 
+	c.total_count, 
+	IF((c.total_count- c.surplus_count) &gt; c.random_count , (c.total_count- c.surplus_count), c.random_count) AS sale_count,
+	sc.brand_id, GROUP_CONCAT(be.name) AS brand_name, bc.name AS class_name,
+	IF(cc.id IS NOT NULL, 0, 1) AS have_state
+		
+		FROM 
+		t_biz_brand_coupons c
+		LEFT JOIN t_biz_scope_coupons sc ON sc.coupons_id=c.id
+		LEFT JOIN t_biz_brand b ON sc.brand_id = b.id
+		LEFT JOIN t_biz_build_enterprise be ON b.enterprise_id = be.id
+		LEFT JOIN t_biz_build_class bc ON bc.id = be.class_id
+		LEFT JOIN t_biz_partner p ON p.id = b.citypartner_id
+		LEFT JOIN t_biz_customer_coupons cc ON cc.customer_id = #{param.customer_id} AND cc.coupons_id = c.id
+		
+	WHERE c.end_time > now() and c.surplus_count > 0 and c.state = 1
+
+			<if test="param.region_code!=null and param.region_code!=''">
+				AND FIND_IN_SET(#{param.region_code}, p.region_id)
+			</if>
+			<if test="param.type!=null and param.type!=''">
+				and c.type = #{param.type}
+			</if>
+			<if test="param.scope_type!=null and param.scope_type!=''">
+				and c.scope_type = #{param.scope_type}
+			</if>
+			<if test="param.brand_id!=null and param.brand_id!=''">
+				and sc.brand_id in ( #{param.brand_id} )
+			</if>
+			<if test="param.class_id!=null and param.class_id!=''">
+				and bc.id in ( #{param.class_id} )
+			</if>
+			
+		GROUP BY c.id 
+	ORDER BY c.surplus_count DESC,c.scope_type ASC,c.type ASC,c.end_time ASC, c.coupons_price ASC, c.surplus_count DESC
+
+	</select>
+	<select id="queryOneFirstPageCoupons" parameterType="java.util.Map" resultType="java.util.Map">
+	
+	SELECT c.id, c.name, c.imgurl, c.type, c.coupons_price, c.step_value, c.value, c.scope_type, DATE_FORMAT(c.start_time,'%Y-%m-%d %T') AS start_time, DATE_FORMAT(c.end_time,'%Y-%m-%d %T') AS end_time, 
+c.total_count, c.details,
+	IF((c.total_count- c.surplus_count) &gt; c.random_count , (c.total_count- c.surplus_count), c.random_count) AS sale_count,
+	sc.brand_id, GROUP_CONCAT(temp.shop_name) AS shop_name, bc.name AS class_name,
+	IF(cc.id IS NOT NULL, 0, 1) AS have_state
+		
+		FROM 
+		t_biz_brand_coupons c
+		LEFT JOIN t_biz_scope_coupons sc ON sc.coupons_id=c.id
+		LEFT JOIN t_biz_brand b ON sc.brand_id = b.id
+		LEFT JOIN t_biz_build_enterprise be ON b.enterprise_id = be.id
+		LEFT JOIN t_biz_build_class bc ON bc.id = be.class_id
+		LEFT JOIN t_biz_customer_coupons cc ON cc.customer_id = #{customer_id} AND cc.coupons_id = c.id
+		LEFT JOIN (SELECT s.brand_id, GROUP_CONCAT(s.shop_name) AS shop_name FROM t_biz_shop s GROUP BY s.brand_id) temp ON temp.brand_id = b.id
+		
+	WHERE c.id = #{id,jdbcType=BIGINT}
+GROUP BY c.id
+	</select>
+	<select id="queryOneCouponsShopInfo" parameterType="java.util.Map" resultType="java.util.Map">
+	
+	SELECT s.id, s.shop_name, s.address
+
+		FROM 
+		t_biz_brand_coupons c
+		LEFT JOIN t_biz_scope_coupons sc ON sc.coupons_id=c.id
+		LEFT JOIN t_biz_brand b ON sc.brand_id = b.id
+		LEFT JOIN t_biz_shop s ON s.brand_id = b.id
+
+	WHERE c.id =  #{id,jdbcType=BIGINT} AND s.id IS NOT NULL
+GROUP BY s.id
+	</select>
+	<select id="whetherHaveQuanforcart" resultType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+	
+	SELECT bc.*
+
+FROM t_biz_brand_coupons bc 
+LEFT JOIN t_biz_scope_coupons sc ON sc.coupons_id = bc.id
+LEFT JOIN t_biz_shop bs ON bs.brand_id = sc.brand_id
+LEFT JOIN 
+(SELECT coupons_id,COUNT(coupons_id) AS COUNT
+FROM t_biz_customer_coupons 
+WHERE customer_id = #{customer_id,jdbcType=BIGINT}
+GROUP BY coupons_id) temp ON temp.coupons_id = bc.id
+
+WHERE bc.surplus_count &gt; 0 AND bc.end_time &gt; NOW()
+AND bc.state = 1
+AND temp.count &lt; bc.limit_count
+AND bs.id = #{shop_id,jdbcType=BIGINT}
+
+GROUP BY bc.id
+
+	</select>
+</mapper>

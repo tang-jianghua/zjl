@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.entnewproduct.mapper.EntNewProductEntityMapper">
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_title" jdbcType="VARCHAR" property="product_title" />
+    <result column="product_sort" jdbcType="INTEGER" property="product_sort" />
+    <result column="product_unit" jdbcType="VARCHAR" property="product_unit" />
+    <result column="isnew" jdbcType="INTEGER" property="isnew" />
+    <result column="new_time" jdbcType="DATE" property="new_time" />
+    <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+    <result column="sales_model" jdbcType="INTEGER" property="sales_model" />
+    <result column="percent" jdbcType="DOUBLE" property="percent" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="enterprise_id" jdbcType="BIGINT" property="enterprise_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <collection property="baseBrandProdImgEntities" resultMap="com.mfangsoft.zhuangjialong.integration.entnewproduct.mapper.BaseEntProdImgEntityMapper.BaseResultMap" columnPrefix="img_"></collection>
+ 	
+ 	<collection property="baseBrandProdSeriesEntities" column="product_id"
+			ofType="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.BaseEntProdSeriesEntity">
+			<id column="prod_series_id" jdbcType="BIGINT" property="id" />
+			<result column="series_id" jdbcType="BIGINT" property="series_id" />
+			<result column="product_id" jdbcType="BIGINT" property="product_id" />
+			<association property="entSeriesEntity"
+				javaType="com.mfangsoft.zhuangjialong.integration.series.model.EntSeriesEntity">
+				<result column="name" jdbcType="VARCHAR" property="name" />
+			</association>
+		</collection>
+ 	<collection property="brandProdAttrValueEntities" resultMap="com.mfangsoft.zhuangjialong.integration.entnewproduct.mapper.BaseEntProdAttrValueEntityMapper.BaseResultMap" columnPrefix="attrvalue_"></collection>
+  
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProductEntity">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    p.id, product_title, product_sort, product_unit, isnew, new_time, partner_id, sales_model, 
+    percent, state, create_time, enterprise_id, brand_id, p.class_id
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+  
+  
+   <select id="selectAllByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs" useCache="false">
+   select 
+   
+     <include refid="Base_Column_List"/>,
+     
+     <include refid="Blob_Column_List"/>,
+     
+     
+        img.id as img_id,
+		img.imgurl as img_imgurl, img.product_id as
+		img_product_id,
+		img.type as img_type,
+		img.img_sort as mg_img_sort,
+		
+	    setemp.id as prod_series_id,
+		setemp.series_id,
+		setemp.product_id,
+		setemp.name
+		
+	     from  t_biz_ent_product p 
+	     left join t_biz_ent_prod_img img on p.id=img.product_id
+	     left join t_biz_ent_prod_series prod_series on prod_series.product_id=p.id
+	     
+	                              left join (select   prod_series.id,prod_series.series_id,prod_series.product_id,series.name from  t_biz_ent_prod_series prod_series,t_biz_ent_series series where prod_series.series_id=series.id) setemp on  setemp.product_id=p.id  
+	      
+	       where   p.id=#{id}
+   </select>
+    
+    <select id="selectBrandProductForPage"  resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" useCache="false">
+   
+   select t.id,t.isnew, t.state,t.product_unit,t.sales_model,t.product_title,ps.max_price,ps.min_price, img.imgurl  from t_biz_ent_product  t  
+  
+  
+  left join v_prod_ent_min_img img on img.product_id = t.id
+  
+  left join (select ws_min.product_id, ws_max.max_price, ws_min.min_price from (SELECT ws.product_id, ws.price AS max_price
+                  FROM t_biz_ent_prod_salesattr ws
+                 WHERE ws.price = (SELECT max(wsi.price)
+                                     FROM t_biz_ent_prod_salesattr wsi
+                                    WHERE wsi.product_id = ws.product_id and  wsi.data_flag!='del'))
+               ws_max,
+               (SELECT ws.product_id, ws.price AS min_price
+                  FROM t_biz_ent_prod_salesattr ws
+                 WHERE ws.price = (SELECT min(wsi.price)
+                                     FROM t_biz_ent_prod_salesattr wsi
+                                    WHERE wsi.product_id = ws.product_id and   wsi.data_flag!='del' ))
+               ws_min where ws_max.product_id = ws_min.product_id) ps on ps.product_id=t.id
+               left join v_prod_ent_cl_s  vs on vs.product_id = t.id 
+               
+               where  1=1
+               <if test="param.product_title!=null and param.product_title!=''">
+               
+               
+                and t.product_title   like CONCAT('%', #{param.product_title},'%')
+               
+               </if>
+               
+               <if test="param.state!=null and param.state!=''">
+               
+                and  t.state=#{param.state}
+               </if>
+               
+               <if test="param.classify_id!=null and param.classify_id!=''">
+               
+                 and vs.class_id=#{param.classify_id}
+                
+               </if>
+               
+               <if test="param.isNew!=null and param.isNew!=''">
+               
+               and t.isnew=#{param.isNew}
+               
+               </if>
+               
+               <if test="param.series_id!=null and param.series_id!=''">
+               
+                 and vs.series_id=#{param.series_id}
+                
+               </if>
+               
+               <if test="param.brand_id!=null and param.brand_id!=''">
+               
+                 and t.brand_id=#{param.brand_id}
+               
+               
+               </if>
+               <if test="param.build_brand_id!=null and param.build_brand_id!=''">
+               
+                  and t.build_brand_id =#{param.build_brand_id}
+               
+               </if>
+               group by  t.id order by t.id desc
+   
+   
+   </select>
+   
+   <select id="getBrandDevProductListForPage" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" useCache="false">
+		SELECT p.sales_model,p.id,p.product_title,
+       vimg.imgurl,
+       sell.sel_count,
+       col.col_count,
+       ev.quality,
+       ev.service,
+       pv.name as pv_name,
+       pv.principal,
+       city.name as city,
+       brand.name as brand_name,
+       ps.max_price,
+       ps.min_price,
+       brand.enterprise_name
+       
+  FROM t_biz_ent_product p
+       LEFT JOIN v_prod_ent_min_img vimg ON p.id = vimg.product_id
+       LEFT JOIN
+       (SELECT prode.product_id, count(1) AS sel_count
+          FROM t_biz_order_product prode,
+               v_orderstate_max_time omax,
+               t_biz_order_state os
+         WHERE     prode.order_id = omax.order_id
+               AND omax.order_state_code = os.order_code
+               AND os.order_code = 3000
+        GROUP BY prode.product_id) sell
+          ON sell.product_id = p.id
+       LEFT JOIN (SELECT t.product_id, count(1) AS col_count
+                    FROM t_app_customer_collection t
+                  GROUP BY t.product_id) col
+          ON col.product_id = p.id
+       LEFT JOIN
+       (SELECT ROUND(SUM(e.quality) / COUNT(e.quality)) quality,
+               ROUND(SUM(e.service) / COUNT(e.service)) service,
+               e.product_id
+          FROM t_biz_evaluation e
+        GROUP BY e.product_id) ev
+          ON ev.product_id = p.id
+          
+       left join (select pa.id,re.name,pa.principal from  t_biz_partner pa, region re where re.code= left(pa.region_id,6) ) pv on  pv.id=p.partner_id
+       
+       
+       left join (select pa.id,re.name   from  t_biz_partner pa, region re where re.code= right(left(pa.region_id,13),6) ) city on  city.id=p.partner_id
+       
+       left join (select e.id,be.name,e.enterprise_name from   t_biz_enterprise e, t_biz_build_enterprise be where be.id=e.build_enterpise) brand on brand.id=p.enterprise_id 
+       
+      left join (select ws_min.product_id, ws_max.max_price, ws_min.min_price from (SELECT ws.product_id, ws.price AS max_price
+                  FROM t_biz_ent_prod_salesattr ws
+                 WHERE ws.price = (SELECT max(wsi.price)
+                                     FROM t_biz_ent_prod_salesattr wsi
+                                    WHERE wsi.product_id = ws.product_id and  wsi.data_flag!='del'))
+               ws_max,
+               (SELECT ws.product_id, ws.price AS min_price
+                  FROM t_biz_ent_prod_salesattr ws
+                 WHERE ws.price = (SELECT min(wsi.price)
+                                     FROM t_biz_ent_prod_salesattr wsi
+                                    WHERE wsi.product_id = ws.product_id and   wsi.data_flag!='del' ))
+               ws_min where ws_max.product_id = ws_min.product_id) ps on ps.product_id=p.id
+               
+               
+                left join v_build_cl_m_e  v on p.class_id= v.class_id  and p.build_brand_id=v.b_ent_id
+               
+               where 1=1
+               
+               <if test="param.class_id!=null and param.class_id!=''">
+               
+                and  p.class_id =#{param.class_id}
+               
+               </if>
+               <if test="param.materials_id!=null and param.materials_id!=''">
+               
+               and v.materials_id=#{param.materials_id}
+               
+               </if>
+               <if test="param.b_ent_id!=null and param.b_ent_id!=''">
+               
+               and v.b_ent_id=#{param.b_ent_id}
+               
+               </if>
+               
+               <if test="param.principal!=null and param.principal!=''">
+               
+               and pv.principal like CONCAT('%', #{param.principal},'%') 
+               </if>
+               
+                <if test="param.product_title!=null and param.product_title!=''">
+               
+               and p.product_title  like CONCAT('%', #{param.product_title},'%') 
+               </if>
+               
+               <if test="param.sales_model!=null and param.sales_model!=''">
+               
+               and p.sales_model =#{param.sales_model}
+               
+               </if>
+               <if test="param.state!=null and param.state!=''">
+               
+               and p.state =#{param.state}
+               
+               </if>
+               
+           group by p.id order by p.id desc
+	</select>
+ 
+ <select id="selectViewbyproduct" parameterType="java.lang.Long" resultType="java.util.Map">
+	
+	select temp.ca_name,  temp.attr_values,temp.product_id, temp.class_id from (SELECT ca.id, ca.name as ca_name, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as attr_values
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id   and pat.attr_value=cav.id 
+
+group  by pat.product_id, ca.id) temp    where  temp.product_id=#{product_id} 
+	</select>
+	
+	
+	<select id="selectproductAttrValueName" resultType="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProdAttrValueName" useCache="false">
+	
+	
+	select t_space.space, t_style.style,t_madin.madin,t_space.product_id from  (select temp.space,temp.product_id, temp.class_id from (SELECT ca.id, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as space
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id   and pat.attr_value=cav.id group  by pat.product_id, ca.id) temp where temp.id=1) t_space,
+
+
+
+(select temp.style,temp.product_id, temp.class_id from (SELECT ca.id, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as style
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id   and pat.attr_value=cav.id 
+
+group  by pat.product_id, ca.id) temp where temp.id=2) t_style,
+
+
+
+
+(select temp.madin,temp.product_id, temp.class_id from (SELECT ca.id, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as madin
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id  and pat.attr_value=cav.id 
+
+group  by pat.product_id, ca.id) temp where temp.id=3) t_madin 
+
+where t_space.product_id=t_style.product_id and t_madin.product_id=t_style.product_id
+	
+	</select>
+	
+	<select id="selectproductAttrValueNameByProductId" resultType="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProdAttrValueName" parameterType="java.lang.Long" useCache="false">
+	
+	
+	select t_space.space, t_style.style,t_madin.madin,t_space.product_id from  (select temp.space,temp.product_id, temp.class_id from (SELECT ca.id, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as space
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id   and pat.attr_value=cav.id group  by pat.product_id, ca.id) temp where temp.id=1) t_space,
+
+
+
+(select temp.style,temp.product_id, temp.class_id from (SELECT ca.id, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as style
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id   and pat.attr_value=cav.id 
+
+group  by pat.product_id, ca.id) temp where temp.id=2) t_style,
+
+
+
+
+(select temp.madin,temp.product_id, temp.class_id from (SELECT ca.id, pat.product_id, pat.class_id, ca.name,pat.attr_value, GROUP_CONCAT(cav.value) as madin
+FROM   t_biz_class_attr ca,  t_biz_ent_prod_attrvalue pat, t_biz_class_attr_value cav
+WHERE   pat.attr_id =ca.id  and pat.attr_value=cav.id 
+
+group  by pat.product_id, ca.id) temp where temp.id=3) t_madin 
+
+where t_space.product_id=t_style.product_id and t_madin.product_id=t_style.product_id and t_style.product_id=#{id}
+	
+	</select>
+	
+	
+	
+	
+	
+	<update id="updateProdBold" parameterType="java.util.Map">
+	
+	   update t_biz_ent_product set space=#{space} where id=#{id}
+	
+	</update>
+	
+	
+	<select id="selectProductByEntId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	
+	  select id from t_biz_ent_product where ent_id=#{entId}
+	
+	
+	</select>
+</mapper>

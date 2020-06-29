@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newcoupons.mapper.BaseCustomerCouponsEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseCustomerCouponsEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="convert_code" jdbcType="VARCHAR" property="convert_code" />
+    <result column="isline" jdbcType="BIT" property="isline" />
+    <result column="coupons_id" jdbcType="BIGINT" property="coupons_id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="isused" jdbcType="BIT" property="isused" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="use_time" jdbcType="TIMESTAMP" property="use_time" />
+    <result column="order_code" jdbcType="VARCHAR" property="order_code" />
+    <result column="product_order_code" jdbcType="VARCHAR" property="product_order_code" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, shop_id, convert_code, isline, coupons_id, customer_id, isused, create_time, 
+    use_time, order_code, product_order_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_customer_coupons
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_customer_coupons
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseCustomerCouponsEntity">
+    insert into t_biz_customer_coupons (id, shop_id, convert_code, 
+      isline, coupons_id, customer_id, 
+      isused, create_time, use_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{shop_id,jdbcType=BIGINT}, #{convert_code,jdbcType=VARCHAR}, 
+      #{isline,jdbcType=BIT}, #{coupons_id,jdbcType=BIGINT}, #{customer_id,jdbcType=BIGINT}, 
+      #{isused,jdbcType=BIT}, #{create_time,jdbcType=TIMESTAMP}, #{use_time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseCustomerCouponsEntity">
+    insert into t_biz_customer_coupons
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="shop_id != null">
+        shop_id,
+      </if>
+      <if test="convert_code != null">
+        convert_code,
+      </if>
+      <if test="isline != null">
+        isline,
+      </if>
+      <if test="coupons_id != null">
+        coupons_id,
+      </if>
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="isused != null">
+        isused,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="use_time != null">
+        use_time,
+      </if>
+      <if test="order_code != null">
+        order_code,
+      </if>
+      <if test="product_order_code != null">
+        product_order_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="convert_code != null">
+        #{convert_code,jdbcType=VARCHAR},
+      </if>
+      <if test="isline != null">
+        #{isline,jdbcType=BIT},
+      </if>
+      <if test="coupons_id != null">
+        #{coupons_id,jdbcType=BIGINT},
+      </if>
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="isused != null">
+        #{isused,jdbcType=BIT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="use_time != null">
+        #{use_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_code != null">
+        #{order_code,jdbcType=VARCHAR},
+      </if>
+      <if test="product_order_code != null">
+        #{product_order_code,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseCustomerCouponsEntity">
+    update t_biz_customer_coupons
+    <set>
+      <if test="shop_id != null">
+        shop_id = #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="convert_code != null">
+        convert_code = #{convert_code,jdbcType=VARCHAR},
+      </if>
+      <if test="isline != null">
+        isline = #{isline,jdbcType=BIT},
+      </if>
+      <if test="coupons_id != null">
+        coupons_id = #{coupons_id,jdbcType=BIGINT},
+      </if>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="isused != null">
+        isused = #{isused,jdbcType=BIT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="use_time != null">
+        use_time = #{use_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_code != null">
+        order_code = #{order_code,jdbcType=VARCHAR},
+      </if>
+      <if test="product_order_code != null">
+        product_order_code = #{product_order_code,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseCustomerCouponsEntity">
+    update t_biz_customer_coupons
+    set shop_id = #{shop_id,jdbcType=BIGINT},
+      convert_code = #{convert_code,jdbcType=VARCHAR},
+      isline = #{isline,jdbcType=BIT},
+      coupons_id = #{coupons_id,jdbcType=BIGINT},
+      customer_id = #{customer_id,jdbcType=BIGINT},
+      isused = #{isused,jdbcType=BIT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      use_time = #{use_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

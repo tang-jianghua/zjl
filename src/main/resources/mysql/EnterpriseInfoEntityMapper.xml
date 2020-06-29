@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.EnterpriseInfoEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="enterprise_id" jdbcType="BIGINT" property="enterprise_id" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    <result column="enterprise_html" jdbcType="LONGVARCHAR" property="enterprise_html" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, enterprise_id
+  </sql>
+  <sql id="Blob_Column_List">
+    enterprise_html
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_enterprise_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+   <select id="selectEnterpriseHtmlByBrandId" parameterType="com.mfangsoft.zhuangjialong.app.brand.model.BrandModel" resultType="java.lang.String">
+SELECT 
+  ei.`enterprise_html` 
+FROM
+  `t_biz_enterprise_info` ei 
+  LEFT JOIN `t_biz_enterprise` e 
+    ON ei.`enterprise_id` = e.`id` 
+    LEFT JOIN `t_biz_build_enterprise` be
+    ON e.`build_enterpise` = be.`id`
+    LEFT JOIN `t_biz_brand` b
+    ON be.`id` = b.`enterprise_id`
+    WHERE  b.`id` = #{brand_id,jdbcType=BIGINT} 
+    AND ei.`type` = #{type,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_enterprise_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    insert into t_biz_enterprise_info (type, enterprise_id, 
+      enterprise_html)
+    values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{enterprise_id,jdbcType=BIGINT}, 
+      #{enterprise_html,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    insert into t_biz_enterprise_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      
+      <if test="type != null">
+        type,
+      </if>
+      <if test="enterprise_id != null">
+        enterprise_id,
+      </if>
+      <if test="enterprise_html != null">
+        enterprise_html,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="enterprise_id != null">
+        #{enterprise_id,jdbcType=BIGINT},
+      </if>
+      <if test="enterprise_html != null">
+        #{enterprise_html,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    update t_biz_enterprise_info
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="enterprise_id != null">
+        enterprise_id = #{enterprise_id,jdbcType=BIGINT},
+      </if>
+      <if test="enterprise_html != null">
+        enterprise_html = #{enterprise_html,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    update t_biz_enterprise_info
+    set type = #{type,jdbcType=INTEGER},
+      enterprise_id = #{enterprise_id,jdbcType=BIGINT},
+      enterprise_html = #{enterprise_html,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseInfoEntity">
+    update t_biz_enterprise_info
+    set type = #{type,jdbcType=INTEGER},
+      enterprise_id = #{enterprise_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getEnterpriseProfilesByUserId" parameterType="java.util.Map" resultMap="ResultMapWithBLOBs">
+  
+  
+   select info.*  from t_biz_enterprise_info info, t_biz_enterprise ent where ent.id= info.enterprise_id and
+   
+    ent.sys_user_id=#{userId} and info.type=#{type}
+  
+  
+  
+  </select>
+  
+   <select id="getEnterpriseDevelopmentByUserId" parameterType="java.util.Map" resultMap="ResultMapWithBLOBs">
+  
+  
+   select info.*  from t_biz_enterprise_info info, t_biz_enterprise ent where ent.id= info.enterprise_id and
+   
+    ent.sys_user_id=#{userId} and info.type=#{type} order by info.enterprise_html  desc
+  
+  </select>
+</mapper>

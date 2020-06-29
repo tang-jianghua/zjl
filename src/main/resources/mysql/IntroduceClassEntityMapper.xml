@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.introduce.mapper.IntroduceClassEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.introduce.model.IntroduceClassEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name" />
+    <result column="product_num" jdbcType="INTEGER" property="product_num" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+    <resultMap id="ClassProductForAppResultMap" type="com.mfangsoft.zhuangjialong.app.main.model.IntroduceProductModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+   <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name" />
+    <result column="appshow_imgurl" jdbcType="VARCHAR" property="appshow_imgurl" />
+    <result column="rgb" jdbcType="VARCHAR" property="bg_color" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, partner_id, class_id, class_name, product_num, sort
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_introduce_class
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPartner" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_introduce_class
+    where partner_id = #{partner_id,jdbcType=BIGINT}
+    order by sort desc
+  </select>
+  <select id="selectPartnerClass" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.introduce.model.PartnerClass">
+    SELECT bc.id as class_id,bc.name as class_name,IF(ic.id IS NULL,0,1) AS state
+FROM t_biz_brand b
+LEFT JOIN t_biz_build_enterprise be ON be.id = b.enterprise_id
+LEFT JOIN t_biz_build_class bc ON bc.id = be.class_id
+LEFT JOIN t_biz_introduce_class ic ON ic.class_id = bc.id
+
+WHERE b.citypartner_id = #{partner_id,jdbcType=BIGINT}
+GROUP BY bc.id
+  </select>
+  <select id="selectclassByPartnerClassId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_introduce_class
+    where partner_id = #{partner_id,jdbcType=BIGINT} and class_id =  #{class_id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_introduce_class
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.introduce.model.IntroduceClassEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_introduce_class (partner_id, class_id,class_name, product_num, 
+      sort)
+    values (#{partner_id,jdbcType=BIGINT}, #{class_id,jdbcType=BIGINT}, #{class_name,jdbcType=VARCHAR}, #{product_num,jdbcType=INTEGER}, 
+      #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.introduce.model.IntroduceClassEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_introduce_class
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="partner_id != null">
+        partner_id,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+       <if test="class_name != null">
+        class_name,
+      </if>
+      <if test="product_num != null">
+        product_num,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="partner_id != null">
+        #{partner_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_name != null">
+        #{class_name,jdbcType=VARCHAR},
+      </if>
+      <if test="product_num != null">
+        #{product_num,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.introduce.model.IntroduceClassEntity">
+    update t_biz_introduce_class
+    <set>
+      <if test="partner_id != null">
+        partner_id = #{partner_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_name != null">
+        class_name = #{class_name,jdbcType=VARCHAR},
+      </if>
+      <if test="product_num != null">
+        product_num = #{product_num,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.introduce.model.IntroduceClassEntity">
+    update t_biz_introduce_class
+    set partner_id = #{partner_id,jdbcType=BIGINT},
+      class_id = #{class_id,jdbcType=BIGINT},
+      class_name = #{class_name,jdbcType=VARCHAR},
+      product_num = #{product_num,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  	   <select id="selectClassForAppForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultMap="ClassProductForAppResultMap">
+		SELECT
+		ic.`id`,
+		ic.`class_id`,
+		ic.`class_name`,
+		bc.`appshow_imgurl`,
+		bc.`rgb`
+		FROM
+		`t_biz_introduce_class` ic
+		LEFT JOIN `t_biz_build_class` bc
+		ON ic.`class_id` = bc.`id`
+		LEFT JOIN `t_biz_partner` p
+		ON ic.`partner_id` = p.`id`
+		WHERE ic.`product_num` = 5
+		AND FIND_IN_SET(#{param.region_code,jdbcType=VARCHAR}, p.`region_id`) != 0
+		ORDER BY ic.`sort`
+      </select>
+      
+</mapper>

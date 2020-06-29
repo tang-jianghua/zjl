@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.seller.mapper.SellerConstructInfoEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.seller.model.SellerConstructInfoEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="idcard_front" jdbcType="VARCHAR" property="idcard_front" />
+    <result column="idcard_back" jdbcType="VARCHAR" property="idcard_back" />
+    <result column="qualification_one" jdbcType="VARCHAR" property="qualification_one" />
+    <result column="qualification_two" jdbcType="VARCHAR" property="qualification_two" />
+    <result column="qualification_three" jdbcType="VARCHAR" property="qualification_three" />
+    <result column="idcard_hold" jdbcType="VARCHAR" property="idcard_hold" />
+    <result column="service_region" jdbcType="VARCHAR" property="service_region" />
+    <result column="construct_about" jdbcType="VARCHAR" property="construct_about" />
+    <result column="service_code" jdbcType="VARCHAR" property="service_code" />
+    <result column="unit_price" jdbcType="DOUBLE" property="unit_price" />
+    <result column="unit_name" jdbcType="VARCHAR" property="unit_name" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="address_details" jdbcType="VARCHAR" property="address_details" />
+    <result column="certification_state" jdbcType="INTEGER" property="certification_state" />
+    <result column="team_name" jdbcType="VARCHAR" property="team_name" />
+    <result column="break_off_state" jdbcType="INTEGER" property="break_off_state" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, idcard_front, idcard_back, qualification_one, qualification_two, qualification_three, 
+    idcard_hold, service_region, construct_about, service_code, unit_price, unit_name, region_code, 
+    address_details, certification_state, team_name, break_off_state, info,updatetime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_sell_construct_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectStateBySellerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   SELECT IFNULL(ci.certification_state,-1) AS certification_state,IF(ci.certification_state=0,ci.info,NULL) AS info 
+   FROM t_app_seller_info i
+	LEFT JOIN t_app_sell_construct_info ci ON ci.id = i.construct_info_id
+   WHERE i.seller_id = #{seller_id,jdbcType=BIGINT} AND ci.id = i.construct_info_id
+  </select>
+   <update id="modifyworkingstate" >
+   UPDATE t_app_seller_info i,t_app_sell_construct_info ci SET ci.break_off_state = #{break_off_state,jdbcType=INTEGER} WHERE i.seller_id = #{seller_id,jdbcType=BIGINT} AND ci.id = i.construct_info_id
+  </update>
+   <update id="modifyVerifystate" >
+   UPDATE t_app_seller_info i,t_app_sell_construct_info ci SET 
+   ci.certification_state = #{certification_state,jdbcType=INTEGER} , updatetime = now()
+   <if test="info != null">
+       ,ci.info = #{info,jdbcType=VARCHAR}
+      </if>
+   WHERE i.seller_id = #{seller_id,jdbcType=BIGINT} AND ci.id = i.construct_info_id
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_app_sell_construct_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerConstructInfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_sell_construct_info (idcard_front, idcard_back, qualification_one, 
+      qualification_two, qualification_three, 
+      idcard_hold, service_region, construct_about, 
+      service_code, unit_price, unit_name, region_code, 
+      address_details, certification_state, team_name,break_off_state, info,updatetime
+      )
+    values (#{idcard_front,jdbcType=VARCHAR}, #{idcard_back,jdbcType=VARCHAR}, #{qualification_one,jdbcType=VARCHAR}, 
+      #{qualification_two,jdbcType=VARCHAR}, #{qualification_three,jdbcType=VARCHAR}, 
+      #{idcard_hold,jdbcType=VARCHAR}, #{service_region,jdbcType=VARCHAR}, #{construct_about,jdbcType=VARCHAR}, 
+      #{service_code,jdbcType=VARCHAR}, #{unit_price,jdbcType=DOUBLE},  #{unit_name,jdbcType=VARCHAR},#{region_code,jdbcType=VARCHAR}, 
+      #{address_details,jdbcType=VARCHAR}, #{certification_state,jdbcType=INTEGER}, #{team_name,jdbcType=VARCHAR},
+      #{break_off_state,jdbcType=INTEGER},#{info,jdbcType=VARCHAR},#{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerConstructInfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_sell_construct_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="idcard_front != null">
+        idcard_front,
+      </if>
+      <if test="idcard_back != null">
+        idcard_back,
+      </if>
+      <if test="qualification_one != null">
+        qualification_one,
+      </if>
+      <if test="qualification_two != null">
+        qualification_two,
+      </if>
+      <if test="qualification_three != null">
+        qualification_three,
+      </if>
+      <if test="idcard_hold != null">
+        idcard_hold,
+      </if>
+      <if test="service_region != null">
+        service_region,
+      </if>
+      <if test="construct_about != null">
+        construct_about,
+      </if>
+      <if test="service_code != null">
+        service_code,
+      </if>
+      <if test="unit_price != null">
+        unit_price,
+      </if>
+      <if test="unit_name != null">
+        unit_name,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="address_details != null">
+        address_details,
+      </if>
+      <if test="certification_state != null">
+        certification_state,
+      </if>
+      <if test="team_name != null">
+        team_name,
+      </if>
+      <if test="break_off_state != null">
+        break_off_state,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="idcard_front != null">
+        #{idcard_front,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard_back != null">
+        #{idcard_back,jdbcType=VARCHAR},
+      </if>
+      <if test="qualification_one != null">
+        #{qualification_one,jdbcType=VARCHAR},
+      </if>
+      <if test="qualification_two != null">
+        #{qualification_two,jdbcType=VARCHAR},
+      </if>
+      <if test="qualification_three != null">
+        #{qualification_three,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard_hold != null">
+        #{idcard_hold,jdbcType=VARCHAR},
+      </if>
+      <if test="service_region != null">
+        #{service_region,jdbcType=VARCHAR},
+      </if>
+      <if test="construct_about != null">
+        #{construct_about,jdbcType=VARCHAR},
+      </if>
+      <if test="service_code != null">
+        #{service_code,jdbcType=VARCHAR},
+      </if>
+      <if test="unit_price != null">
+        #{unit_price,jdbcType=DOUBLE},
+      </if>
+      <if test="unit_name != null">
+        #{unit_name,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address_details != null">
+        #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="certification_state != null">
+        #{certification_state,jdbcType=INTEGER},
+      </if>
+      <if test="team_name != null">
+        #{team_name,jdbcType=VARCHAR},
+      </if>
+       <if test="break_off_state != null">
+        #{break_off_state,jdbcType=INTEGER},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerConstructInfoEntity">
+    update t_app_sell_construct_info
+    <set>
+      <if test="idcard_front != null">
+        idcard_front = #{idcard_front,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard_back != null">
+        idcard_back = #{idcard_back,jdbcType=VARCHAR},
+      </if>
+      <if test="qualification_one != null">
+        qualification_one = #{qualification_one,jdbcType=VARCHAR},
+      </if>
+      <if test="qualification_two != null">
+        qualification_two = #{qualification_two,jdbcType=VARCHAR},
+      </if>
+      <if test="qualification_three != null">
+        qualification_three = #{qualification_three,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard_hold != null">
+        idcard_hold = #{idcard_hold,jdbcType=VARCHAR},
+      </if>
+      <if test="service_region != null">
+        service_region = #{service_region,jdbcType=VARCHAR},
+      </if>
+      <if test="construct_about != null">
+        construct_about = #{construct_about,jdbcType=VARCHAR},
+      </if>
+      <if test="service_code != null">
+        service_code = #{service_code,jdbcType=VARCHAR},
+      </if>
+      <if test="unit_price != null">
+        unit_price = #{unit_price,jdbcType=DOUBLE},
+      </if>
+      <if test="unit_name != null">
+        unit_name = #{unit_name,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address_details != null">
+        address_details = #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="certification_state != null">
+        certification_state = #{certification_state,jdbcType=INTEGER},
+      </if>
+      <if test="team_name != null">
+        team_name = #{team_name,jdbcType=VARCHAR},
+      </if>
+      <if test="break_off_state != null">
+        break_off_state = #{break_off_state,jdbcType=INTEGER},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerConstructInfoEntity">
+    update t_app_sell_construct_info
+    set idcard_front = #{idcard_front,jdbcType=VARCHAR},
+      idcard_back = #{idcard_back,jdbcType=VARCHAR},
+      qualification_one = #{qualification_one,jdbcType=VARCHAR},
+      qualification_two = #{qualification_two,jdbcType=VARCHAR},
+      qualification_three = #{qualification_three,jdbcType=VARCHAR},
+      idcard_hold = #{idcard_hold,jdbcType=VARCHAR},
+      service_region = #{service_region,jdbcType=VARCHAR},
+      construct_about = #{construct_about,jdbcType=VARCHAR},
+      service_code = #{service_code,jdbcType=VARCHAR},
+      unit_price = #{unit_price,jdbcType=DOUBLE},
+      unit_name = #{unit_name,jdbcType=VARCHAR},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      address_details = #{address_details,jdbcType=VARCHAR},
+      certification_state = #{certification_state,jdbcType=INTEGER},
+      team_name = #{team_name,jdbcType=VARCHAR},
+      break_off_state = #{break_off_state,jdbcType=INTEGER},
+      info = #{info,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+   <update id="updateBySellerId" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerConstructInfoEntity">
+    update t_app_sell_construct_info
+    set 
+      certification_state = #{certification_state,jdbcType=INTEGER},
+      
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

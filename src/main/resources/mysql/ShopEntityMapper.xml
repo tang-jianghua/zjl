@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.shop.mapper.ShopEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+    <result column="principal" jdbcType="VARCHAR" property="principal" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lbs" jdbcType="VARCHAR" property="lbs" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sys_user_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="commerce_id" jdbcType="BIGINT" property="commerce_id" />
+    <result column="citypartner_id" jdbcType="BIGINT" property="citypartner_id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="bank_info_id" jdbcType="BIGINT" property="bank_info_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modify_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brand_name"/>
+    <result column="enterprise_name" jdbcType="VARCHAR" property="enterprise_name"/>
+    
+    <result column="sort" jdbcType="BIGINT" property="sort" />
+     <association property="userEntity" resultMap="com.mfangsoft.zhuangjialong.integration.user.mapper.UserEntityMapper.BaseResultMap" columnPrefix="user_"></association>
+    <association property="bankEntity" resultMap="com.mfangsoft.zhuangjialong.integration.bank.mapper.BankEntityMapper.BaseResultMap" columnPrefix="bank_"></association>
+    <association property="commerceEntity" resultMap="com.mfangsoft.zhuangjialong.integration.commerce.mapper.CommerceEntityMapper.BaseResultMap" columnPrefix="com_"></association>
+    <association property="partnerEntity" resultMap="com.mfangsoft.zhuangjialong.integration.partner.mapper.PartnerEntityMapper.BaseResultMap" columnPrefix="part_"></association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, shop_name, principal, phone_num, imgurl, address, lbs, sys_user_id, brand_id, 
+    commerce_id, citypartner_id, region_code, bank_info_id, create_time, modify_time, 
+    state, sort
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+      shop.id, shop.shop_name, shop.principal, shop.phone_num, shop.imgurl, shop.address, shop.lbs, shop.sys_user_id, shop.brand_id, 
+    shop.commerce_id, shop.citypartner_id, shop.region_code, shop.bank_info_id, shop.create_time, shop.modify_time, 
+    shop.state, shop.sort,
+	u.id as user_id, u.user as user_user, u.account as user_account,
+	u.create_time as user_create_time, u.state as user_state, u.user_type
+	user_user_type, u.department_id as user_department_id, u.position_id as
+	user_position_id , u.phone_num
+	as user_phone_num
+	from t_biz_shop shop, t_sys_user u
+
+
+	where shop.sys_user_id= u.id  
+	
+    
+     and  shop.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectshopByUserId" resultMap="BaseResultMap"  parameterType="java.lang.Long">
+  
+       select *  from  t_biz_shop where sys_user_id=#{userId}
+  
+  </select>
+    <select id="selectShopByBrandId" resultType="com.mfangsoft.zhuangjialong.app.shop.model.Shop"  parameterType="java.lang.Long">
+  
+SELECT id AS shop_id,shop_name,address,lbs FROM `t_biz_shop` WHERE brand_id =#{brand_id,jdbcType=BIGINT} and state = 1 order by id 
+  
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_shop
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity">
+    insert into t_biz_shop (shop_name, principal, 
+      phone_num, imgurl, address, 
+      lbs, sys_user_id, brand_id, 
+      commerce_id, citypartner_id, region_code, 
+      bank_info_id, create_time, modify_time, 
+      state, sort)
+    values  #{shop_name,jdbcType=VARCHAR}, #{principal,jdbcType=VARCHAR}, 
+      #{phone_num,jdbcType=VARCHAR}, #{imgurl,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{lbs,jdbcType=VARCHAR}, #{sys_user_id,jdbcType=BIGINT}, #{brand_id,jdbcType=BIGINT}, 
+      #{commerce_id,jdbcType=BIGINT}, #{citypartner_id,jdbcType=BIGINT}, #{region_code,jdbcType=VARCHAR}, 
+      #{bank_info_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, #{modify_time,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity">
+
+    insert into t_biz_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+    
+      <if test="shop_name != null">
+        shop_name,
+      </if>
+      <if test="principal != null">
+        principal,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="lbs != null">
+        lbs,
+      </if>
+      <if test="sys_user_id != null">
+        sys_user_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="commerce_id != null">
+        commerce_id,
+      </if>
+      <if test="citypartner_id != null">
+        citypartner_id,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="bank_info_id != null">
+        bank_info_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="modify_time != null">
+        modify_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      
+      <if test="shop_name != null">
+        #{shop_name,jdbcType=VARCHAR},
+      </if>
+      <if test="principal != null">
+        #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lbs != null">
+        #{lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="sys_user_id != null">
+        #{sys_user_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="commerce_id != null">
+        #{commerce_id,jdbcType=BIGINT},
+      </if>
+      <if test="citypartner_id != null">
+        #{citypartner_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="bank_info_id != null">
+        #{bank_info_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modify_time != null">
+        #{modify_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity">
+    update t_biz_shop
+    <set>
+      <if test="shop_name != null">
+        shop_name = #{shop_name,jdbcType=VARCHAR},
+      </if>
+      <if test="principal != null">
+        principal = #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lbs != null">
+        lbs = #{lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="sys_user_id != null">
+        sys_user_id = #{sys_user_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="commerce_id != null">
+        commerce_id = #{commerce_id,jdbcType=BIGINT},
+      </if>
+      <if test="citypartner_id != null">
+        citypartner_id = #{citypartner_id,jdbcType=BIGINT},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="bank_info_id != null">
+        bank_info_id = #{bank_info_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modify_time != null">
+        modify_time = #{modify_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity">
+    update t_biz_shop
+    set shop_name = #{shop_name,jdbcType=VARCHAR},
+      principal = #{principal,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      lbs = #{lbs,jdbcType=VARCHAR},
+      sys_user_id = #{sys_user_id,jdbcType=BIGINT},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      commerce_id = #{commerce_id,jdbcType=BIGINT},
+      citypartner_id = #{citypartner_id,jdbcType=BIGINT},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      bank_info_id = #{bank_info_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      modify_time = #{modify_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+	<select id="selectShopInfoByBrandId" parameterType="com.mfangsoft.zhuangjialong.integration.shop.model.ShopEntity"
+		resultType="com.mfangsoft.zhuangjialong.app.shop.model.Shop">
+		SELECT id shop_id,shop_name,region_code,address,phone_num telephone,lbs
+		FROM t_biz_shop
+		WHERE brand_id = #{brand_id,jdbcType=BIGINT}
+		AND state=1
+	</select>
+	<select id="selectShopInfoByProductId" parameterType="java.lang.Long"
+		resultType="com.mfangsoft.zhuangjialong.app.shop.model.Shop">
+		SELECT s.id as shop_id,s.shop_name,s.region_code,s.address,s.phone_num as telephone,s.lbs
+		FROM t_biz_shop s
+		LEFT JOIN t_biz_brand_product p ON
+		s.brand_id = p.brand_id
+		left join `t_biz_partner` par
+		on p.partner_id = par.id
+		WHERE par.`check_state` = 2 AND  p.id = #{product_id,jdbcType=BIGINT} AND s.state=1
+	</select>
+  
+  <select id="getShopForPage" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+
+	select
+	
+	ent.enterprise_name,
+	par.principal as partner_name,
+	be.name as brand_name,
+	shop.id, shop.shop_name, shop.principal,shop.phone_num,
+  
+  	date_format(shop.create_time, '%Y-%m-%d %T') as create_time, date_format(shop.modify_time, '%Y-%m-%d %T') as modify_time ,
+	u.account, u.state,shop.state as shop_state
+	
+	from t_biz_shop shop left join  t_biz_brand brand on brand.id=shop.brand_id
+	
+	 left join  t_biz_partner par on par.id = brand.citypartner_id
+	 
+	 left join  t_biz_enterprise ent on ent.id = par.enterprise_id
+	 
+	 left join  t_sys_user u on u.id= shop.sys_user_id
+	 
+	 left join  t_biz_build_enterprise be on be.id=brand.enterprise_id 
+	
+	where 1=1
+	<if test="param.user_name!=null and param.user_name!=''">
+
+		and shop.principal like CONCAT('%',#{param.user_name},'%')
+
+	</if>
+
+	<if test="param.account!=null and param.account!=''">
+	
+		and u.account like CONCAT('%',#{param.account},'%')
+
+	</if>
+
+	<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+		and ent.enterprise_name like CONCAT('%',#{param.enterprise_name},'%')
+	</if>
+
+	<if test="param.phone_num!=null and param.phone_num!=''">
+
+		and shop.phone_num  like CONCAT('%',#{param.phone_num},'%') 
+	</if>
+	
+	<if test="param.partner_principal!=null and param.partner_principal!=''">
+
+		and part.principal  like CONCAT('%',#{param.partner_principal},'%') 
+	</if>
+	
+	<if test="param.brand_name!=null and param.brand_name!=''">
+
+		and be.name  like CONCAT('%',#{param.brand_name},'%') 
+	</if>
+	
+	<if test="param.currentUser!=null and param.currentUser!=''">
+
+		and shop.brand_id =#{param.currentUser} 
+	</if>
+	
+	<if test="param.shopb!=null and param.shopb!=''">
+	
+	   and shop.brand_id in(${param.shopb})
+	
+	
+	</if>
+	
+	<if test="param.shop_name!=null and param.shop_name!=''">
+	
+	   and shop.shop_name like CONCAT('%',#{param.shop_name},'%') 
+	
+	</if>
+	
+	<if test="param.shop_state!=null and param.shop_state!=''">
+	
+	   and shop.state =#{param.shop_state}
+	
+	</if>
+	<if test="param.sort!=null">
+ 	order by
+ 	<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	
+ 	  shop.${sort.field}  ${sort.dir}
+ 	
+ 	</foreach>
+ 	</if>
+  </select>
+  <select id="getShopName" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List"/>from t_biz_shop
+  
+  </select>
+  
+    <select id="getShopNameByBrand" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List"/>from t_biz_shop where brand_id=#{brand_id}
+  
+  </select>
+  
+  <select id="getShopEntityById" resultType="java.util.Map" parameterType="java.lang.Long">
+  
+   select *  from v_personal_info where shop_id=#{shopId}
+  
+  </select>
+  
+  <select id="selectAllShop" resultType="java.lang.Long">
+  
+   select id from t_biz_shop where id not in 
+   	<foreach collection="shop_id_list" index="index" item="item" separator="," open="(" close=")">
+ 	  ${item}
+ 	</foreach>
+  
+  </select>
+  
+</mapper>

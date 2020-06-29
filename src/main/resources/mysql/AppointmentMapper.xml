@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.appointment.mapper.AppointmentMapper">
+   <resultMap id="ListResultMap" type="com.mfangsoft.zhuangjialong.app.appointment.model.Appointment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="name" jdbcType="VARCHAR" property="appointment_name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="address_details" jdbcType="VARCHAR" property="address_details" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="door_model_img" jdbcType="VARCHAR" property="door_model_img" />
+       <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+        <result column="needs" jdbcType="VARCHAR" property="needs" />
+    <result column="min_price" jdbcType="DOUBLE" property="min_price" />
+    <result column="max_price" jdbcType="DOUBLE" property="max_price" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name" />
+    <result column="style" jdbcType="VARCHAR" property="style" />
+    <result column="space" jdbcType="VARCHAR" property="space" />
+    <result column="server" jdbcType="VARCHAR" property="server" />
+    <result column="service_phone" jdbcType="VARCHAR" property="service_phone" />
+    <result column="classify" jdbcType="VARCHAR" property="classify" />
+     <result column="deal_info" jdbcType="VARCHAR" property="deal_info" />
+        <result column="needs" jdbcType="VARCHAR" property="needs" />
+  </resultMap>
+
+   <select id="selectByCustomerId" parameterType="java.lang.Long" resultMap="ListResultMap">
+    SELECT ai.id, ai.state , ap.create_time, ai.start_time, ai.end_time, bs.shop_name
+    FROM t_biz_appointment ap, t_biz_appointment_info ai,t_biz_shop bs
+    WHERE ap.customer_id = #{customer_id,jdbcType=BIGINT} AND ap.id= ai.appointment_id AND bs.id = ai.shop_id 
+    order by ai.state asc, ap.create_time desc;
+  </select>
+  
+  <select id="selectDatilByAppointmentInfoId" parameterType="java.lang.Long" resultMap="ListResultMap">
+ SELECT ap.customer_id,
+ s.name AS SERVER,
+ s.phone AS service_phone,
+ c.name AS class_name, e.name AS brand_name,
+ ai.state,ai.needs ,ap.door_model_img, bs.shop_name,ase.value AS SPACE, 
+ ai.min_price, ai.max_price, 
+   asy.value AS style,
+ ap.receiver_name AS NAME, ap.phone_num AS phone, 
+ap.address_details AS address,
+IF(LOCATE('%',ai.deal_info) > 0 ,REPLACE(REPLACE(REPLACE(REPLACE(ai.deal_info,'%2s',bs.shop_name),'%3s',s.name),'%3d',s.phone),'%6s',bs.shop_name),ai.deal_info) AS deal_info
+
+FROM t_biz_appointment ap
+LEFT JOIN t_app_customer ac ON ac.id = ap.customer_id,
+ t_biz_appointment_info ai 
+ LEFT JOIN `t_app_seller` s ON s.id = ai.server_id
+LEFT JOIN t_biz_shop bs ON bs.id = ai.shop_id
+LEFT JOIN t_biz_brand b ON b.id = ai.brand_id
+LEFT JOIN t_biz_build_enterprise e ON e.id = b.enterprise_id
+LEFT JOIN t_biz_build_class c ON c.id = ai.class_id
+ LEFT JOIN  t_biz_class_attr_value ase ON ase.id = ai.space_id 
+  LEFT JOIN t_biz_class_attr_value asy ON asy.id = ai.style_id
+
+WHERE  ai.id = #{id,jdbcType=BIGINT} AND ap.id= ai.appointment_id ;
+  </select>
+  
+    <select id="selectSpacesByClassId" parameterType="java.lang.Long"
+        resultType="com.mfangsoft.zhuangjialong.app.product.model.Salesinfo">
+         SELECT id, SPACE name
+            FROM t_biz_appointment_space
+            WHERE class_id = #{class_id,jdbcType=BIGINT}
+    </select>
+  
+    <select id="selectStylesByClassId" parameterType="java.lang.Long"
+        resultType="com.mfangsoft.zhuangjialong.app.product.model.Salesinfo">
+        SELECT id, style name
+        FROM t_biz_appointment_style
+        WHERE class_id =  #{class_id,jdbcType=BIGINT}
+    </select>
+  <insert id="insertAppointment" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.Appointment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_appointment (door_model_img, customer_id, create_time, 
+      region_code,address_details,receiver_name,phone_num)
+    values (#{door_model_img,jdbcType=VARCHAR}, #{customer_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{region_code,jdbcType=VARCHAR},#{address_details,jdbcType=VARCHAR},#{receiver_name,jdbcType=VARCHAR},#{phone_num,jdbcType=VARCHAR})
+  </insert>
+   <select id="selectIdByAppointment" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.Appointment" resultType="java.lang.Long">
+    select id
+    from t_biz_appointment
+    where 1 = 1
+    <if test="door_model_img != null">
+        and door_model_img = #{door_model_img,jdbcType=VARCHAR}
+    </if>
+    <if test="customer_id != null">
+        and customer_id = #{customer_id,jdbcType=BIGINT}
+    </if>
+    <if test="create_time != null">
+        and create_time = #{create_time,jdbcType=TIMESTAMP}
+    </if>
+    <if test="address_id != null">
+        and address_id = #{address_id,jdbcType=BIGINT}
+    </if>
+  </select>
+
+  <select id="getAppointmentListForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  
+
+   SELECT ap.id, t.door_model_img, t.receiver_name AS name, t.phone_num  AS phone, DATE_FORMAT(ap.start_time, '%Y-%m-%d %T') AS start_time,DATE_FORMAT(ap.end_time, '%Y-%m-%d %T') AS end_time, ap.state,
+               t.region_code, ap.server_id, ap.brand_id, ap.shop_id, s.name AS server_name, DATE_FORMAT(t.create_time,'%Y-%m-%d %T') AS create_time,shop.shop_name,be.name AS brand_name
+        FROM   t_biz_appointment t
+               LEFT JOIN t_biz_appointment_info ap ON t.id = ap.appointment_id
+               LEFT JOIN t_app_customer c ON c.id = t.customer_id
+               
+               LEFT JOIN `t_app_seller` s ON s.id = ap.server_id
+               LEFT JOIN t_biz_shop shop ON shop.id=ap.shop_id
+               LEFT JOIN  t_biz_brand b  ON shop.brand_id = b.id
+               LEFT JOIN  t_biz_partner p  ON b.citypartner_id = p.id
+               LEFT JOIN  t_biz_enterprise ent  ON p.enterprise_id = ent.id
+               LEFT JOIN  t_biz_build_enterprise be  ON b.enterprise_id = be.id
+               
+        WHERE 1=1
+  <if test="param.customer_name!=null and param.customer_name!=''">
+  
+    and  t.receiver_name like CONCAT('%', #{param.customer_name},'%') 
+  </if>
+  <if test="param.shop_name!=null and param.shop_name!=''">
+  
+    and  shop.shop_name like CONCAT('%', #{param.shop_name},'%') 
+  </if>
+  <if test="param.brand_name!=null and param.brand_name!=''">
+  
+    and  be.name like CONCAT('%', #{param.brand_name},'%') 
+  </if>
+  <if test="param.start_time!=null and param.start_time!=''">
+  
+    and  date_format(ap.start_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>    
+  </if>
+  
+  <if test="param.end_time!=null and param.end_time!=''">
+  
+    and  date_format(ap.start_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>    
+  </if>
+  <if test="param.province!=null and param.province!=''">
+  
+   and CONCAT(left(t.region_code,2),'0000')= #{param.province}
+  
+  </if>
+  
+  <if test="param.city!=null and param.city!=''">
+  
+    and CONCAT(left(t.region_code,4),'00')= #{param.city}
+  
+  </if>
+  
+  <if test="param.county!=null and param.county!=''">
+  
+   and t.region_code= #{param.county}
+  
+  </if>
+  <if test="param.brand_id!=null and param.brand_id!=''">
+  
+   and ap.brand_id =#{param.brand_id}
+  
+  </if>
+  <if test="param.shop_id!=null and param.shop_id!=''">
+  
+   and ap.shop_id  =#{param.shop_id}
+  
+  </if>
+  
+   <if test="param.ent_id!=null and param.ent_id!=''">
+  
+   and ent.id  =#{param.ent_id}
+  
+  </if>
+   <if test="param.partner_id!=null and param.partner_id!=''">
+  
+   and p.id  =#{param.partner_id}
+  
+  </if>
+  
+  <if test="param.server_name!=null and param.server_name!=''">
+  
+  
+   and s.name like  CONCAT('%', #{param.server_name},'%')
+  
+  </if>
+  
+   <if test="param.server_id!=null and param.server_id!=''">
+  
+  
+   and ap.server_id like  CONCAT('%', #{param.server_id},'%')
+  
+  </if>
+  
+  <if test="param.state!=null and param.state!=''">
+  
+  
+   and ap.state= #{param.state}
+  
+  </if>
+  
+  order by t.create_time desc
+  </select>
+  
+  <select id="selectUncheckedAppointmentNo" parameterType="java.lang.Long"
+                    resultType="java.lang.Integer">
+SELECT 
+COUNT(1)
+FROM
+  `t_biz_appointment` a 
+  LEFT JOIN `t_biz_appointment_info` ai 
+    ON a.`id` = ai.`appointment_id`  
+WHERE a.`seen_state` = 0
+AND ai.`server_id` = #{server_id,jdbcType=BIGINT}  
+  </select>
+  <select id="selectTotalAppointmentNo" parameterType="java.lang.Long"
+                    resultType="java.lang.Integer">
+SELECT 
+COUNT(1)
+FROM
+  `t_biz_appointment` a 
+  LEFT JOIN `t_biz_appointment_info` ai 
+    ON a.`id` = ai.`appointment_id`  
+WHERE  ai.`server_id` = #{server_id,jdbcType=BIGINT}  
+  </select>
+  <select id="selectAppointmentsByServerIdAndStateForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+                    resultType="com.mfangsoft.zhuangjialong.app.appointment.model.Appointment">
+  select 
+  a.id,
+  ai.`id` as appointment_info_id,
+  a.`create_time`,
+  ai.`start_time`,
+  ai.`end_time`,
+  a.`receiver_name` as customer_name,
+  a.`phone_num` as phone,
+  ai.`state`,
+  a.seen_state
+from
+  `t_biz_appointment` a 
+  left join `t_biz_appointment_info` ai 
+    on a.`id` = ai.`appointment_id` 
+  left join `t_app_customer` c 
+    on a.`customer_id` = c.`id` 
+where ai.`server_id` = #{param.server_id,jdbcType=BIGINT} 
+<if test="param.state != null and param.state != ''">
+  and ai.`state` = #{param.state,jdbcType=INTEGER}
+  </if>
+order by a.`create_time` desc 
+  </select>
+  
+    <select id="selectAppointmentdetailForShopGuider" parameterType="java.lang.Long"
+                    resultType="com.mfangsoft.zhuangjialong.app.appointment.model.Appointment">
+  SELECT 
+  ai.`id` AS appointment_info_id,
+  a.door_model_img,
+  ai.`state`,
+  shop.`shop_name`,
+  ca.`value` AS `space`,
+  cav.`value` AS `style`,
+  ai.`max_price`,
+  ai.`min_price`,
+  ai.`needs`,
+   a.`receiver_name`,
+   a.`phone_num` AS phone,
+   a.`address_details` AS address,
+  IF(LOCATE('%',ai.deal_info) > 0 ,REPLACE(REPLACE(REPLACE(REPLACE(ai.deal_info,'%2s',shop.shop_name),'%3s',s.name),'%3d',s.phone),'%6s',shop.shop_name),ai.deal_info) AS deal_info
+
+FROM
+  `t_biz_appointment` a 
+  LEFT JOIN `t_biz_appointment_info` ai 
+    ON a.`id` = ai.`appointment_id` 
+    LEFT JOIN `t_biz_class_attr_value` cav
+    ON ai.`style_id` = cav.`id`
+    LEFT JOIN `t_biz_class_attr_value` ca
+    ON ai.`space_id` = ca.`id`
+    LEFT JOIN `t_biz_shop` shop
+    ON ai.`shop_id` = shop.`id`
+    LEFT JOIN `t_app_customer` c
+    ON a.`customer_id` = c.`id`
+	LEFT JOIN t_app_seller s
+	ON ai.server_id = s.id
+    WHERE ai.`id` = #{appointment_info_id}
+  </select>
+  
+  <update id="updateSeenStateByIds" >
+  UPDATE 
+  `t_biz_appointment` 
+SET
+  `seen_state` = 1 
+WHERE seen_state = 0
+AND  `id` in
+<foreach collection="list" item="item" open="(" close=")" separator=",">
+ #{item} 
+  </foreach>
+  </update>
+</mapper>

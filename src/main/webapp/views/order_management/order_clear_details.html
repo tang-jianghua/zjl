@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<style>
+.info {
+    color: black;
+    line-height: 32px;
+    font-size: 14px;
+}
+.panner{
+	padding: 20px 10px;
+    background-color: #e6e6e6;
+    border-radius: 5px;
+}
+.productImage{
+	width: 120px;
+	height: 120px;
+}
+.leftImage{
+    position: absolute;
+}
+.rightInfo{
+    padding-left: 50%;
+    text-align: left;
+    min-height: 120px;
+} 
+</style>
+<div ng-controller="orderClearDetailsCtrl">
+    <!-- 标题 -->
+    <section class="well">
+	    <div class="fileAbout backstage">结算详情</div>
+	    
+	   	<div class="idMessage">
+		   	 <div class="form-horizontal form-widgets col-sm-12 gray">
+		   	 	<div class="form-group">
+	                <label class="control-label col-sm-2">结算进程：</label>
+	                <div class="col-sm-8">
+	                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="clearProcess" style="width:100%;">
+						  <circle cx="100" cy="75" r="40" stroke="black" stroke-width="2" fill="#00cf61"/>
+						  <circle cx="300" cy="75" r="40" stroke="black" stroke-width="2" fill="#00cf61"/>
+						  <circle cx="500" cy="75" r="40" stroke="black" stroke-width="2" fill="#00cf61"/>
+						  <circle cx="700" cy="75" r="40" stroke="black" stroke-width="2" fill="#00cf61"/>
+						  <circle cx="900" cy="75" r="40" stroke="black" stroke-width="2" fill="gray"/>
+						  <polygon points="150,65 220,65 220,50 250,75 220,100 220,85 150,85" style="fill:#00cf61;stroke:purple;stroke-width:1"/>
+						  <polygon points="350,65 420,65 420,50 450,75 420,100 420,85 350,85" style="fill:#00cf61;stroke:purple;stroke-width:1"/>
+						  <polygon points="550,65 620,65 620,50 650,75 620,100 620,85 550,85" style="fill:#00cf61;stroke:purple;stroke-width:1"/>
+						  <polygon points="750,65 820,65 820,50 850,75 820,100 820,85 750,85" style="fill:#00cf61;stroke:purple;stroke-width:1"/>
+						  <text x="65" y="135" fill="black">订单结算单</text>
+						  <text x="265" y="135" fill="black">商家确认中</text>
+						  <text x="465" y="135" fill="black">平台确认中</text>
+						  <text x="665" y="135" fill="black">财务付款中</text>
+						  <text x="875" y="135" fill="black">完成结算</text>
+						</svg>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">结算编号：</label>
+	                <div class="col-sm-3 info">{{clearDetails.shell_code}}</div>
+	                <label class="control-label col-sm-2">结算日期：</label>
+	                <div class="col-sm-3 info">{{clearDetails.create_time}}</div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">商家信息</label>
+	                <div class="col-sm-8 panner">
+	                	<div class="form-group">
+			                <label class="control-label col-sm-2">对应企业：</label>
+			                <div class="col-sm-4 info">{{clearDetails.enterprise_name}}</div>
+			                <label class="control-label col-sm-2">对应合伙人：</label>
+			                <div class="col-sm-4 info">{{clearDetails.principal}}</div>
+			            </div>
+			            <div class="form-group">
+			                <label class="control-label col-sm-2">对应品牌：</label>
+			                <div class="col-sm-4 info">{{clearDetails.brand_name}}</div>
+			                <label class="control-label col-sm-2">对应店铺：</label>
+			                <div class="col-sm-4 info">{{clearDetails.shop_name}}</div>
+			            </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label class="control-label col-sm-2">订单信息</label>
+	                <div class="col-sm-8 panner">
+	                	<div class="form-group">
+			                <label class="control-label col-sm-2">总金额：</label>
+			                <div class="col-sm-4 info">{{clearDetails.money_pre}}</div>
+			                <label class="control-label col-sm-2">品台佣金：</label>
+			                <div class="col-sm-4 info">{{clearDetails.money_platform}}</div>
+			            </div>
+			            <div class="form-group">
+			                <label class="control-label col-sm-2">导购提点：</label>
+			                <div class="col-sm-4 info">{{clearDetails.seller_money}}</div>
+			                <label class="control-label col-sm-2">实际结算：</label>
+			                <div class="col-sm-4 info">{{clearDetails.money_trade}}</div>
+			            </div>
+	                </div>
+	            </div>
+		   	 </div>
+	    </div>
+	    
+	    <div class="interval">
+	    	 <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+	    </div>
+     </section>
+     
+     <div kendo-window="booking_detail" k-title="'订单详情'" k-width="800" k-min-height="400"k-visible="false" k-modal="true"class="allTable">
+   		  <table class="col-sm-11 table">
+ 		  	  <tr>
+                   <td colspan="6" style="text-align:left">【订单信息】</td>
+              </tr>
+              <tr>
+	               <td>订单编号:</td>
+	               <td colspan="2">{{orderDetails.code}}</td>
+	               <td>交易时间:</td>
+	               <td colspan="2">{{orderDetails.create_time}}</td> 
+              </tr>
+              <tr>
+                   <td  colspan="6" style="text-align:left">【产品信息】</td>
+              </tr>
+              <tr>
+	               <td>标题：</td>
+	               <td colspan="5">{{orderDetails.product_name}}</td>
+              </tr>
+              <tr>
+	               <td class="col-sm-4" colspan="2" rowspan="3">
+	               		<div style="background:url('{{orderDetails.imgurl}}') no-repeat;width:150px;height:150px;background-size:contain;background-position:center;margin:auto;"/></div>
+	               </td>
+	               <td style="text-align:right;">型号：</td>
+	               <td style="text-align:left;">{{orderDetails.sales_model}}</td>
+	               <td style="text-align:right;">颜色分类：</td>
+	               <td style="text-align:left;">{{orderDetails.color}}</td>
+              </tr>
+              <tr>
+              	   <td>单价：</td>
+              	   <td>{{orderDetails.price}}</td>
+	               <td>购买数量：</td>
+	               <td>{{orderDetails.product_num}}</td>
+              </tr>
+              <tr>
+              	   <td>金额：</td>
+	               <td>{{orderDetails.price*orderDetails.product_num}}</td>
+	               <td>交易状态：</td>
+	               <td>{{orderDetails.state}}</td>
+              </tr>
+              <tr>
+                   <td  colspan="6" style="text-align:left">【买家信息】</td>
+              </tr>
+              <tr>
+                  <td class="col-sm-2">昵称:</td>
+                  <td class="col-sm-2">{{orderDetails.customerName}}</td>
+                  <td class="col-sm-2">姓名:</td>
+                  <td class="col-sm-2">{{orderDetails.receiver_name}}</td>
+                  <td class="col-sm-2">联系方式:</td>
+                  <td class="col-sm-2">{{orderDetails.customer_phone}}</td>
+              </tr>
+              <tr>
+                  
+                  <td>所属合伙人:</td>
+                  <td>{{orderDetails.principal}}</td>
+                  <td>所属品牌:</td>
+                  <td>{{orderDetails.brand_name}}</td>
+                  <td>推广导购:</td>
+                  <td>{{orderDetails.seller_name}}</td>
+              </tr>
+               <tr>
+               	  <td>所属企业:</td>
+                  <td colspan="2">{{orderDetails.enterpise_name}}</td>
+                  <td>所属店面:</td>
+                  <td colspan="2">{{orderDetails.shop_name}}</td>
+              </tr>
+              <tr>
+                  <td>订单状态:</td>
+                  <td colspan="5"><span ng-bind-html="orderDetails.state_info"></span></td>
+              </tr>
+              <tr>
+              	  <td>送货地址:</td>
+              	  <td colspan="5">{{orderDetails.address}}</td>
+              </tr>
+           </table>
+     </div>
+     
+     
+    
+</div>
+    
+

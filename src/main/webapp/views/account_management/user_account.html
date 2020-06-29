@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<style>
+.userImg {
+	width: 200px;
+	height: 200px;
+	background-color: orange;
+	border-radius: 100px;
+	margin: auto;
+}
+
+.showTitle {
+	padding: 10px;
+	font-size: 20px;
+	text-align: right;
+	color: gray;
+}
+
+.showText {
+	padding: 10px;
+	font-size:17px;
+	color: black;
+}
+.showtitle{
+	color:black;
+	font-weight:600;
+	font-size:24px;
+}
+</style>
+<div ng-controller="userAccountCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">用户账户</div>
+
+		<div style="min-height: 250px; margin-top: 10px">
+			<div class="col-sm-5">
+				<div class="userImg rght" id="logo_img"></div>
+			</div>
+			<div class="col-sm-7" style="padding: 35px;">
+				<div class="row">
+					<div class="col-sm-12 showTitle showtitle" style="text-align:left">{{user.enterprise_name}}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-2 showTitle">当前角色：</div>
+					<div class="col-sm-4 showText text-left">{{user.role_name}}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-2 showTitle">账号：</div>
+					<div class="col-sm-4 showText text-left">{{user.account}}</div>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="row col-sm-12">
+				<div class="showText col-sm-4 text-right">修改密码</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-4">旧密码：</label>
+					<div class="col-sm-4">
+						<input ng-model="form.old_pw" class="k-textbox" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-4">新密码：</label>
+					<div class="col-sm-4">
+						<input type="password" ng-model="form.new_pw" class="k-textbox" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-4">确认新密码：</label>
+					<div class="col-sm-4">
+						<input type="password" ng-model="form.new_pw2" class="k-textbox" />
+					</div>
+				</div>
+			</div>
+			<div style="text-align: center;">
+				<button class="k-button k-state-default" ng-click="formSubmit()">确定</button>
+				<button class="k-button k-state-default" ng-click="formReset()">取消</button>
+			</div>
+		</div>
+	</section>
+</div>
+
+

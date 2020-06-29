@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.entnewproduct.mapper.EntProdAttrValueEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProdAttrValueEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="attr_id" jdbcType="BIGINT" property="attr_id" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attr_value" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="isrelation" jdbcType="INTEGER" property="isrelation" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, attr_id, attr_value, product_id, isrelation, class_id
+  </sql>
+ 
+  
+    <select id="selectProdattrValueByProductId" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProdAttrValueEntity" >
+  SELECT  pat.id, pat.attr_id, GROUP_CONCAT(pat.attr_value) as attr_value, pat.product_id, pat.isrelation, cav.value as value_name  FROM t_biz_ent_prod_attrvalue pat,t_biz_class_attr_value cav WHERE   pat.attr_value = cav.id and product_id = #{product_id,jdbcType=BIGINT} group by pat.attr_id
+  
+  </select>
+   <select id="selectProdattrValueByProductIdAndAttrId" parameterType="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProdAttrValueEntity" resultType="com.mfangsoft.zhuangjialong.integration.entnewproduct.model.EntProdAttrValueEntity" >
+   SELECT  id, attr_id, attr_value, product_id, isrelation  FROM `t_biz_ent_prod_attrvalue` WHERE product_id = #{product_id,jdbcType=BIGINT} and attr_id=#{attr_id}
+  
+  </select>
+  
+  <delete id="deleteProdattValueByProductId" parameterType="java.lang.Long">
+  
+    delete from t_biz_ent_prod_attrvalue where product_id=#{product_id,jdbcType=BIGINT} and attr_id=1
+  
+  </delete>
+</mapper>

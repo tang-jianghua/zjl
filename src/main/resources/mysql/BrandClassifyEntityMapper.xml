@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.brandclassify.mapper.BrandClassifyEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.brandclassify.model.BrandClassifyEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="creater" jdbcType="BIGINT" property="creater" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <collection property="brandSeries" resultMap="com.mfangsoft.zhuangjialong.integration.series.mapper.BrandSeriesEntityMapper.BaseResultMap" columnPrefix="a_" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, brand_id, name, creater, sort
+  </sql>
+   <select id="selectBrandClassifyAndSeries" parameterType="java.lang.Long" resultMap="BaseResultMap">
+     SELECT c.id,c.name,s.id a_id,s.name a_name
+	FROM t_biz_brand_classify c
+	LEFT JOIN t_biz_brand_series s ON c.id =s.classify_id
+	WHERE brand_id = #{brand_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_classify
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_brand_classify
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert"  parameterType="com.mfangsoft.zhuangjialong.integration.brandclassify.model.BrandClassifyEntity">
+    
+     <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+        SELECT  NEXTVAL('t_biz_brand_classify') 
+    </selectKey>  
+    insert into t_biz_brand_classify (id,brand_id, name, 
+      creater, sort)
+    values (#{id},#{brand_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=BIGINT}, #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.brandclassify.model.BrandClassifyEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT NEXTVAL('t_biz_brand_classify')
+    </selectKey>
+    insert into t_biz_brand_classify
+    
+     
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id!=null">
+        id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id!=null">
+    #{id,jdbcType=BIGINT},
+    </if>
+    
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.brandclassify.model.BrandClassifyEntity">
+    update t_biz_brand_classify
+    <set>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.brandclassify.model.BrandClassifyEntity">
+    update t_biz_brand_classify
+    set brand_id = #{brand_id,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=BIGINT},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryBrandClassifiesForPage"  resultMap="BaseResultMap" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  
+   select <include refid="Base_Column_List" /> from t_biz_brand_classify where 1=1
+   
+  
+  </select>
+  
+  
+  
+  <select id="queryBrandClassifies" resultMap="BaseResultMap" parameterType="java.util.Map">
+  
+   select <include refid="Base_Column_List" /> from t_biz_brand_classify where 1=1
+    <if test="brand_id!=null">
+     and brand_id in (${brand_id})
+    </if>
+  </select>
+ 
+</mapper>

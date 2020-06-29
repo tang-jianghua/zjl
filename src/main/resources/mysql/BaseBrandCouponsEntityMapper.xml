@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newcoupons.mapper.BaseBrandCouponsEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="scope_type" jdbcType="INTEGER" property="scope_type" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="coupons_price" jdbcType="DOUBLE" property="coupons_price" />
+    <result column="surplus_count" jdbcType="INTEGER" property="surplus_count" />
+    <result column="total_count" jdbcType="INTEGER" property="total_count" />
+    <result column="step_value" jdbcType="DOUBLE" property="step_value" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="value" jdbcType="DOUBLE" property="value" />
+    <result column="user_id" jdbcType="BIGINT" property="user_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="limit_count" jdbcType="INTEGER" property="limit_count" />
+    <result column="random_count" jdbcType="INTEGER" property="random_count" />
+    <result column="details" jdbcType="VARCHAR" property="details" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, scope_type, imgurl, coupons_price, surplus_count, total_count, step_value, 
+    type, start_time, end_time, state, value, user_id, create_time, limit_count, random_count,details
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_coupons
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_brand_coupons
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    insert into t_biz_brand_coupons (id, name, scope_type, 
+      imgurl, coupons_price, surplus_count, 
+      total_count, step_value, type, 
+      start_time, end_time, state, 
+      value, user_id, create_time, 
+      limit_count)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{scope_type,jdbcType=INTEGER}, 
+      #{imgurl,jdbcType=VARCHAR}, #{coupons_price,jdbcType=DOUBLE}, #{surplus_count,jdbcType=INTEGER}, 
+      #{total_count,jdbcType=INTEGER}, #{step_value,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
+      #{start_time,jdbcType=TIMESTAMP}, #{end_time,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
+      #{value,jdbcType=DOUBLE}, #{user_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{limit_count,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    insert into t_biz_brand_coupons
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="scope_type != null">
+        scope_type,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="coupons_price != null">
+        coupons_price,
+      </if>
+      <if test="surplus_count != null">
+        surplus_count,
+      </if>
+      <if test="total_count != null">
+        total_count,
+      </if>
+      <if test="step_value != null">
+        step_value,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="start_time != null">
+        start_time,
+      </if>
+      <if test="end_time != null">
+        end_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="value != null">
+        value,
+      </if>
+      <if test="user_id != null">
+        user_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="limit_count != null">
+        limit_count,
+      </if>
+      <if test="random_count != null">
+        random_count,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="scope_type != null">
+        #{scope_type,jdbcType=INTEGER},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="coupons_price != null">
+        #{coupons_price,jdbcType=DOUBLE},
+      </if>
+      <if test="surplus_count != null">
+        #{surplus_count,jdbcType=INTEGER},
+      </if>
+      <if test="total_count != null">
+        #{total_count,jdbcType=INTEGER},
+      </if>
+      <if test="step_value != null">
+        #{step_value,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="start_time != null">
+        #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=DOUBLE},
+      </if>
+      <if test="user_id != null">
+        #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="limit_count != null">
+        #{limit_count,jdbcType=INTEGER},
+      </if>
+      <if test="random_count != null">
+        #{random_count,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    update t_biz_brand_coupons
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="scope_type != null">
+        scope_type = #{scope_type,jdbcType=INTEGER},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="coupons_price != null">
+        coupons_price = #{coupons_price,jdbcType=DOUBLE},
+      </if>
+      <if test="surplus_count != null">
+        surplus_count = #{surplus_count,jdbcType=INTEGER},
+      </if>
+      <if test="total_count != null">
+        total_count = #{total_count,jdbcType=INTEGER},
+      </if>
+      <if test="step_value != null">
+        step_value = #{step_value,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="start_time != null">
+        start_time = #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        end_time = #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        value = #{value,jdbcType=DOUBLE},
+      </if>
+      <if test="user_id != null">
+        user_id = #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="limit_count != null">
+        limit_count = #{limit_count,jdbcType=INTEGER},
+      </if>
+      <if test="random_count != null">
+        random_count = #{random_count,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseBrandCouponsEntity">
+    update t_biz_brand_coupons
+    set name = #{name,jdbcType=VARCHAR},
+      scope_type = #{scope_type,jdbcType=INTEGER},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      coupons_price = #{coupons_price,jdbcType=DOUBLE},
+      surplus_count = #{surplus_count,jdbcType=INTEGER},
+      total_count = #{total_count,jdbcType=INTEGER},
+      step_value = #{step_value,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      value = #{value,jdbcType=DOUBLE},
+      user_id = #{user_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      limit_count = #{limit_count,jdbcType=INTEGER},
+      random_count = #{random_count,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<style>
+.thisTitle thead tr th, .thisTitle thead tr th a {
+	text-align: center;
+	color: #fff;
+}
+</style>
+<div ng-controller="exchangeManage">
+	<section class="well ">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">兑换管理</div>
+		
+		<div class="idMessage">
+		
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+			
+				<div class="form-group" style="border-bottom: 1px solid #caa359;">
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="control-label col-sm-1">商品名称</label>
+							<div class="col-sm-3">
+								<input id="product_title" placeholder="商品名称" style="width:100%;"/>
+							</div>
+							<label class="control-label col-sm-1">兑换类型</label>
+							<div class="col-sm-3">
+								<input id="convert_type" placeholder="兑换类型"  style="width:100%;"/>
+							</div>
+							<label class="control-label col-sm-1">兑换时间</label>
+							<div class="col-sm-3">
+								<input id="convert_time" placeholder="兑换时间" style="width:100%;"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-1">用户昵称</label>
+							<div class="col-sm-3">
+								<input id="userName" placeholder="用户昵称" style="width:100%;"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="buttons-wrap clearBoth">
+						<button class="k-button k-state-default blueBackground"
+							ng-click="search()">搜索</button>
+					</div>
+				</div>
+				
+			</div>
+			<div class="form-group" style="border-bottom: 1px solid #caa359;height:70px;">
+				<label class="control-label col-sm-1">兑换码</label>
+				<div class="col-sm-3">
+					<input id="exchangeCode" placeholder="兑换码" style="width:100%;"/>
+				</div>
+				<button class="k-button" ng-click="exchangeClick()">兑换</button>
+			</div>
+			<div kendo-grid="grid" k-options="mainGridOptions" class="thisTitle"></div>
+
+		</div>
+	</section>
+</div>

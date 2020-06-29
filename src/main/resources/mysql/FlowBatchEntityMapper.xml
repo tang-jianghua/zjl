@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.sendflow.mapper.FlowBatchEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBatchEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="batch_no" jdbcType="VARCHAR" property="batch_no" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="ctcc" jdbcType="VARCHAR" property="ctcc" />
+    <result column="cmcc" jdbcType="VARCHAR" property="cmcc" />
+    <result column="cucc" jdbcType="VARCHAR" property="cucc" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, batch_no, mobile, ctcc, cmcc, cucc, code, msg, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_flow_batch
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByBatch" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_flow_batch
+    where batch_no = #{batch_no,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_flow_batch
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBatchEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_flow_batch (batch_no, mobile, ctcc, 
+      cmcc, cucc, code, msg, 
+      create_time)
+    values (#{batch_no,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{ctcc,jdbcType=VARCHAR}, 
+      #{cmcc,jdbcType=VARCHAR}, #{cucc,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, 
+      #{create_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBatchEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_flow_batch
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="batch_no != null">
+        batch_no,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="ctcc != null">
+        ctcc,
+      </if>
+      <if test="cmcc != null">
+        cmcc,
+      </if>
+      <if test="cucc != null">
+        cucc,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="msg != null">
+        msg,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="batch_no != null">
+        #{batch_no,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="ctcc != null">
+        #{ctcc,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcc != null">
+        #{cmcc,jdbcType=VARCHAR},
+      </if>
+      <if test="cucc != null">
+        #{cucc,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBatchEntity">
+    update t_biz_flow_batch
+    <set>
+      <if test="batch_no != null">
+        batch_no = #{batch_no,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="ctcc != null">
+        ctcc = #{ctcc,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcc != null">
+        cmcc = #{cmcc,jdbcType=VARCHAR},
+      </if>
+      <if test="cucc != null">
+        cucc = #{cucc,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.sendflow.model.FlowBatchEntity">
+    update t_biz_flow_batch
+    set batch_no = #{batch_no,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      ctcc = #{ctcc,jdbcType=VARCHAR},
+      cmcc = #{cmcc,jdbcType=VARCHAR},
+      cucc = #{cucc,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

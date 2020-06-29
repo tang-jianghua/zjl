@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<div ng-controller="cityPartnerInformationCtrl">
+<section class="well">
+    <!-- 标题 -->
+    <div class="fileAbout backstage">合伙人信息管理
+    </div>
+    
+  <div class="idMessage">
+ 		<div class="form-horizontal form-widgets col-sm-12 gray">
+		     <div class="form-group">
+		   		<div class="form-horizontal form-widgets col-sm-4" ng-show="enterprise_show">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">企业名称</label>
+		                <div class="col-sm-8"><input ng-model="search.enterprise_name"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">合伙人</label>
+		                <div class="col-sm-8"><input ng-model="search.user_name"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">后台账号</label>
+		                <div class="col-sm-8"><input ng-model="search.account"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4" translate="phone_number"></label>
+		                <div class="col-sm-8"><input ng-model="search.phone_num"  class="k-textbox"/></div>
+		            </div>
+		        </div>
+		        <!-- <div class="form-horizontal form-widgets col-sm-4">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">省</label>
+		                <div class="col-sm-8">
+		                    <input id="province"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-3">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">市</label>
+		                <div class="col-sm-8">
+		                    <input id="city"/>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="form-horizontal form-widgets col-sm-3">
+		            <div class="form-group">
+		                <label class="control-label col-sm-4">区</label>
+		                <div class="col-sm-8">
+		                    <input id="area"/>
+		                </div>
+		            </div>
+		        </div> -->
+		        
+		
+		        <div class="buttons-wrap clearBoth">
+		            <button class="k-button k-state-default" ng-click="search()">搜索</button>
+		        </div>
+		   </div>
+		</div>
+		<div >
+	     	<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+		 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+			<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+			<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+	     	<button class="k-button k-state-default" ng-click="addPartnerInformation()" id="addAccount" translate="add_account_information"></button>
+	     	<hr class="towGreen">
+     </div>
+     
+     <div id="gridCity" kendo-grid="grid"  k-options="mainGridOptions" ></div>
+    </section>
+
+  
+
+ 
+</div>
+    
+

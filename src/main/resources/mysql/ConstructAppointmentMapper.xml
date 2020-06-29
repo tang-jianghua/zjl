@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.constructAppointment.mapper.ConstructAppointmentMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="needs" jdbcType="VARCHAR" property="needs" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="construct_id" jdbcType="BIGINT" property="construct_id" />
+    <result column="address_id" jdbcType="BIGINT" property="address_id" />
+    <result column="construct_data" jdbcType="DOUBLE" property="construct_data" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customer_name" />
+    <result column="state_time" jdbcType="TIMESTAMP" property="state_time" />
+    <result column="evaluate_time" jdbcType="TIMESTAMP" property="evaluate_time" />
+     <result column="evaluate_content" jdbcType="VARCHAR" property="evaluate_content" />
+     
+     <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+     <result column="address_details" jdbcType="VARCHAR" property="address_details" />
+     <result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+     <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+     
+  </resultMap>
+    <resultMap id="BaseResultMapBack" type="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointmentModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="needs" jdbcType="VARCHAR" property="needs" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="construct_name" jdbcType="VARCHAR" property="construct_name" />
+    <result column="construct_id" jdbcType="BIGINT" property="construct_id" />
+    <result column="service_type" jdbcType="VARCHAR" property="service_type" />
+    <result column="construct_data" jdbcType="DOUBLE" property="construct_data" />
+    <result column="seller_phone" jdbcType="VARCHAR" property="seller_phone" />
+    <result column="address_id" jdbcType="BIGINT" property="address_id" />
+    <result column="address_details" jdbcType="VARCHAR" property="address_details" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customer_name" />
+    <result column="customer_phone" jdbcType="VARCHAR" property="customer_phone" />
+    <result column="state_time" jdbcType="TIMESTAMP" property="state_time" />
+    <collection property="constructStateRelationList" column="id"
+			ofType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructStateRelation" columnPrefix="sta_">
+			    <id column="id" jdbcType="BIGINT" property="id" />
+    	<result column="construct_appointment_id" jdbcType="BIGINT" property="construct_appointment_id" />
+    	<result column="state_code" jdbcType="VARCHAR" property="state_code" />
+    	<result column="state" jdbcType="VARCHAR" property="state" />
+    	<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		</collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, needs, create_time, construct_id, address_id, construct_data, score, 
+    start_time,evaluate_time,evaluate_content,region_code,address_details,receiver_name,phone_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_construct_appointment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectInfoById" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointmentModel">
+    SELECT a.customer_id, ci.team_name
+    FROM t_biz_construct_appointment a 
+    LEFT JOIN t_app_seller_info i ON i.seller_id = a.construct_id
+    LEFT JOIN t_app_sell_construct_info ci ON ci.id = i.construct_info_id
+    where a.id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAppointmentCountByConstructId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+   SELECT COUNT(1) FROM t_biz_construct_appointment ca WHERE ca.construct_id = #{id,jdbcType=BIGINT}
+  </select>
+   <select id="selectUnReadAppointmentCountByConstructId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+   SELECT COUNT(ca.id) FROM t_biz_construct_appointment ca,t_app_seller s WHERE s.id = #{id,jdbcType=BIGINT} AND ca.construct_id = s.id AND ca.create_time > s.view_shigong_time
+  </select>
+    <select id="selectConstructerAppointmentAndTraceingBackByAppopintId" parameterType="java.lang.Long" resultMap="BaseResultMapBack">
+      SELECT a.id, a.receiver_name AS customer_name,s.name as construct_name,a.phone_num AS customer_phone,DATE_FORMAT(a.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,DATE_FORMAT(a.start_time, '%Y-%m-%d %H:%i:%s') AS start_time,a.address_details,
+      a.needs,st.service_type,a.construct_data,s.phone AS seller_phone,cs.state as sta_state,DATE_FORMAT(r.create_time, '%Y-%m-%d %H:%i:%s') AS sta_create_time
+   
+	FROM t_biz_construct_appointment a LEFT JOIN t_app_seller s ON a.construct_id = s.id 
+	LEFT JOIN t_app_seller_info si ON si.seller_id = s.id
+	LEFT JOIN t_app_sell_construct_info ci ON ci.id = si.construct_info_id
+	LEFT JOIN t_biz_construct_service_type st ON st.service_code = ci.service_code
+	LEFT JOIN t_app_customer c ON c.id = a.customer_id 
+	LEFT JOIN t_biz_construct_state_relation r ON r.construct_appointment_id = a.id 
+	LEFT JOIN t_biz_construct_state cs ON cs.state_code = r.state_code
+	WHERE  a.id = #{id,jdbcType=BIGINT}
+	ORDER BY r.create_time DESC
+  </select>
+    <select id="selectConstructAppointmentBySellerIdForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+   resultType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointmentModel">
+			 SELECT a.id,c.name construct_name,a.construct_data,c.phone,c.head_url head_img,a.address_details,a.needs,s.state_code,s.state,r.create_time
+FROM t_biz_construct_appointment a
+LEFT JOIN t_biz_construct_state_relation r ON r.construct_appointment_id = a.id AND r.create_time = (SELECT MAX(create_time) FROM t_biz_construct_state_relation WHERE construct_appointment_id = r.construct_appointment_id)
+LEFT JOIN t_biz_construct_state s ON s.state_code = r.state_code,
+t_app_customer c
+ WHERE a.id = #{param.id,jdbcType=BIGINT} AND a.customer_id = c.id
+ ORDER BY a.create_time DESC
+  </select>
+   <select id="selectConstructAppointmentByCustomerIdForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+   resultType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointmentModel">
+	SELECT ca.id,s.head_img,ci.team_name,s.name construct_name,s.phone,ca.create_time,ca.start_time,ca.needs,
+			 ca.address_details receive_address,ca.phone_num receive_phone,ca.receiver_name receiver,ca.construct_data as total_price,ca.`construct_id`
+			FROM t_biz_construct_appointment ca
+			LEFT JOIN t_app_seller s ON ca.construct_id = s.id
+			LEFT JOIN t_app_seller_info si ON si.seller_id = s.id
+			LEFT JOIN t_app_sell_construct_info ci ON ci.id = si.construct_info_id
+			WHERE ca.customer_id = #{param.customer_id,jdbcType=BIGINT}
+			ORDER BY ca.create_time DESC
+  </select>
+  <select id="selectAppointmentOfConstructerForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+   resultType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointmentModel">
+  SELECT a.id, a.receiver_name AS customer_name,c.head_url,a.phone_num AS phone,a.construct_data,a.start_time,a.create_time,a.address_details,a.needs,r.state_code,cs.state,r.create_time AS state_time
+	FROM t_app_seller s LEFT JOIN t_biz_construct_appointment a ON a.construct_id = s.id 
+	LEFT JOIN t_app_customer c ON c.id = a.customer_id 
+	LEFT JOIN t_biz_construct_state_relation r ON r.construct_appointment_id = a.id AND r.create_time = (SELECT MAX(create_time) FROM t_biz_construct_state_relation WHERE a.id = construct_appointment_id)
+	LEFT JOIN t_biz_construct_state cs ON cs.state_code = r.state_code
+	WHERE  s.id = #{param.id} AND s.state = 1 AND s.seller_type = 3
+		and r.state_code in 
+		<foreach collection="param.stateList" index="index" item="item" open="(" separator="," close=")">
+			${item} 
+		</foreach>
+ ORDER BY a.start_time DESC,r.state_code ASC
+  </select>
+  
+  
+    <select id="selectEvaluationOfConstructerForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+   resultMap="BaseResultMap">
+    SELECT 
+   ca.id,
+  c.`name` customer_name,
+  ca.`score`,
+  ca.`evaluate_time`,
+  ca.`evaluate_content`
+FROM
+  `t_biz_construct_appointment` ca 
+  LEFT JOIN `t_app_customer` c 
+    ON ca.`customer_id` = c.`id` 
+WHERE  ca.`evaluate_time` IS NOT NULL  AND ca.construct_id = #{param.construct_id,jdbcType=BIGINT} 
+ORDER BY ca.evaluate_time DESC
+  </select>
+  
+      <select id="selectEvaluationImages" parameterType="java.lang.Long" 
+   resultType="java.lang.String">
+  SELECT imgurl FROM `t_biz_con_eva_img` WHERE appointment_id = #{param.appointment_id,jdbcType=BIGINT}  ORDER BY id
+  </select>
+  
+  <select id="selectEvaluationsForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"   resultType="java.util.Map">
+  		SELECT c.name AS customer_name,c.phone AS customer_phone,s.name AS seller_name, a.score , DATE_FORMAT(a.evaluate_time, '%Y-%m-%d %H:%i:%s') as evaluate_time, 
+  		a.evaluate_content,GROUP_CONCAT(i.imgurl) as imgurl
+FROM t_biz_construct_appointment a
+LEFT JOIN t_app_customer c ON c.id = a.customer_id
+LEFT JOIN t_app_seller s ON a.construct_id = s.id 
+LEFT JOIN t_biz_con_eva_img i ON i.appointment_id = a.id
+WHERE 1=1
+	<if test="param.id != null">
+		AND s.id = ${param.id}
+    </if>
+<if test="param.appointment_id != null">
+		AND a.id = ${param.appointment_id}
+    </if>
+<if test="param.customer_name != null">
+		AND c.name LIKE <![CDATA[  '%${param.customer_name}%']]> 
+    </if>
+<if test="param.phone != null">
+		AND c.phone = ${param.phone}
+    </if>
+<if test="param.seller_name != null">
+		AND s.name LIKE <![CDATA[  '%${param.seller_name}%']]>
+    </if>
+  </select>
+  
+   <select id="workerchangestate" parameterType="java.lang.Long" 
+   resultType="java.lang.Integer">
+   SELECT a.id, c.name as customer_name,c.phone,a.start_time,a.address_details,a.needs,cs.state,r.create_time AS state_time
+	FROM t_app_seller s LEFT JOIN t_biz_construct_appointment a ON a.construct_id = s.id 
+	LEFT JOIN t_app_customer c ON c.id = a.customer_id 
+	LEFT JOIN t_biz_construct_state_relation r ON r.construct_appointment_id = a.id 
+	LEFT JOIN t_biz_construct_state cs ON cs.state_code = r.state_code
+	WHERE  s.id = #{param.id,jdbcType=BIGINT} AND s.state = 1 AND s.seller_type = 3 ORDER BY a.start_time DESC,r.state_code ASC
+  </select>
+  
+  <select id="selectConstructAppointmentBackForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+   resultType="java.util.Map">
+SELECT ap.id,cu.name customer_name,cu.phone,ci.unit_price,ap.construct_data,DATE_FORMAT(ap.start_time, '%Y-%m-%d %H:%i:%s') as start_time,ap.needs,se.account,s.state_code,s.state,se.name,cn.pay_state,DATE_FORMAT(cn.pay_time, '%Y-%m-%d %H:%i:%s') as pay_time
+FROM t_app_seller se  
+LEFT JOIN  t_biz_partner p ON p.id = se.partner_id
+LEFT JOIN t_app_seller_info i ON i.seller_id = se.id 
+LEFT JOIN t_app_sell_construct_info ci ON i.construct_info_id = ci.id
+LEFT JOIN t_biz_construct_appointment ap ON ap.construct_id = se.id
+LEFT JOIN t_biz_order_cash_new cn ON cn.type = 1 AND cn.type_id = ap.id AND cn.create_time = (SELECT MAX(create_time) FROM t_biz_order_cash_new WHERE cn.type = 1 AND cn.type_id=type_id)
+LEFT JOIN t_app_customer cu ON cu.id = ap.customer_id
+LEFT JOIN t_biz_construct_state_relation r ON r.construct_appointment_id = ap.id AND r.create_time = (SELECT MAX(create_time) FROM t_biz_construct_state_relation WHERE construct_appointment_id = r.construct_appointment_id)
+LEFT JOIN t_biz_construct_state s ON s.state_code = r.state_code
+ 
+	WHERE  se.seller_type = 3 and se.id = #{param.id,jdbcType=BIGINT} 
+	<if test="param.partner_id!=null and param.partner_id!=''">
+ 		AND p.id = #{param.partner_id,jdbcType=BIGINT} 
+ 	</if>
+ 	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+ 		AND p.enterprise_id = #{param.enterprise_id,jdbcType=BIGINT} 
+ 	</if>
+	<if test="param.principal!=null and param.principal!=''">
+ 		AND p.principal LIKE CONCAT('%', #{param.principal,jdbcType=VARCHAR},'%') 
+ 	</if>
+	<if test="param.customer_name!=null and param.customer_name!=''">
+ 		AND cu.name LIKE CONCAT('%', #{param.customer_name,jdbcType=VARCHAR},'%') 
+ 	</if>
+	<if test="param.account!=null and param.account!=''">
+ 		AND se.account LIKE CONCAT('%', #{param.account,jdbcType=VARCHAR},'%')
+	</if>
+	<if test="param.state_code!=null and param.state_code!=''">
+ 		 AND s.state_code LIKE CONCAT('%', #{param.state_code,jdbcType=VARCHAR},'%') 
+	</if>
+		ORDER BY ap.start_time DESC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_construct_appointment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+   <insert id="addEvaImgs" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointment">
+   INSERT INTO `t_biz_con_eva_img`(appointment_id,imgurl)  VALUES
+    <foreach collection="evaluate_imgs" item="item" separator=",">
+			(#{id,jdbcType=BIGINT},'${item}')
+		</foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_construct_appointment (customer_id, needs, create_time, 
+      construct_id, address_id, construct_data, 
+      score, start_time,evaluate_time,evaluate_content,region_code,address_details,receiver_name,phone_num)
+    values (#{customer_id,jdbcType=BIGINT}, #{needs,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{construct_id,jdbcType=BIGINT}, #{address_id,jdbcType=BIGINT}, #{construct_data,jdbcType=DOUBLE}, 
+      #{score,jdbcType=INTEGER}, #{start_time,jdbcType=TIMESTAMP},#{evaluate_time,jdbcType=TIMESTAMP}, #{evaluate_content,jdbcType=VARCHAR}
+      , #{region_code,jdbcType=VARCHAR}, #{address_details,jdbcType=VARCHAR}, #{receiver_name,jdbcType=VARCHAR}, #{phone_num,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_construct_appointment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="needs != null">
+        needs,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="construct_id != null">
+        construct_id,
+      </if>
+      <if test="address_id != null">
+        address_id,
+      </if>
+      <if test="construct_data != null">
+        construct_data,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="start_time != null">
+        start_time,
+      </if>
+          <if test="evaluate_time != null">
+        evaluate_time,
+      </if>
+          <if test="evaluate_content != null">
+        evaluate_content,
+      </if>
+       <if test="region_code != null">
+        region_code,
+      </if>
+       <if test="address_details != null">
+        address_details,
+      </if>
+       <if test="receiver_name != null">
+        receiver_name,
+      </if>
+       <if test="phone_num != null">
+        phone_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="needs != null">
+        #{needs,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="construct_id != null">
+        #{construct_id,jdbcType=BIGINT},
+      </if>
+      <if test="address_id != null">
+        #{address_id,jdbcType=BIGINT},
+      </if>
+      <if test="construct_data != null">
+        #{construct_data,jdbcType=DOUBLE},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="start_time != null">
+        #{start_time,jdbcType=TIMESTAMP},
+      </if>
+         <if test="evaluate_time != null">
+        #{evaluate_time,jdbcType=TIMESTAMP},
+      </if>
+       <if test="evaluate_content != null">
+        #{evaluate_content,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address_details != null">
+        #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver_name != null">
+        #{receiver_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateconstructdata" >
+    update t_biz_construct_appointment set construct_data = #{construct_data,jdbcType=DOUBLE} where id = #{id,jdbcType=BIGINT}
+    
+    </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointment">
+    update t_biz_construct_appointment
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="needs != null">
+        needs = #{needs,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="construct_id != null">
+        construct_id = #{construct_id,jdbcType=BIGINT},
+      </if>
+      <if test="address_id != null">
+        address_id = #{address_id,jdbcType=BIGINT},
+      </if>
+      <if test="construct_data != null">
+        construct_data = #{construct_data,jdbcType=DOUBLE},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="start_time != null">
+        start_time = #{start_time,jdbcType=TIMESTAMP},
+      </if>
+            <if test="evaluate_time != null">
+        evaluate_time = #{evaluate_time,jdbcType=TIMESTAMP},
+      </if>
+          <if test="evaluate_content != null">
+        evaluate_content = #{evaluate_content,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="address_details != null">
+        address_details = #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver_name != null">
+        receiver_name = #{receiver_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.constructAppointment.model.ConstructAppointment">
+    update t_biz_construct_appointment
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      needs = #{needs,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      construct_id = #{construct_id,jdbcType=BIGINT},
+      address_id = #{address_id,jdbcType=BIGINT},
+      construct_data = #{construct_data,jdbcType=DOUBLE},
+      score = #{score,jdbcType=INTEGER},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      evaluate_time = #{evaluate_time,jdbcType=TIMESTAMP},
+       evaluate_content = #{evaluate_content,jdbcType=VARCHAR},
+       region_code = #{region_code,jdbcType=VARCHAR},
+       address_details = #{address_details,jdbcType=VARCHAR},
+       receiver_name = #{receiver_name,jdbcType=VARCHAR},
+       phone_num = #{phone_num,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

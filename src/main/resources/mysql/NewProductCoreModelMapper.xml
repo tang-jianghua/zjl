@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.newproductcore.mapper.NewProductCoreModelMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.newproductcore.model.NewProductCoreModel">
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="sales_num" jdbcType="BIGINT" property="sales_num" />
+    <result column="product_name" jdbcType="VARCHAR" property="product_name" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+    <result column="hot_line" jdbcType="VARCHAR" property="hot_line" />
+    <result column="enterprise_id" jdbcType="BIGINT" property="enterprise_id" />
+    <result column="brand_imgurl" jdbcType="VARCHAR" property="brand_imgurl" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name" />
+    <result column="citypartner_id" jdbcType="BIGINT" property="citypartner_id" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="new_time" jdbcType="DATE" property="new_time" />
+    <result column="isnew" jdbcType="INTEGER" property="isnew" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="sales_model" jdbcType="INTEGER" property="sales_model" />
+    <result column="percent" jdbcType="DOUBLE" property="percent" />
+    <result column="min_price" jdbcType="DOUBLE" property="min_price" />
+    <result column="max_price" jdbcType="DOUBLE" property="max_price" />
+    <result column="standard" jdbcType="VARCHAR" property="standard" />
+    <result column="min_promotion_price" jdbcType="DOUBLE" property="min_promotion_price" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.newproductcore.model.NewProductCoreModel">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+         <select id="selectProductCoreByProductId"  parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+  select * from v_product_new_core where product_id = #{product_id,jdbcType=BIGINT}
+  </select>
+</mapper>

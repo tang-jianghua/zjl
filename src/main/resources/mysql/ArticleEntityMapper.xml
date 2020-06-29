@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.article.mapper.ArticleEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="digest" jdbcType="VARCHAR" property="digest" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="seen_time" jdbcType="INTEGER" property="seen_time" />
+    <result column="share_num" jdbcType="INTEGER" property="share_num" />
+    <result column="abum_id" jdbcType="BIGINT" property="abum_id"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time"/>
+    <result column="type" jdbcType="INTEGER" property="type"/>
+    <result column="abum_name" jdbcType="VARCHAR" property="abum_name"/>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    <result column="details" jdbcType="LONGVARCHAR" property="details" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, image, title, create_time, author, digest, state, seen_time,type,abum_id,share_num
+  </sql>
+  <sql id="Blob_Column_List">
+    details
+  </sql>
+  <update id="updateSeenTime" parameterType="java.lang.Long" >
+  UPDATE `t_biz_article` SET seen_time =1+seen_time WHERE id = #{id}
+  </update>
+    <update id="updateShareNum" parameterType="java.lang.Long" >
+  UPDATE `t_biz_article` SET share_num =1+share_num WHERE id = #{id}
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_article
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectImageByPrimaryKey" parameterType="java.lang.Long" resultType="java.lang.String">
+    select image
+    from t_biz_article
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+      <select id="selectDetailsByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select id,image,title,create_time,author,
+    <include refid="Blob_Column_List" />
+    from t_biz_article
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectArticlesForPage" 
+    parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+     resultMap="ResultMapWithBLOBs">
+  SELECT id,image,title,create_time,digest,seen_time
+	FROM t_biz_article t 
+	WHERE state = 1 and abum_id = #{param.album_id,jdbcType=BIGINT}
+	
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_article
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    insert into t_biz_article (image, title, create_time, 
+      author, digest, state, 
+      seen_time, details,abum_id,update_time,type)
+    values (#{image,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{author,jdbcType=VARCHAR}, #{digest,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{seen_time,jdbcType=INTEGER}, #{details,jdbcType=LONGVARCHAR},#{abum_id,jdbcType=INTEGER},#{update_time,jdbcType=TIMESTAMP},#{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    
+    insert into t_biz_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="image != null">
+        image,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="digest != null">
+        digest,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="seen_time != null">
+        seen_time,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+      <if test="abum_id != null">
+        abum_id,
+      </if>
+       <if test="update_time != null">
+        update_time,
+      </if>
+        <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null">
+        #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="seen_time != null">
+        #{seen_time,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="abum_id != null">
+        #{abum_id,jdbcType=BIGINT},
+      </if>
+       <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+       <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    update t_biz_article
+    <set>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null">
+        digest = #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="seen_time != null">
+        seen_time = #{seen_time,jdbcType=INTEGER},
+      </if>
+        <if test="share_num != null">
+        share_num = #{share_num,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="abum_id != null">
+        abum_id = #{abum_id,jdbcType=BIGINT},
+      </if>
+      
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      
+      <if test="type != null">
+        type = #{type,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    update t_biz_article
+    set image = #{image,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      author = #{author,jdbcType=VARCHAR},
+      digest = #{digest,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      seen_time = #{seen_time,jdbcType=INTEGER},
+      share_num = #{share_num,jdbcType=INTEGER},
+      details = #{details,jdbcType=LONGVARCHAR},
+      abum_id = #{abum_id,jdbcType=BIGINT},
+       update_time = #{update_time,jdbcType=TIMESTAMP},
+       type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+    update t_biz_article
+    set image = #{image,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      author = #{author,jdbcType=VARCHAR},
+      digest = #{digest,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      seen_time = #{seen_time,jdbcType=INTEGER},
+      share_num = #{share_num,jdbcType=INTEGER},
+       abum_id = #{abum_id,jdbcType=BIGINT},
+       update_time = #{update_time,jdbcType=TIMESTAMP},
+        type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+      <select id="selectArticlesServerForPage" 
+    parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+     resultType="com.mfangsoft.zhuangjialong.integration.column.model.ArticleModel">
+   SELECT t.id,t.image,t.title,t.create_time,t.digest,t.seen_time,t.abum_id,ab.name as abum_name,share_num
+	FROM t_biz_article t ,t_biz_abum ab,
+	
+	 t_sys_user u 
+	WHERE  t.abum_id =ab.id and  u.id=ab.user_id
+	<if test="param.title!=null and param.title!=''">
+	  and t.title  like CONCAT('%', #{param.title},'%') 
+	</if>
+	<if test="param.user_type!=null">
+    
+     and u.user_type=#{param.user_type} 
+    
+    </if>
+    
+    <if test="param.user_id!=null">
+    
+     and ab.user_id=#{param.user_id} 
+    
+    </if>
+    order by t.create_time desc
+  </select>
+  
+  <select id="selectArticlesServerByAbumId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  
+    select <include refid="Base_Column_List"></include> from t_biz_article where abum_id=#{id}
+  
+  
+  </select>
+</mapper>

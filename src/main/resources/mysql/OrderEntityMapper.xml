@@ -1,0 +1,2064 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.order.mapper.OrderEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="code" jdbcType="VARCHAR" property="order_code" />
+		<result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+		<result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+		<result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+		<result column="citypartner_id" jdbcType="BIGINT" property="citypartner_id" />
+		<result column="order_price" jdbcType="DOUBLE" property="order_price" />
+		<result column="deposit_price" jdbcType="DOUBLE" property="deposit_price" />
+		<result column="cut_price" jdbcType="DOUBLE" property="cut_price" />
+		<result column="isdeposit" jdbcType="TINYINT" property="isdeposit" />
+		<result column="exshopper_id" jdbcType="BIGINT" property="exshopper_id" />
+		<result column="region_code" jdbcType="VARCHAR" property="region_code" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		<result column="address_details" jdbcType="VARCHAR" property="address_details" />
+		<result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+		<result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+		<result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+		<result column="pushstr" jdbcType="VARCHAR" property="pushstr" />
+		<result column="pay_state" jdbcType="INTEGER" property="pay_state" />
+		<result column="shell_id" jdbcType="BIGINT" property="shell_id" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		<result column="memo" jdbcType="LONGVARCHAR" property="memo" />
+	</resultMap>
+	<resultMap id="OrderResultMap"
+		type="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="code" jdbcType="VARCHAR" property="order_code" />
+		<result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+		<result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+		<result column="order_price" jdbcType="DOUBLE" property="order_price" />
+		<result column="deposit_price" jdbcType="DOUBLE" property="deposit_price" />
+		<result column="cut_price" jdbcType="DOUBLE" property="cut_price" />
+		<result column="isdeposit" jdbcType="TINYINT" property="isdeposit" />
+		<result column="pay_state" jdbcType="BIGINT" property="pay_state" />
+		<result column="order_state_code" jdbcType="BIGINT" property="order_state_code" />
+		<result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		<result column="shell_id" jdbcType="BIGINT" property="shell_id" />
+		<association property="address"
+			javaType="com.mfangsoft.zhuangjialong.app.applogin.model.CustomerAddress">
+			<id column="id" jdbcType="BIGINT" property="id" />
+			<result column="address_details" jdbcType="VARCHAR" property="address_details" />
+			<result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+			<result column="receiver_phone" jdbcType="VARCHAR" property="phone_num" />
+		</association>
+		<association property="tracing"
+			javaType="com.mfangsoft.zhuangjialong.app.order.model.OrderTracing">
+			<result column="code" jdbcType="VARCHAR" property="order_code" />
+			<result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+			<result column="shop_phone_num" jdbcType="VARCHAR" property="shop_phone_num" />
+			<result column="param" jdbcType="VARCHAR" property="param" />
+			<result column="time" jdbcType="TIMESTAMP" property="time" />
+			<result column="state" jdbcType="VARCHAR" property="state" />
+			<result column="description" jdbcType="VARCHAR" property="description" />
+		</association>
+		<association property="shopPrepayEntity"
+			javaType="com.mfangsoft.zhuangjialong.app.prepay.model.ShopPrepayEntity" columnPrefix="asp_">
+			<id column="id" jdbcType="INTEGER" property="id" />
+			<result column="value" jdbcType="INTEGER" property="value" />
+		</association>
+		<collection property="products" column="id"
+			ofType="com.mfangsoft.zhuangjialong.app.order.model.OrderProduct">
+			<id column="product_id" jdbcType="BIGINT" property="product_id" />
+			<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+			<result column="num" jdbcType="INTEGER" property="num" />
+			<result column="info" jdbcType="VARCHAR" property="info" />
+			<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+			<result column="buy_type" jdbcType="INTEGER" property="buy_type" />
+			<result column="type_value" jdbcType="VARCHAR" property="type_value" />
+			
+			<association property="sales_properity"
+				javaType="com.mfangsoft.zhuangjialong.app.order.model.Salespropiety">
+				<result column="sales_property_id" jdbcType="BIGINT"
+					property="id" />
+				<result column="stock" jdbcType="INTEGER" property="stock" />
+				<result column="price" jdbcType="DOUBLE" property="price" />
+				<result column="new_price" jdbcType="DOUBLE" property="new_price" />
+				<result column="sale_price" jdbcType="DOUBLE" property="sale_price" />
+				<!-- <result column="color_img" jdbcType="VARCHAR" property="image_url" 
+					/> -->
+			</association>
+		</collection>
+		<collection property="couponsinfo" column="id"
+			ofType="com.mfangsoft.zhuangjialong.integration.coupons.model.BrandCouponsEntity" columnPrefix="coups_">
+			<id column="id" jdbcType="BIGINT" property="id" />
+			<result column="name" jdbcType="VARCHAR" property="name" />
+			<result column="step_value" jdbcType="DOUBLE" property="step_value" />
+			<result column="value" jdbcType="INTEGER" property="value" />
+			<result column="type" jdbcType="INTEGER" property="type" />
+		</collection>
+		<collection property="unionpropmotionList" column="id"
+			ofType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion" columnPrefix="union_">
+			<id column="id" jdbcType="BIGINT" property="id" />
+			<result column="cash_value" jdbcType="DOUBLE" property="cash_value" />
+		</collection>
+		
+	</resultMap>
+
+	<resultMap id="OrderResultMapNew"
+		type="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="code" jdbcType="VARCHAR" property="order_code" />
+		<result column="order_price" jdbcType="DOUBLE" property="order_price" />
+		<result column="deposit_price" jdbcType="DOUBLE" property="deposit_price" />
+		<result column="cut_price" jdbcType="DOUBLE" property="cut_price" />
+		<result column="isdeposit" jdbcType="TINYINT" property="isdeposit" />
+		<result column="order_state_code" jdbcType="BIGINT" property="order_state_code" />
+		<result column="pay_state" jdbcType="BIGINT" property="pay_state" />
+		<result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+		<result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+		<result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+		<collection property="products" column="id"
+			ofType="com.mfangsoft.zhuangjialong.app.order.model.OrderProduct">
+			<result column="product_id" jdbcType="BIGINT" property="product_id" />
+			<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+			<result column="num" jdbcType="INTEGER" property="num" />
+			<result column="info" jdbcType="VARCHAR" property="info" />
+			<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+			<result column="buy_type" jdbcType="INTEGER" property="buy_type" />
+			<result column="type_value" jdbcType="VARCHAR" property="type_value" />
+			
+			<association property="sales_properity"
+				javaType="com.mfangsoft.zhuangjialong.app.order.model.Salespropiety">
+				<id column="product_id" jdbcType="BIGINT" property="product_id" />
+				<result column="sales_property_id" jdbcType="BIGINT"
+					property="id" />
+				<result column="stock" jdbcType="INTEGER" property="stock" />
+				<result column="price" jdbcType="DOUBLE" property="price" />
+				<result column="new_price" jdbcType="DOUBLE" property="new_price" />
+				<result column="sale_price" jdbcType="DOUBLE" property="sale_price" />
+				<!-- <result column="color_img" jdbcType="VARCHAR" property="image_url" 
+					/> -->
+			</association>
+		</collection>
+	</resultMap>
+	<resultMap id="PreOrderResultMap"
+		type="com.mfangsoft.zhuangjialong.app.order.model.Order">
+		<id column="brand_id" jdbcType="BIGINT" property="brand_id" />
+		<result column="citypartner_id" jdbcType="BIGINT" property="citypartner_id" />
+		<result column="exshopper_id" jdbcType="BIGINT" property="exshopper_id" />
+		<result column="region_code" jdbcType="VARCHAR" property="region_code" />
+	</resultMap>
+	<resultMap id="OrderTracingMap"
+		type="com.mfangsoft.zhuangjialong.app.order.model.OrderTracing">
+		<result column="id" jdbcType="BIGINT" property="order_id" />
+		<result column="code" jdbcType="VARCHAR" property="order_code" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+		<result column="shop_phone_num" jdbcType="VARCHAR" property="shop_phone_num" />
+		<result column="time" jdbcType="TIMESTAMP" property="time" />
+		<result column="state" jdbcType="VARCHAR" property="state" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+	</resultMap>
+	
+	<resultMap id="MesageResultMap"
+		type="com.mfangsoft.zhuangjialong.app.order.model.OrderMessage">
+		<result column="order_id" jdbcType="BIGINT" property="order_id" />
+		<result column="code" jdbcType="VARCHAR" property="order_code" />
+		<result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+		<result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+		<result column="pushstr" jdbcType="VARCHAR" property="pushstr" />
+		<result column="platform" jdbcType="VARCHAR" property="platform" />
+		<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+			
+		<result column="product_id" jdbcType="BIGINT" property="product_id" />
+		<result column="type_value" jdbcType="VARCHAR" property="type_value" />
+		<result column="product_num" jdbcType="INTEGER" property="product_num" />
+		<result column="sales_property_id" jdbcType="BIGINT" property="sales_property_id" />
+			
+	</resultMap>
+	
+	<resultMap id="OrderResultMapForBack"
+		type="com.mfangsoft.zhuangjialong.integration.seller.model.Order">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="order_price" jdbcType="DOUBLE" property="order_price" />
+		<result column="deposit_price" jdbcType="DOUBLE" property="deposit_price" />
+		<result column="isdeposit" jdbcType="TINYINT" property="isdeposit" />
+		<result column="totalprice" jdbcType="DOUBLE" property="totalprice" />
+		<result column="total_price" jdbcType="DOUBLE" property="total_price" />
+		<result column="shifu_type" jdbcType="INTEGER" property="shifu_type" />
+		<result column="fixed_money" jdbcType="DOUBLE" property="fixed_money" />
+		<result column="pre_money" jdbcType="DOUBLE" property="pre_money" />
+		<result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+		<result column="level" jdbcType="VARCHAR" property="level" />
+		<result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+		<result column="trade_data" jdbcType="VARCHAR" property="trade_data" />
+		<result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		<result column="seller_name" jdbcType="VARCHAR" property="seller_name" />
+			
+			<result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+			<result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+			
+			<result column="enterprise_name" jdbcType="VARCHAR" property="enterprise_name" />
+			<result column="principal" jdbcType="VARCHAR" property="principal" />
+			
+			<result column="order_state_code" jdbcType="VARCHAR" property="order_state_code" />
+			<result column="state" jdbcType="VARCHAR" property="state" />
+			<result column="money_platform" jdbcType="DOUBLE" property="money_platform" />
+			<result column="amount" jdbcType="DOUBLE" property="amount" />
+			
+		<collection property="order_products" column="id"
+			ofType="com.mfangsoft.zhuangjialong.integration.seller.model.Product">
+			<id column="product_id" jdbcType="BIGINT" property="product_id" />
+			<result column="product_title" jdbcType="VARCHAR" property="product_title" />
+			<result column="sales_property_id" jdbcType="BIGINT" property="sales_property_id" />
+			<result column="product_num" jdbcType="INTEGER" property="product_num" />
+			<result column="product_total_price" jdbcType="DOUBLE" property="product_total_price" />
+			
+			<result column="sales_model" jdbcType="INTEGER" property="sales_model" />
+			<result column="customer_name" jdbcType="VARCHAR" property="customer_name" />
+			<result column="pay_type_str" jdbcType="VARCHAR" property="pay_type_str" />
+
+			<result column="model" jdbcType="VARCHAR" property="model" />
+			<result column="color" jdbcType="VARCHAR" property="color" />
+			<result column="price" jdbcType="DOUBLE" property="price" />
+			<result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+			<result column="info" jdbcType="VARCHAR" property="info" />
+			
+		</collection>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, code, customer_id, shop_id, brand_id, citypartner_id,
+		order_price,isdeposit,deposit_price,
+		exshopper_id,
+		region_code, create_time, address_details, receiver_name, phone_num
+	</sql>
+	<sql id="Blob_Column_List">
+		memo
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_biz_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="customerorderstatenum" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.app.order.model.StateOrderDatile">
+		SELECT r.order_state_code as state, COUNT(1) as num 
+
+FROM t_biz_order_state_relation r,t_biz_order o
+
+WHERE o.customer_id = #{customer_id,jdbcType=BIGINT} AND o.id = r.order_id AND 
+
+r.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE order_id = r.order_id)
+
+GROUP BY r.order_state_code
+	</select>
+		<select id="selectOrdersByCodeList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM t_biz_order 
+		WHERE code in
+		<foreach collection="codeList" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>
+		order by create_time desc
+	</select>
+		<select id="selectOneOrdersByCode" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM t_biz_order 
+		WHERE code = #{code,jdbcType=VARCHAR}
+	</select>
+	<select id="selectOrdersForShell" resultMap="BaseResultMap">
+		(SELECT o.id, o.code, (o.order_price+o.deposit_price) AS order_price, o.shop_id
+FROM t_biz_order o
+LEFT JOIN t_biz_order_state_relation a ON  a.order_id = o.id AND a.TIME = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE a.order_id=order_id)
+LEFT JOIN t_biz_order_pay op ON op.order_id = o.id
+
+WHERE  a.order_state_code = 2001 AND  a.time &lt;= #{start_time, jdbcType=TIMESTAMP} AND a.time &lt; DATE_SUB(NOW(), INTERVAL '7' DAY)
+AND op.pay_state = 1 AND (o.isdeposit IS FALSE OR (o.isdeposit IS TRUE AND op.isdeposit IS TRUE))
+AND o.shell_id IS NULL
+) 
+UNION ALL
+(
+SELECT o.id, o.code, (o.order_price+o.deposit_price) AS order_price, o.shop_id
+FROM t_biz_order o
+LEFT JOIN t_biz_order_state_relation a ON  a.order_id = o.id AND a.TIME = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE a.order_id=order_id)
+LEFT JOIN t_biz_order_pay op ON op.order_id = o.id
+
+WHERE  a.order_state_code = 3000 
+AND op.pay_state = 1 AND (o.isdeposit IS FALSE OR (o.isdeposit IS TRUE AND op.isdeposit IS TRUE))
+AND o.shell_id IS NULL
+)
+	</select>
+	
+	<select id="selectOrdersListForShellOrders" parameterType="java.lang.Long" resultType="java.lang.Long" >
+		SELECT o.id from t_biz_order o WHERE o.shell_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectPreInfoForOrder" resultMap="PreOrderResultMap">
+		SELECT s.brand_id,s.citypartner_id,c.exshopper_id
+		FROM
+		t_biz_shop s, t_app_customer c
+		WHERE s.id =
+		#{shop_id, jdbcType=BIGINT} AND c.id = #{customer_id,jdbcType=BIGINT}
+	</select>
+		<select id="selectPreExpireorders" resultMap="MesageResultMap">
+		
+		SELECT o.code,o.customer_id,img.imgurl,u.platform,u.pushstr
+
+FROM t_biz_order o
+LEFT JOIN t_biz_order_state_relation a ON  a.order_id = o.id AND a.TIME = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE a.order_id=order_id)
+LEFT JOIN t_biz_order_product op ON o.id = op.order_id 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = op.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img i WHERE img.product_id=i.product_id)
+LEFT JOIN t_biz_userequipment u ON u.customer_id = o.customer_id AND u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE u.customer_id=customer_id)
+LEFT JOIN t_app_customer c ON c.id = u.customer_id
+
+WHERE o.create_time &lt; DATE_SUB(NOW(), INTERVAL '22:00' HOUR_MINUTE) AND o.create_time &gt; DATE_SUB(NOW(), INTERVAL '22:30' HOUR_MINUTE)  
+AND a.order_state_code = 1000 
+AND c.isreceive_message_order IS TRUE
+GROUP BY o.id
+
+	</select>
+	
+	<select id="selectSecKIllExpireorders" resultMap="MesageResultMap">
+	SELECT p.sales_property_id, p.product_id, p.product_num ,p.type_value, p.order_id, o.code,o.customer_id, u.pushstr, u.platform
+
+FROM t_biz_order_product p  
+LEFT JOIN t_biz_order o ON o.id = p.order_id
+LEFT JOIN t_biz_order_state_relation r ON r.order_id = p.order_id AND r.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE order_id = p.order_id)
+LEFT JOIN t_biz_promotion_seckill_product psp ON CONCAT(psp.promotion_id,CONCAT('-',psp.time_id)) = p.type_value AND psp.product_id = p.product_id
+LEFT JOIN t_biz_promotion bp ON bp.id = psp.promotion_id
+LEFT JOIN t_biz_userequipment u ON u.customer_id = o.customer_id AND u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE customer_id = u.customer_id)
+
+
+WHERE p.buy_type=1 
+
+AND r.order_state_code = 1000 AND o.create_time &lt; DATE_SUB(NOW(), INTERVAL 30 MINUTE) AND o.create_time &gt; DATE_SUB(NOW(), INTERVAL 1 DAY)
+
+	</select>
+	
+	<select id="selectCanceledordersForMessage" resultMap="MesageResultMap">
+    SELECT o.code,o.customer_id,img.imgurl,u.platform,u.pushstr
+FROM t_biz_order o, t_biz_order_state_relation a ,t_biz_order_product op,t_biz_brand_prod_img img,t_biz_userequipment u
+WHERE o.id IN ( #{orderIds} )
+ AND a.order_id = o.id AND a.TIME = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE a.order_id=order_id)
+AND o.id = op.order_id 
+AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img i WHERE img.product_id=i.product_id)
+AND img.product_id = op.product_id 
+AND u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE u.customer_id=customer_id)
+AND u.customer_id = o.customer_id 
+GROUP BY o.id
+	</select>
+	<select id="cancelExpireorders"  resultType="java.lang.String">
+		CALL cancel24HOrderBySystem();
+	</select>
+		<select id="selectordersInfoForMessageByCode" resultMap="MesageResultMap">
+        SELECT o.code,o.customer_id,img.imgurl,u.platform,u.pushstr,bp.product_title as product_name 
+FROM t_biz_order o
+LEFT JOIN t_biz_userequipment u ON u.customer_id = o.customer_id AND u.time = (SELECT MAX(TIME) FROM t_biz_userequipment WHERE u.customer_id=customer_id)
+, t_biz_order_state_relation a ,t_biz_order_product op,t_biz_brand_product bp,t_biz_brand_prod_img img
+WHERE o.code = #{code,jdbcType=VARCHAR} 
+ AND a.order_id = o.id AND a.TIME = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE a.order_id=order_id)
+AND o.id = op.order_id  AND op.product_id = bp.id 
+AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img i WHERE img.product_id=i.product_id)
+AND img.product_id = op.product_id 
+GROUP BY o.id ;
+	</select>
+	<select id="selectAnyOneImgForOrderProduct" resultType="java.lang.String">
+SELECT img.imgurl FROM t_biz_order o,t_biz_order_product op,t_biz_brand_prod_img img 
+ WHERE o.code = #{code,jdbcType=VARCHAR} AND o.id = op.order_id AND img.product_id =op.product_id 
+ GROUP BY o.id
+ ORDER BY img.img_sort ASC;
+	</select>
+	<select id="selectOrderTraceInfoByCode" parameterType="java.lang.String"
+		resultMap="OrderTracingMap">
+		SELECT o.id,o.code,s.shop_name,s.phone_num AS
+		shop_phone_num, st.state,r.time,
+		REPLACE(st.description,'#',s.shop_name) AS
+		description
+		FROM t_biz_order_state st,
+		t_biz_order_state_relation r, t_biz_order
+		o,t_biz_shop s
+		WHERE o.code =
+		#{order_code,jdbcType=VARCHAR} AND o.id = r.order_id AND s.id =
+		o.shop_id
+		AND st.order_code = r.order_state_code ORDER BY r.time DESC;
+	</select>
+	<select id="selectOrderSimpleInfoByCode" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_biz_order
+		where code = #{code,jdbcType=VARCHAR}
+	</select>
+	<select id="clearOrderByOrderCode" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		call clearOneOrder(#{orderCode, jdbcType=VARCHAR});
+	</select>
+	<select id="selectOrderState" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT s.order_state_code 
+		FROM t_biz_order o,t_biz_order_state_relation s 
+		WHERE o.code =  #{code,jdbcType=VARCHAR} AND o.id = s.order_id AND s.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE order_id = o.id)
+	</select>
+	<select id="selectOrdersCountsByState" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM t_biz_order o,t_biz_order_state_relation osr
+		WHERE o.customer_id = #{customer_id} AND osr.order_state_code in
+		<foreach collection="stateList" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>
+		AND osr.order_id = o.id AND osr.TIME = (SELECT 
+      MAX(TIME) 
+    FROM
+      t_biz_order_state_relation 
+    WHERE osr.order_id = order_id) AND osr.order_id = o.id;
+	</select>
+	<select id="selectOrdersByState" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultMap="OrderResultMapNew">
+		SELECT temp.id,temp.code,temp.brand_id,
+		temp.order_price,temp.isdeposit,temp.deposit_price,temp.order_state_code,temp.pay_state,temp.customer_id,
+		temp.shop_id , bs.shop_name, op.product_id,
+		op.sales_property_id,
+		op.product_num AS num,
+		op.buy_type,op.type_value,op.price,op.sale_price,
+		bp.product_title AS product_name,img.imgurl AS image_url,img.img_sort
+		FROM
+		(SELECT
+		o.id, o.brand_id, o.code, o.order_price,o.isdeposit,o.deposit_price, state.order_state_code,
+		osp.pay_state,o.customer_id,o.shop_id
+		FROM
+		t_biz_order o,
+		(SELECT
+		osr.order_id,osr.order_state_code FROM t_biz_order
+		o,t_biz_order_state_relation osr 
+		WHERE o.customer_id = 
+		#{param.customer_id} AND o.id= osr.order_id and osr.order_state_code
+		IN 
+		<foreach collection="param.stateList" item="item" open="(" separator="," close=")">
+			${item}
+		</foreach>
+		 AND osr.TIME = (SELECT 
+      MAX(TIME) 
+    FROM
+      t_biz_order_state_relation 
+    WHERE osr.order_id = order_id)
+		GROUP BY osr.order_id) state,
+		t_biz_order_pay osp
+		WHERE
+		o.customer_id =
+		#{param.customer_id}
+		AND state.order_id = o.id AND osp.order_id = o.id
+		ORDER BY
+		o.id desc LIMIT #{page}, #{pageSize}) temp
+		LEFT JOIN t_biz_order_product op ON temp.id = op.order_id
+		LEFT JOIN t_biz_brand_prod_img img ON img.product_id = op.product_id AND img.img_sort= (SELECT 
+				MIN(img_sort) 
+				FROM t_biz_brand_prod_img 
+				WHERE img.product_id = product_id)
+
+		LEFT JOIN t_biz_shop bs ON bs.id = temp.shop_id
+		LEFT JOIN t_biz_brand_product bp ON bp.id = op.product_id
+		ORDER BY temp.id desc;
+
+	</select>
+
+	<select id="selectOneOrderByCode" parameterType="java.lang.String"
+		resultMap="OrderResultMap">
+	SELECT 
+  o.id,
+  o.code,
+  o.brand_id,
+  o.customer_id,
+  o.create_time,
+  o.order_price,
+  o.isdeposit,
+  o.deposit_price,
+  o.cut_price,
+  bs.shop_name,
+  bs.phone_num as shop_phone_num,
+  p.pay_state,
+  state.order_state_code,
+  state.state,
+  REPLACE(state.description, '#', shop_name) AS description,
+  state.time,
+  bs.id AS shop_id,
+  op.product_id,
+  op.sales_property_id,
+  bp.product_title as product_name,
+  op.product_num AS num,
+  op.buy_type,op.type_value,op.price,op.sale_price,
+  bp.description AS info,
+  bpi.imgurl AS image_url,
+  o.address_details,
+  o.receiver_name,
+  o.phone_num as receiver_phone,
+  cc.id AS coups_id,
+  bcoups.name AS coups_name,
+  bcoups.step_value AS coups_step_value,
+  bcoups.value AS coups_value,
+  bcoups.type AS coups_type,
+  asp.id AS asp_id,
+  asp.value AS asp_value,
+  bu.id AS union_id,
+  bu.cash_value AS  union_cash_value
+FROM
+  t_biz_order o 
+  LEFT JOIN t_biz_order_product op 
+    ON o.id = op.order_id 
+  LEFT JOIN t_biz_brand_product bp 
+    ON bp.id = op.product_id 
+  LEFT JOIN 
+    (SELECT 
+      img.product_id,
+      img.imgurl 
+    FROM
+      t_biz_order o,
+      t_biz_order_product op,
+      t_biz_brand_prod_img img 
+    WHERE o.code = #{code,jdbcType=VARCHAR} 
+      AND o.id = op.order_id 
+      AND img.product_id = op.product_id 
+    AND img.img_sort = (SELECT 
+				MIN(img_sort) 
+				FROM t_biz_brand_prod_img 
+				WHERE img.product_id = product_id)) bpi 
+    ON bpi.product_id = op.product_id 
+  LEFT JOIN 
+    (SELECT 
+      osr.order_id,
+      osr.order_state_code,
+      st.state,
+      st.description,
+      osr.param,
+      osr.time
+    FROM
+      t_biz_order o,
+      t_biz_order_state_relation osr,
+      t_biz_order_state st 
+    WHERE o.code = #{code,jdbcType=VARCHAR}
+      AND o.id = osr.order_id 
+      AND st.order_code = osr.order_state_code 
+    AND osr.TIME = (SELECT 
+      MAX(TIME) 
+    FROM
+      t_biz_order_state_relation 
+    WHERE osr.order_id = order_id)) state 
+    ON state.order_id = o.id,
+  t_biz_order_pay p,
+  t_biz_shop bs,
+  t_biz_order_coupons oc 
+  LEFT JOIN t_biz_customer_coupons cc ON cc.id IN (oc.coupons_id, oc.redbag_id, oc.zhekou_id)
+  LEFT JOIN t_biz_brand_coupons bcoups ON bcoups.id = cc.coupons_id
+  LEFT JOIN t_biz_unionpromotion bu ON FIND_IN_SET(bu.id,oc.promotion_id) >0
+  LEFT JOIN t_app_shop_prepay asp on asp.id = oc.pershop_id
+WHERE o.code = #{code,jdbcType=VARCHAR} 
+  AND o.id = p.order_id 
+  AND o.shop_id = bs.id 
+  AND o.id = oc.order_id
+	</select>
+	<select id="selectOrdersByGroupCode" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT o.id, o.code , o.exshopper_id, o.customer_id, o.order_price, o.isdeposit, o.deposit_price, p.pay_state 
+		FROM t_biz_order_pay p,t_biz_order o 
+		WHERE grouppay_id = #{grouppay_id ,jdbcType=VARCHAR} AND o.id = p.order_id
+	</select>
+	<select id="selectUnReadOrdersForGuilder" parameterType="java.lang.Long"
+		resultType="java.lang.Integer">
+	   SELECT COUNT(1) 
+    FROM t_biz_seller_balance_detail bd, t_app_seller s  
+    WHERE bd.seller_id = #{id,jdbcType=BIGINT} AND bd.type = 1 AND bd.seller_id = s.id AND bd.create_time &gt; s.view_orders_time 
+	</select>
+	<select id="selectSumPriceOfAllOrders" parameterType="java.lang.Long"
+		resultType="java.lang.Double">
+	   SELECT ROUND(SUM(amount),2) AS amount   
+    FROM t_biz_seller_balance_detail bd, v_orderstate_max_time st
+    
+    WHERE bd.seller_id = #{id,jdbcType=BIGINT} AND bd.type = 1 AND st.order_id = bd.order_id 
+
+    AND st.order_state_code != 4000 AND st.order_state_code != 5000 AND bd.create_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK)
+	</select>
+	<select id="selectGuildSumofLastMonth" parameterType="java.lang.Long"
+		resultType="java.lang.Double">
+	 SELECT ROUND(SUM(amount),2) AS amount   
+    FROM t_biz_seller_balance_detail bd,v_orderstate_max_time st
+    WHERE bd.seller_id = #{id,jdbcType=BIGINT}
+    AND bd.type =1 
+    AND bd.order_id = st.order_id 
+    AND st.order_state_code != 4000 AND st.order_state_code != 5000 
+    AND bd.create_time &gt; DATE_SUB(DATE_SUB(DATE_FORMAT(NOW(),'%y-%m-%d'),INTERVAL EXTRACT(DAY FROM NOW())-1 DAY),INTERVAL 1 MONTH)
+    AND bd.create_time &lt; DATE_SUB(DATE_SUB(DATE_FORMAT(NOW(),'%y-%m-%d'),INTERVAL EXTRACT(DAY FROM NOW()) DAY),INTERVAL 0 MONTH)
+	</select>
+	<select id="selectGuildSumofThisMonth" parameterType="java.lang.Long"
+		resultType="java.lang.Double">
+	SELECT ROUND(SUM(amount),2) AS amount   
+    FROM t_biz_seller_balance_detail bd, v_orderstate_max_time st
+    
+    WHERE bd.seller_id =  #{id,jdbcType=BIGINT} AND bd.type = 1 AND st.order_id = bd.order_id
+    
+    AND st.order_state_code != 4000 AND st.order_state_code != 5000 
+    AND bd.create_time &gt; DATE_SUB(DATE_SUB(DATE_FORMAT(NOW(),'%y-%m-%d'),INTERVAL EXTRACT(DAY FROM NOW())-1 DAY),INTERVAL 0 MONTH) 
+    
+	</select>
+	<select id="selectGuildSumOrders" parameterType="java.lang.Long"
+		resultType="java.lang.Integer">
+	   SELECT COUNT(1) 
+    FROM t_biz_seller_balance_detail bd 
+    WHERE bd.seller_id = #{id,jdbcType=BIGINT} and bd.type =1 AND bd.order_id IS NOT NULL
+	</select>
+	<select id="selectTodayGuildSumOrders" parameterType="java.lang.Long"
+		resultType="java.lang.Integer">
+	   SELECT COUNT(1)    
+    FROM t_biz_seller_balance_detail bd 
+    WHERE bd.seller_id = #{id,jdbcType=BIGINT}  and bd.type =1 AND bd.order_id IS NOT NULL AND bd.create_time &gt;= CURDATE()
+	</select>
+	<select id="selectAllOrdersForGuilderPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultType="com.mfangsoft.zhuangjialong.app.seller.model.OrderProfitShareModel">
+	SELECT bd.order_id,shop.shop_name,bp.product_title as product_name,ROUND((o.order_price + o.deposit_price),2) as order_price,o.create_time,p.pay_time,IF(p.pay_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK), "已结算", "已付款") AS state,img.imgurl,
+	ROUND(amount,2) AS guji,
+	IF((st.order_state_code IN (2001,3000) <![CDATA[&&]]> p.pay_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK)), ROUND(amount,2), 0) AS shouru
+    
+    FROM t_biz_seller_balance_detail bd, t_biz_order o,t_biz_shop shop, t_biz_order_pay p,t_biz_order_state_relation st,t_biz_order_product op,t_biz_brand_product bp,t_biz_brand_prod_img img
+    WHERE bd.seller_id = #{param.id,jdbcType=BIGINT} AND o.id = bd.order_id AND o.id = p.order_id and o.id=st.order_id AND p.pay_state = 1 AND p.pay_time &lt; NOW() AND op.order_id = o.id AND img.product_id= op.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id=img.product_id)  
+   AND st.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE st.order_id = order_id)
+   AND shop.id = o.shop_id AND bp.id=op.product_id
+    GROUP BY bd.order_id
+    ORDER BY o.create_time desc
+	</select>
+		<select id="selectYiJiesuanOrdersForGuilderPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultType="com.mfangsoft.zhuangjialong.app.seller.model.OrderProfitShareModel">
+	SELECT bd.order_id,shop.shop_name,bp.product_title as product_name,ROUND((o.order_price + o.deposit_price),2) as order_price,o.create_time,p.pay_time, "已结算" AS state,img.imgurl,
+	ROUND(amount,2) AS guji,ROUND(amount,2) AS shouru
+    
+    FROM t_biz_seller_balance_detail bd, t_biz_order o,t_biz_shop shop, t_biz_order_pay p,t_biz_order_state_relation st,t_biz_order_product op,t_biz_brand_product bp,t_biz_brand_prod_img img
+    WHERE bd.seller_id = #{param.id,jdbcType=BIGINT} AND o.id = bd.order_id AND o.id = p.order_id and o.id=st.order_id and st.order_state_code IN (2001,3000) AND p.pay_state = 1 AND p.pay_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK) AND op.order_id = o.id AND img.product_id= op.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id=img.product_id)  
+   AND st.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE st.order_id = order_id)
+   AND shop.id = o.shop_id AND bp.id=op.product_id
+    GROUP BY bd.order_id
+    ORDER BY o.create_time desc
+	</select>
+		<select id="selectYiFuKuanOrdersForGuilderPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultType="com.mfangsoft.zhuangjialong.app.seller.model.OrderProfitShareModel">
+	SELECT bd.order_id,shop.shop_name,bp.product_title as product_name,ROUND((o.order_price + o.deposit_price),2) as order_price,o.create_time,p.pay_time, "已付款" AS state,img.imgurl,
+	ROUND(amount,2) AS guji
+    
+    FROM t_biz_seller_balance_detail bd, t_biz_order o,t_biz_shop shop, t_biz_order_pay p,t_biz_order_state_relation st,t_biz_order_product op,t_biz_brand_product bp,t_biz_brand_prod_img img
+    WHERE bd.seller_id = #{param.id,jdbcType=BIGINT} AND o.id = bd.order_id AND o.id = p.order_id and o.id=st.order_id  AND p.pay_state = 1 AND p.pay_time &gt; DATE_SUB(NOW(), INTERVAL 2 WEEK) AND op.order_id = o.id AND img.product_id= op.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id=img.product_id)  
+   AND st.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE st.order_id = order_id)
+   AND shop.id = o.shop_id AND bp.id=op.product_id
+    GROUP BY bd.order_id
+    ORDER BY o.create_time desc
+	</select>
+			<select id="selectYiShiXiaoOrdersForGuilderPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultType="com.mfangsoft.zhuangjialong.app.seller.model.OrderProfitShareModel">
+	SELECT bd.order_id,shop.shop_name,bp.product_title as product_name,ROUND((o.order_price + o.deposit_price),2) as order_price,o.create_time,p.pay_time,"已失效" AS state,img.imgurl,
+	ROUND(amount,2) AS guji
+    
+    FROM t_biz_seller_balance_detail bd, t_biz_order o,t_biz_shop shop, t_biz_order_pay p,t_biz_order_state_relation st,t_biz_order_product op,t_biz_brand_product bp,t_biz_brand_prod_img img
+    WHERE bd.seller_id = #{param.id,jdbcType=BIGINT} AND o.id = bd.order_id AND o.id = p.order_id and o.id=st.order_id AND st.order_state_code = 4000 AND p.pay_state = 1 AND p.pay_time &lt; NOW() AND op.order_id = o.id AND img.product_id= op.product_id AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id=img.product_id)  
+   AND st.time = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE st.order_id = order_id)
+   AND shop.id = o.shop_id AND bp.id=op.product_id
+    GROUP BY bd.order_id
+    ORDER BY o.create_time desc
+	</select>
+	<update id="updateOrderState"
+		parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		UPDATE t_biz_order_state_relation osr,t_biz_order bo SET
+		osr.order_state_code = #{order_state_code,jdbcType=INTEGER} and
+		osr.time= now() WHERE bo.code = #{code,jdbcType=VARCHAR} AND bo.id =
+		osr.order_id;
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		t_biz_order
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_biz_order (code, customer_id, shop_id,
+		brand_id,
+		citypartner_id, order_price,
+		exshopper_id, region_code, create_time,
+		address_details,receiver_name,phone_num,memo,isdeposit,deposit_price)
+		values (#{order_code,jdbcType=VARCHAR},
+		#{customer_id,jdbcType=BIGINT},
+		#{shop_id,jdbcType=BIGINT},
+		#{brand_id,jdbcType=BIGINT}, #{citypartner_id,jdbcType=BIGINT},
+		ROUND(#{order_price,jdbcType=DOUBLE},2),
+		#{exshopper_id,jdbcType=BIGINT},
+		#{region_code,jdbcType=VARCHAR},
+		#{create_time,jdbcType=TIMESTAMP},
+		#{address_details,jdbcType=VARCHAR},
+		#{receiver_name,jdbcType=VARCHAR},
+		#{phone_num,jdbcType=VARCHAR},
+		#{memo,jdbcType=LONGVARCHAR},
+		#{isdeposit,jdbcType=TINYINT},
+		ROUND(#{deposit_price,jdbcType=DOUBLE},2)
+		)
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_biz_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="order_code != null">
+				code,
+			</if>
+			<if test="customer_id != null">
+				customer_id,
+			</if>
+			<if test="shop_id != null">
+				shop_id,
+			</if>
+			<if test="brand_id != null">
+				brand_id,
+			</if>
+			<if test="citypartner_id != null">
+				citypartner_id,
+			</if>
+			<if test="order_price != null">
+				order_price,
+			</if>
+			<if test="cut_price != null">
+				cut_price,
+			</if>
+			<if test="exshopper_id != null">
+				exshopper_id,
+			</if>
+			<if test="region_code != null">
+				region_code,
+			</if>
+			<if test="create_time != null">
+				create_time,
+			</if>
+			<if test="address_details != null">
+				address_details,
+			</if>
+			<if test="receiver_name != null">
+				receiver_name,
+			</if>
+			<if test="phone_num != null">
+				phone_num,
+			</if>
+			<if test="memo != null">
+				memo,
+			</if>
+			<if test="isdeposit != null">
+				isdeposit,
+			</if>
+			<if test="deposit_price != null">
+				deposit_price
+			</if>
+			<if test="shell_id != null">
+				shell_id
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="order_code != null">
+				#{order_code,jdbcType=VARCHAR},
+			</if>
+			<if test="customer_id != null">
+				#{customer_id,jdbcType=BIGINT},
+			</if>
+			<if test="shop_id != null">
+				#{shop_id,jdbcType=BIGINT},
+			</if>
+			<if test="brand_id != null">
+				#{brand_id,jdbcType=BIGINT},
+			</if>
+			<if test="citypartner_id != null">
+				#{citypartner_id,jdbcType=BIGINT},
+			</if>
+			<if test="order_price != null">
+				#{order_price,jdbcType=DOUBLE},
+			</if>
+			<if test="cut_price != null">
+				#{cut_price,jdbcType=DOUBLE},
+			</if>
+			<if test="exshopper_id != null">
+				#{exshopper_id,jdbcType=BIGINT},
+			</if>
+			<if test="region_code != null">
+				#{region_code,jdbcType=VARCHAR},
+			</if>
+			<if test="create_time != null">
+				#{create_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address_details != null">
+				#{address_details,jdbcType=VARCHAR},
+			</if>
+			<if test="receiver_name != null">
+				#{receiver_name,jdbcType=VARCHAR},
+			</if>
+			<if test="phone_num != null">
+				#{phone_num,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				#{memo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isdeposit != null">
+				#{isdeposit,jdbcType=TINYINT},
+			</if>
+			<if test="deposit_price != null">
+				ROUND(#{deposit_price,jdbcType=DOUBLE},2)
+			</if>
+			<if test="shell_id != null">
+				#{shell_id,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		update t_biz_order
+		<set>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="customer_id != null">
+				customer_id = #{customer_id,jdbcType=BIGINT},
+			</if>
+			<if test="shop_id != null">
+				shop_id = #{shop_id,jdbcType=BIGINT},
+			</if>
+			<if test="brand_id != null">
+				brand_id = #{brand_id,jdbcType=BIGINT},
+			</if>
+			<if test="citypartner_id != null">
+				citypartner_id = #{citypartner_id,jdbcType=BIGINT},
+			</if>
+			<if test="order_price != null">
+				order_price = #{order_price,jdbcType=DOUBLE},
+			</if>
+			<if test="exshopper_id != null">
+				exshopper_id = #{exshopper_id,jdbcType=BIGINT},
+			</if>
+			<if test="region_code != null">
+				region_code = #{region_code,jdbcType=VARCHAR},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address_details != null">
+				address_details =
+				#{address_details,jdbcType=VARCHAR},
+			</if>
+			<if test="receiver_name != null">
+				receiver_name =
+				#{receiver_name,jdbcType=VARCHAR},
+			</if>
+			<if test="phone_num != null">
+				phone_num =
+				#{phone_num,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				memo = #{memo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="shell_id != null">
+				shell_id = #{shell_id,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		update t_biz_order
+		set code = #{code,jdbcType=VARCHAR},
+		customer_id = #{customer_id,jdbcType=BIGINT},
+		shop_id =
+		#{shop_id,jdbcType=BIGINT},
+		brand_id = #{brand_id,jdbcType=BIGINT},
+		citypartner_id = #{citypartner_id,jdbcType=BIGINT},
+		order_price =
+		#{order_price,jdbcType=DOUBLE},
+		exshopper_id =
+		#{exshopper_id,jdbcType=BIGINT},
+		region_code =
+		#{region_code,jdbcType=VARCHAR},
+		create_time =
+		#{create_time,jdbcType=TIMESTAMP},
+		address_details =
+		#{address_details,jdbcType=VARCHAR},
+		receiver_name =
+		#{receiver_name,jdbcType=VARCHAR},
+		phone_num =
+		#{phone_num,jdbcType=VARCHAR},
+		memo =
+		#{memo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.mfangsoft.zhuangjialong.app.order.model.OrderEntity">
+		update t_biz_order
+		set code = #{code,jdbcType=VARCHAR},
+		customer_id = #{customer_id,jdbcType=BIGINT},
+		shop_id =
+		#{shop_id,jdbcType=BIGINT},
+		brand_id = #{brand_id,jdbcType=BIGINT},
+		citypartner_id = #{citypartner_id,jdbcType=BIGINT},
+		order_price =
+		#{order_price,jdbcType=DOUBLE},
+		exshopper_id =
+		#{exshopper_id,jdbcType=BIGINT},
+		region_code =
+		#{region_code,jdbcType=VARCHAR},
+		create_time =
+		#{create_time,jdbcType=TIMESTAMP},
+		address_details =
+		#{address_details,jdbcType=VARCHAR},
+		receiver_name =
+		#{receiver_name,jdbcType=VARCHAR},
+		phone_num =
+		#{phone_num,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateShellId" >
+		update t_biz_order
+		set shell_id = #{shell_id,jdbcType=BIGINT}
+		where id in 
+			<foreach collection="shellIdList" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+	</update>
+	
+	<select id="getOrderListForPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+
+		SELECT
+	o.id, o.code,
+	ifnull(appseller.name,'') as seller_name,
+	if(o.deposit_price=0,o.order_price, if(opy.isdeposit=1,o.order_price+o.deposit_price,concat(concat('已付定金：',o.order_price),'剩余尾款:',o.deposit_price)))as totalprice,
+	o.customer_id,
+	o.shop_id,
+	c.exshopper_id,
+  o.receiver_name,
+  prod.sales_model as pay_type,
+	o.create_time,
+	op.id as op_id,
+	op.product_id,
+	op.info,
+	opy.customer_pay_id,
+	o.region_code,
+	op.sales_property_id,
+	op.product_num*sal.price as sales_price,
+	c.name as customer_name,
+	p.region_id,
+  sp.shop_name, be.name as brand_name, e.enterprise_name,p.principal as principal,
+  os.state,
+  os.order_code,
+  prod.product_title as product_name,sal.model as sales_model,sal.color,sal.price ,pimg.imgurl,
+  p.id  as partner_id,
+  e.id as ent_id,
+  b.id as brand_id
+	FROM t_biz_order o
+	left join  t_biz_brand b on b.id=o.brand_id
+	left join t_biz_partner p on p.id = b.citypartner_id
+	left join t_biz_enterprise e on e.id=p.enterprise_id
+	left join t_biz_shop sp on sp.id=o.shop_id
+	left join t_biz_order_product op on op.order_id=o.id
+	left join t_biz_brand_product prod on op.product_id =prod.id
+	left join t_biz_build_enterprise be on be.id=b.enterprise_id 
+	left join v_prod_min_img pimg on pimg.product_id =op.product_id
+	left join t_biz_brand_prod_salesattr sal on sal.id =op.sales_property_id
+	left join v_orderstate_max_time omax  on  o.id=omax.order_id
+	left join t_biz_order_state os on os.order_code =omax.order_state_code
+	left join t_app_customer c on c.id=o.customer_id
+	left join t_biz_order_pay opy on opy.order_id = o.id
+  	left join  t_app_seller appseller on appseller.id=c.exshopper_id
+	WHERE 1=1 and os.state is not null
+	
+  
+	<if test="param.shop_id !=null and param.shop_id!=''">
+
+		and o.shop_id=#{param.shop_id}
+	</if>
+	
+	<if test="param.partner!=null and param.partner!=''">
+	
+	     and o.citypartner_id = #{param.partner}
+	
+	</if>
+	
+	<if test="param.brand!=null and param.brand!=''">
+	
+	     and o.brand_id = #{param.brand}
+	
+	</if>
+	
+	<if test="param.ent_id!=null and param.ent_id!=''">
+	
+	     and e.id  =#{param.ent_id}
+	
+	</if>
+	
+	<if test="param.order_state !=null and param.order_state!=''">
+
+		and os.order_code=#{param.order_state}
+	</if>
+
+	<if test="param.shop_name !=null and param.shop_name!=''">
+
+		and sp.shop_name like CONCAT('%', #{param.shop_name},'%')
+	</if>
+
+	<if test="param.brand_name !=null and param.brand_name!=''">
+
+		and be.name like CONCAT('%', #{param.brand_name},'%')
+
+	</if>
+
+	<if test="param.principal!=null and param.principal!=''">
+
+		and p.principal like CONCAT('%', #{param.principal},'%')
+
+	</if>
+	
+	<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+		and e.enterprise_name like CONCAT('%', #{param.enterprise_name},'%')
+
+	</if>
+	
+	<if test="param.deposit_price!=null and param.deposit_price!=''">
+	
+	   <if test="param.deposit_price==1">
+	   
+	   and ((o.isdeposit=1 and opy.isdeposit=#{param.deposit_price}) or ( o.isdeposit=1 and o.deposit_price=0 and opy.isdeposit=0))
+	   </if>
+	   
+	    <if test="param.deposit_price==0">
+	   and o.deposit_price!=0 and  opy.isdeposit=#{param.deposit_price}
+	   
+	   </if>
+	  
+	</if>
+
+
+	  <if test="param.province!=null and param.province!=''">
+  
+   and CONCAT(left(o.region_code,2),'0000')= #{param.province}
+  
+  </if>
+  
+  <if test="param.city!=null and param.city!=''">
+  
+   and CONCAT(left(o.region_code,4),'00')= #{param.city}
+  
+  </if>
+  
+  <if test="param.county!=null and param.county!=''">
+  
+   and o.region_code= #{param.county}
+  
+  </if>
+
+	<if test="param.order_code!=null and param.order_code!=''">
+
+		and o.code=#{param.order_code}
+
+	</if>
+
+	<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+	</if>
+
+
+
+	<if test="param.product_name!= null and param.product_name!=''">
+
+		and prod.product_title like CONCAT('%', #{param.product_name},'%')
+
+	</if>
+	<if test="param.product_model!= null and param.product_model!=''">
+		and prod.sales_model like CONCAT('%', #{param.product_model},'%')
+	
+	</if>
+	
+	<if test="param.ids!=null and param.ids!=''">
+	
+	   and o.id in (${param.ids})
+	
+	</if>
+	
+	<if test="param.sort!=null">
+ 	order by
+ 	<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	
+ 	  ${sort.field}  ${sort.dir}
+ 	
+ 	</foreach>
+ 	</if>
+	</select>
+
+<select id="selectOrderForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+
+SELECT
+  o.id,
+  o.code,
+  o.deposit_price,
+  o.order_price,
+  ifnull(appseller.name,'') as seller_name,
+  opy.trade_data,
+  opy.isdeposit,
+  opy.customer_pay_id,
+  o.receiver_name,
+  IF((o.isdeposit IS TRUE AND opy.isdeposit IS FALSE),0,1) AS shifu_type,
+  date_format(o.create_time,'%Y-%m-%d %T') as create_time,
+  c.name as customer_name,
+  sp.shop_name, 
+  be.name as brand_name, 
+  e.enterprise_name,
+  p.principal as principal,
+  os.state,
+  os.order_code,
+  osr.order_state_code
+	FROM t_biz_order o
+	left join  t_biz_brand b on b.id=o.brand_id
+	left join t_biz_partner p on p.id = b.citypartner_id
+	left join t_biz_enterprise e on e.id=p.enterprise_id
+	left join t_biz_shop sp on sp.id=o.shop_id
+	left join t_biz_build_enterprise be on be.id=b.enterprise_id 
+	left join v_orderstate_max_time omax  on  o.id=omax.order_id
+	left join t_biz_order_state os on os.order_code =omax.order_state_code
+	left join t_app_customer c on c.id=o.customer_id
+	left join t_biz_order_pay opy on opy.order_id = o.id
+	left join  t_app_seller appseller on appseller.id=o.exshopper_id
+	
+	 left join  t_biz_order_state_relation osr on osr.`time` != omax.`time` and  (osr.order_state_code=4000 or osr.order_state_code=3000) and osr.order_id=o.id
+	<if test="param.product_title!=null and param.product_title!=''">
+	left join t_biz_order_product op on op.order_id = o.id
+    left join t_biz_brand_product prod on  prod.id= op.product_id
+	</if>
+	
+	
+	
+	WHERE 1=1 and os.state is not null
+
+	<if test="param.shop_id !=null and param.shop_id!=''">
+
+		and o.shop_id=#{param.shop_id}
+	</if>
+	
+	<if test="param.customer_name!=null and param.customer_name!=''">
+	
+	    and o.receiver_name like  CONCAT('%', #{param.customer_name},'%')
+	
+	</if>
+	
+	<if test="param.product_title!=null and param.product_title!=''">
+	 
+	 and prod.product_title like CONCAT('%', #{param.product_title},'%') 
+	 
+	</if>
+	
+	<if test="param.partner!=null and param.partner!=''">
+	
+	     and o.citypartner_id = #{param.partner}
+	
+	</if>
+	
+	<if test="param.brand!=null and param.brand!=''">
+	
+	     and o.brand_id = #{param.brand}
+	
+	</if>
+	
+	<if test="param.ent_id!=null and param.ent_id!=''">
+	
+	     and e.id  =#{param.ent_id}
+	
+	</if>
+	
+	<if test="param.order_state !=null and param.order_state!=''">
+
+		and os.order_code=#{param.order_state}
+	</if>
+
+	<if test="param.shop_name !=null and param.shop_name!=''">
+
+		and sp.shop_name like CONCAT('%', #{param.shop_name},'%')
+	</if>
+
+	<if test="param.brand_name !=null and param.brand_name!=''">
+
+		and be.name like CONCAT('%', #{param.brand_name},'%')
+
+	</if>
+
+	<if test="param.principal!=null and param.principal!=''">
+
+		and p.principal like CONCAT('%', #{param.principal},'%')
+
+	</if>
+	
+	<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+		and e.enterprise_name like CONCAT('%', #{param.enterprise_name},'%')
+
+	</if>
+	
+	<if test="param.deposit_price!=null and param.deposit_price!=''">
+	
+	   <if test="param.deposit_price==1">
+	   
+	   and ((o.isdeposit=1 and opy.isdeposit=1) or ( o.isdeposit=0 and opy.pay_state=1))
+	   </if>
+	   
+	    <if test="param.deposit_price==0">
+	   and (opy.pay_state = 0 or  opy.isdeposit=0)
+	   
+	   </if>
+	  
+	</if>
+
+
+	  <if test="param.province!=null and param.province!=''">
+  
+   and CONCAT(left(o.region_code,2),'0000')= #{param.province}
+  
+  </if>
+  
+  <if test="param.city!=null and param.city!=''">
+  
+   and CONCAT(left(o.region_code,4),'00')= #{param.city}
+  
+  </if>
+  
+  <if test="param.county!=null and param.county!=''">
+  
+   and o.region_code= #{param.county}
+  
+  </if>
+
+	<if test="param.order_code!=null and param.order_code!=''">
+
+		and o.code=#{param.order_code}
+
+	</if>
+
+	<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+	</if>
+	
+	
+	<if test="param.sort!=null">
+ 	order by
+ 	<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	
+ 	  ${sort.field}  ${sort.dir}
+ 	
+ 	</foreach>
+ 	</if>
+	
+	
+</select>
+
+<select id="selectOrderProduct" parameterType="java.lang.Long" resultType="java.util.Map">
+
+   select op.id, prod.sales_model,prod.product_title, pimg.imgurl, op.product_num,sale.price, sale.model,sale.color,op.info from t_biz_order_product op left join t_biz_brand_product prod on  prod.id= op.product_id
+  
+  
+  left join t_biz_brand_prod_salesattr  sale on sale.id = op.sales_property_id
+  
+  left join v_prod_min_img  pimg on pimg.product_id = op.product_id
+  
+  
+  where 1=1 and op.order_id=#{id}
+  
+
+
+
+
+</select>
+
+	<select id="getOrderdetails" resultType="java.util.Map"
+		parameterType="java.lang.Long">
+select temp.*,appseller.name as seller_name,
+ group_concat(order_state_info.state,order_state_info.time order by order_state_info.time desc SEPARATOR '') as  state_info
+from  (SELECT
+	o.id,
+    o.code,
+    o.receiver_name,
+	o.order_price+o.deposit_price  as totalprice,
+	op.product_num,
+	cu.exshopper_id,
+	sp.shop_name,
+	sp.principal as shop_principal,
+	be.name as brand_name,
+	par.principal as principal,
+	e.enterprise_name as enterpise_name,
+	cu.name as customer_name,
+    o.phone_num as customer_phone,
+	date_format(o.create_time,'%Y-%m-%d %T') as create_time,
+  p.product_title as product_name,
+  prod.color,
+  prod.model as sales_model,
+  prod.price,
+  pimg.imgurl,
+  
+  os.state,
+  o.address_details as address 
+	FROM t_biz_order o left join t_biz_order_product op on op.order_id = o.id
+	                   
+	                   left join  t_biz_brand b on b.id=o.brand_id
+					   left join t_biz_partner par on par.id = b.citypartner_id
+					   left join t_biz_enterprise e on e.id=par.enterprise_id
+					   left join t_biz_shop sp on sp.id=o.shop_id
+					   left join t_biz_build_enterprise be on be.id=b.enterprise_id 
+					   left join t_app_customer cu on cu.id =o.customer_id 
+				
+					   left join t_biz_brand_product p on p.id =op.product_id
+					   left join t_biz_brand_prod_salesattr prod on op.sales_property_id = prod.id
+					   left join v_prod_min_img pimg on pimg.product_id = op.product_id
+					   left join v_orderstate_max_time omax  on  o.id=omax.order_id
+					   left join t_biz_order_state os on os.order_code =omax.order_state_code
+					   
+	where 1=1				
+	and op.id=#{order_id} GROUP BY o.id) temp  left join    
+  (select osr.id as osr_id, osr.order_id as osr_order_id,
+		 <![CDATA[ CONCAT('<p>',os.state,'   ') ]]> 
+	as state,os.description,
+		 <![CDATA[ CONCAT('',osr.time,'<p>')  ]]> 
+	as time from
+	t_biz_order_state os,t_biz_order_state_relation osr where
+	osr.order_state_code = os.order_code  order by osr.time desc ) order_state_info on   temp.id = order_state_info.osr_order_id 
+	
+	 left join  t_app_seller appseller on appseller.id=temp.exshopper_id
+  group by  temp.id
+	</select>
+	
+	
+		<select id="getOrderListBackForPage" resultMap="OrderResultMapForBack"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+
+SELECT
+	o.id, o.code,
+	pp.isdeposit,
+	TRUNCATE(o.order_price,2) as order_price,
+	TRUNCATE(o.deposit_price,2) as deposit_price,
+	IF((o.isdeposit IS TRUE AND pp.isdeposit IS FALSE),CONCAT(TRUNCATE(o.order_price,2),'+',TRUNCATE(o.deposit_price,2)),TRUNCATE((o.order_price + o.deposit_price),2)) AS totalprice,
+	IF((o.isdeposit IS TRUE AND pp.isdeposit IS FALSE),0,1) AS shifu_type, -- 0 定金 + 尾款  1 求和
+	
+	IF(pp.pay_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK) &amp;&amp; pay_state = 1 &amp;&amp; (o.isdeposit IS FALSE OR (o.isdeposit IS TRUE AND pp.isdeposit IS TRUE)), TRUNCATE((o.order_price + o.deposit_price) * si.commission_rate,2), 0) AS fixed_money,
+	
+	 TRUNCATE((o.order_price + o.deposit_price) * si.commission_rate,2) AS pre_money,
+	 
+	(o.order_price + o.deposit_price) AS total_price,
+	o.customer_id,
+	o.shop_id,
+	pp.trade_data,
+  o.receiver_name,
+  DATE_FORMAT(o.create_time, '%Y-%m-%d %H:%i:%s') create_time,
+  ROUND((o.order_price+o.deposit_price) * osi.rate,2) AS money_platform,IFNULL(ROUND(d.amount,2),0) AS amount,
+  
+  op.id as product_id,
+	op.sales_property_id,
+	op.product_num,
+	(sal.price * op.product_num) AS product_total_price, 
+	c.name AS customer_name,
+	prod.sales_model,
+  if(prod.sales_model = 2,'定金','全款') AS pay_type_str,
+  IFNULL(s.name,'') AS seller_name,
+  
+  sp.shop_name, be.name AS brand_name, e.enterprise_name,p.principal,
+  omax.order_state_code,
+  os.state,
+  prod.product_title,sal.model,sal.color,sal.price ,pimg.imgurl,
+  op.info
+  -- CONCAT(IF(bc1.value IS NULL,'',CONCAT('优惠券:',bc1.value)), IF(bc2.value IS NULL,'',CONCAT('红包:',bc2.value)) ,IF(spr.value IS NULL,'',CONCAT('店铺现金券:',spr.value))) AS quan
+	
+	FROM t_biz_order_shell_info osi,t_biz_order o
+	LEFT JOIN t_biz_seller_balance_detail d ON d.order_id = o.id
+	LEFT JOIN t_app_seller_info si ON si.seller_id = o.exshopper_id 
+	LEFT JOIN t_app_seller s ON s.id=o.exshopper_id 
+	LEFT JOIN t_biz_order_pay pp ON pp.order_id = o.id 
+	LEFT JOIN v_orderstate_max_time omax ON o.id = omax.order_id
+	LEFT JOIN t_biz_order_state os ON os.order_code = omax.order_state_code
+	LEFT JOIN t_app_customer c ON c.id=o.customer_id
+	LEFT JOIN t_biz_shop sp ON o.shop_id = sp.id
+	LEFT JOIN t_biz_order_coupons oc ON oc.order_id = o.id 
+	LEFT JOIN t_biz_customer_coupons cc1 ON cc1.id = oc.coupons_id
+	LEFT JOIN t_biz_brand_coupons bc1 ON cc1.coupons_id = bc1.id 
+	LEFT JOIN t_biz_customer_coupons cc2 ON cc2.id = oc.redbag_id
+	LEFT JOIN t_biz_brand_coupons bc2 ON cc2.coupons_id = bc2.id
+	LEFT JOIN t_app_shop_prepay spr ON FIND_IN_SET(spr.id, SUBSTRING_INDEX(REVERSE(oc.promotion_id), '-',1)) > 0
+	
+	LEFT JOIN t_biz_order_product op ON op.order_id = o.id 
+	LEFT JOIN t_biz_brand_product prod ON prod.id =op.product_id
+	LEFT JOIN v_prod_min_img pimg ON pimg.product_id= op.product_id
+	LEFT JOIN t_biz_partner p ON p.id = prod.partner_id
+	LEFT JOIN t_biz_brand b ON b.id = prod.brand_id
+	LEFT JOIN t_biz_enterprise e ON prod.enterprise_id=e.id
+	LEFT JOIN t_biz_build_enterprise be ON be.id=b.enterprise_id
+	LEFT JOIN t_biz_brand_prod_salesattr sal ON sal.product_id = op.product_id AND sal.id = op.sales_property_id
+  
+  
+  where 1=1 
+  <if test="param.id !=null and param.id!=''">
+
+		and o.exshopper_id = #{param.id}
+	</if>
+	
+<if test="param.enterprise_id !=null and param.enterprise_id!=''">
+
+		and e.id=#{param.enterprise_id}
+	</if>
+	
+	<if test="param.partner_id !=null and param.partner_id!=''">
+
+		and p.id=#{param.partner_id}
+	</if>
+	
+	<if test="param.brand_id!=null and param.brand_id!=''">
+	
+	     and o.brand_id = #{param.brand_id}
+	
+	</if>
+	
+	<if test="param.order_code!=null and param.order_code!=''">
+
+		and o.code=#{param.order_code}
+
+	</if>
+	
+	<if test="param.order_state !=null and param.order_state!=''">
+
+		and omax.order_state_code=#{param.order_state}
+	</if>
+
+	<if test="param.principal!=null and param.principal!=''">
+
+		and p.principal like CONCAT('%', #{param.principal},'%')
+
+	</if>
+
+	<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')   <![CDATA[>= #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')  <![CDATA[<= #{param.end_time}]]>
+	</if>
+
+	<if test="param.seller_name!= null and param.seller_name!=''">
+		and s.name like CONCAT('%', #{param.seller_name},'%')
+	
+	</if>
+	
+	<if test="param.isdeposit !=null and param.isdeposit!=''">
+
+		and o.isdeposit = #{param.isdeposit}
+	</if>
+
+	<if test="param.order_id_list !=null">
+			and o.id in 
+ 		<foreach collection="param.order_id_list" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>
+	</if>
+	
+    <if test="param.sort!=null">
+		order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	 	 ${sort.field}  ${sort.dir}
+ 	</foreach>
+ 	</if>
+	</select>
+	
+	<select id="getOrderListBackForExcelPage" resultType="java.util.Map"
+		parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+
+SELECT
+	o.id, o.code,
+	pp.isdeposit,
+	TRUNCATE(o.order_price,2) as order_price,
+	TRUNCATE(o.deposit_price,2) as deposit_price,
+	IF((o.isdeposit IS TRUE AND pp.isdeposit IS FALSE),CONCAT(TRUNCATE(o.order_price,2),'+',TRUNCATE(o.deposit_price,2)),TRUNCATE((o.order_price + o.deposit_price),2)) AS totalprice,
+	IF((o.isdeposit IS TRUE AND pp.isdeposit IS FALSE),0,1) AS shifu_type, -- 0 定金 + 尾款
+	
+	IF(pp.pay_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK) &amp;&amp; pay_state = 1 &amp;&amp; (o.isdeposit IS FALSE OR (o.isdeposit IS TRUE AND pp.isdeposit IS TRUE)), TRUNCATE((o.order_price + o.deposit_price) * si.commission_rate,2), 0) AS fixed_money,
+	
+	 TRUNCATE((o.order_price + o.deposit_price) * si.commission_rate,2) AS pre_money,
+	 
+	(o.order_price + o.deposit_price) AS total_price,
+	o.customer_id,
+	o.shop_id,
+	pp.trade_data,
+  o.receiver_name,
+  DATE_FORMAT(o.create_time, '%Y-%m-%d %H:%i:%s') create_time,
+  
+	op.product_id,
+	op.sales_property_id,
+	op.product_num,
+	(sal.price * op.product_num) AS product_total_price, 
+	c.name AS customer_name,
+	prod.sales_model,
+  if(prod.sales_model = 2,'定金','全款') AS pay_type_str,
+  IFNULL(s.name,'') AS seller_name,
+  
+  sp.shop_name, be.name AS brand_name, e.enterprise_name,p.principal AS principal,
+  omax.order_state_code,
+  os.state,
+  prod.product_title AS product_name,sal.model,sal.color,sal.price ,pimg.imgurl,
+  op.info
+  -- CONCAT(IF(bc1.value IS NULL,'',CONCAT('优惠券:',bc1.value)), IF(bc2.value IS NULL,'',CONCAT('红包:',bc2.value)) ,IF(spr.value IS NULL,'',CONCAT('店铺现金券:',spr.value))) AS quan
+	
+	FROM t_biz_order o
+	LEFT JOIN t_app_seller_info si ON si.seller_id = o.exshopper_id 
+	LEFT JOIN t_app_seller s ON s.id=o.exshopper_id 
+	LEFT JOIN t_biz_order_pay pp ON pp.order_id = o.id 
+	LEFT JOIN v_orderstate_max_time omax ON o.id = omax.order_id
+	LEFT JOIN t_biz_order_state os ON os.order_code = omax.order_state_code
+	LEFT JOIN t_app_customer c ON c.id=o.customer_id
+	LEFT JOIN t_biz_shop sp ON o.shop_id = sp.id
+	LEFT JOIN t_biz_order_coupons oc ON oc.order_id = o.id 
+	LEFT JOIN t_biz_customer_coupons cc1 ON cc1.id = oc.coupons_id
+	LEFT JOIN t_biz_brand_coupons bc1 ON cc1.coupons_id = bc1.id 
+	LEFT JOIN t_biz_customer_coupons cc2 ON cc2.id = oc.redbag_id
+	LEFT JOIN t_biz_brand_coupons bc2 ON cc2.coupons_id = bc2.id
+	LEFT JOIN t_app_shop_prepay spr ON FIND_IN_SET(spr.id, SUBSTRING_INDEX(REVERSE(oc.promotion_id), '-',1)) > 0
+	
+	LEFT JOIN t_biz_order_product op ON op.order_id = o.id 
+	LEFT JOIN t_biz_brand_product prod ON prod.id =op.product_id
+	LEFT JOIN v_prod_min_img pimg ON pimg.product_id= op.product_id
+	LEFT JOIN t_biz_partner p ON p.id = prod.partner_id
+	LEFT JOIN t_biz_brand b ON b.id = prod.brand_id
+	LEFT JOIN t_biz_enterprise e ON prod.enterprise_id=e.id
+	LEFT JOIN t_biz_build_enterprise be ON be.id=b.enterprise_id
+	LEFT JOIN t_biz_brand_prod_salesattr sal ON sal.product_id = op.product_id AND sal.id = op.sales_property_id
+  
+  where 1=1 
+  <if test="param.id !=null and param.id!=''">
+
+		and o.exshopper_id = #{param.id}
+	</if>
+	
+<if test="param.enterprise_id !=null and param.enterprise_id!=''">
+
+		and e.id=#{param.enterprise_id}
+	</if>
+	
+	<if test="param.partner_id !=null and param.partner_id!=''">
+
+		and p.id=#{param.partner_id}
+	</if>
+	
+	<if test="param.brand_id!=null and param.brand_id!=''">
+	
+	     and o.brand_id = #{param.brand_id}
+	
+	</if>
+	
+	<if test="param.order_code!=null and param.order_code!=''">
+
+		and o.code=#{param.order_code}
+
+	</if>
+	
+	<if test="param.order_state !=null and param.order_state!=''">
+
+		and omax.order_state_code=#{param.order_state}
+	</if>
+
+	<if test="param.principal!=null and param.principal!=''">
+
+		and p.principal like CONCAT('%', #{param.principal},'%')
+
+	</if>
+
+	<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')   <![CDATA[>= #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(o.create_time,'%Y-%m-%d %T')  <![CDATA[<= #{param.end_time}]]>
+	</if>
+
+	<if test="param.seller_name!= null and param.seller_name!=''">
+		and s.name like CONCAT('%', #{param.seller_name},'%')
+	
+	</if>
+	
+	<if test="param.isdeposit !=null and param.isdeposit!=''">
+
+		and o.isdeposit = #{param.isdeposit}
+	</if>
+
+    <if test="param.sort!=null">
+	order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	 	 ${sort.field}  ${sort.dir}
+ 	</foreach>
+ 	</if>
+	</select>
+	
+	
+	<select id="selectOrdercashcouponListForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+	
+	
+SELECT  temp.id, concat(temp.code,CONCAT('_',IFNULL(temp.trade_data,'%'))) as code, temp.code as code_c,temp.customer_id, temp.promotion_id, temp.order_price, temp.exshopper_id, temp.create_time, temp.pay_time, temp.brand_name, temp.pay_state, temp.trade_data, temp.customer_pay_id, temp.customer_name, temp.promotion_name, temp.pr_price, temp.cash_value, temp.discount, temp.principal, temp.enterpise_name, temp.enterprise_id,
+       temp.product_order_code,temp.use_state, temp.use_time, temp.phone,
+       appseller.name AS seller_name,
+       '../../images/partnercash/partnercash.jpg' AS imgurl,temp.shop_name
+  FROM (SELECT ca.id,
+               ca.code,
+               ca.customer_id,
+               ca.promotion_id,
+               ca.order_price,
+               ca.exshopper_id,
+               date_format(ca.create_time, '%Y-%m-%d %T') AS create_time,
+               ca.pay_time,
+               NULL AS brand_name,
+               NULL as shop_name,
+               ca.pay_state,
+               ca.trade_data,
+               ca.customer_pay_id,
+               c.name AS customer_name,
+               c.phone,
+               u.name AS promotion_name,
+               u.price AS pr_price,
+               u.cash_value,
+               u.discount,
+               p.principal,
+               e.id as  enterprise_id,
+               bu.name AS enterpise_name,
+               cc.product_order_code,
+               cc.state as use_state, date_format(cc.use_time, '%Y-%m-%d %T') AS use_time
+          FROM t_biz_order_cash ca
+				LEFT JOIN t_app_customer c ON c.id = ca.customer_id
+               LEFT JOIN t_biz_unionpromotion u ON u.id = ca.promotion_id
+               LEFT JOIN t_biz_partner p ON u.partner_id = p.id
+               LEFT JOIN t_biz_enterprise e ON e.id = p.enterprise_id
+               LEFT JOIN t_biz_build_enterprise bu ON bu.id = e.build_enterpise
+               LEFT JOIN t_biz_cash_customer cc ON cc.order_code = ca.code
+               
+         WHERE ca.trade_data IS NOT NULL
+         
+<if test="param.promotion_name!=null and param.promotion_name!=''">
+
+
+and u.name like CONCAT('%', #{param.promotion_name},'%')
+
+</if>
+<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+
+and e.enterprise_name like CONCAT('%', #{param.enterprise_name},'%')
+
+</if>
+
+<if test="param.principal!=null and param.principal!=''">
+
+
+and p.principal like CONCAT('%', #{param.principal},'%')
+
+</if>
+
+<if test="param.order_code !=null and param.order_code!=''">
+
+and ca.code = #{param.order_code}
+
+</if>
+
+<if test="param.customer_name!=null and param.customer_name!=''">
+
+and c.name like CONCAT('%', #{param.customer_name},'%')
+
+</if>
+
+<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(ca.create_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(ca.create_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+	</if>
+	
+	<if test="param.partner!=null and param.partner!=''">
+	
+	   and u.partner_id=#{param.partner}
+	
+	</if>
+	
+	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+	
+	   and e.id=#{param.enterprise_id}
+	
+	</if>
+	
+	<if test="param.ids!=null and param.ids!=''">
+	
+	
+	   and ca.id in(${param.ids})
+	
+	
+	</if>
+
+
+) temp 
+
+
+ left join  t_app_seller appseller on appseller.id=temp.exshopper_id
+	
+order by temp.create_time desc
+	</select>
+	<select id="selectOrdercashcouponNewListForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+
+		SELECT ocn.id, ocn.code as code_c, ocn.customer_id, ocn.shop_id, ocn.type, ocn.type_id,
+                       ocn.order_price, ocn.exshopper_id, ocn.pay_time, ocn.pay_state, ocn.trade_data,
+                       ocn.customer_pay_id, c.name AS customer_name, pv.value as cash_value,
+                       e.enterprise_name as enterpise_name,shop.shop_name,p.principal,
+                       appseller.name AS seller_name,
+                       bu.name as brand_name,
+                       NULL AS pr_price,
+                        '../../images/shopcash/shopcash.jpg' AS imgurl,
+                        concat(ocn.code, CONCAT('_', IFNULL(ocn.trade_data, '%'))) AS code,
+                       date_format(ocn.create_time, '%Y-%m-%d %T') AS create_time,
+                       c.phone, date_format(sp.use_time, '%Y-%m-%d %T') AS use_time, sp.state AS use_state, sp.product_order_code
+                FROM   t_biz_order_cash_new ocn
+                       LEFT JOIN t_biz_shop shop ON ocn.shop_id = shop.id
+                       LEFT JOIN t_biz_prepay_value pv ON pv.id = ocn.type_id
+                       LEFT JOIN t_app_customer c ON c.id = ocn.customer_id
+                       LEFT JOIN t_biz_brand brand ON shop.brand_id = brand.id
+                       LEFT JOIN t_biz_build_enterprise bu ON bu.id = brand.enterprise_id
+                       LEFT JOIN t_biz_partner p ON brand.citypartner_id = p.id
+                       LEFT JOIN t_biz_enterprise e ON e.id = p.enterprise_id
+                       LEFT JOIN t_app_seller appseller ON appseller.id = ocn.exshopper_id
+						LEFT JOIN t_app_shop_prepay sp ON sp.order_code = ocn.code
+	where 1=1 and ocn.type=0 AND ocn.trade_data IS NOT NULL
+	<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(ocn.create_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(ocn.create_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+	</if>
+	
+	<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+
+and e.enterprise_name like CONCAT('%', #{param.enterprise_name},'%')
+
+</if>
+
+<if test="param.principal!=null and param.principal!=''">
+
+
+and p.principal like CONCAT('%', #{param.principal},'%')
+
+</if>
+
+<if test="param.brand_name!=null and param.brand_name!=''">
+
+
+and bu.name like CONCAT('%', #{param.brand_name},'%')
+
+</if>
+
+<if test="param.brand_id!=null and param.brand_id!=''">
+
+and  brand.id=#{param.brand_id}
+
+</if>
+<if test="param.citypartner_id!=null and param.citypartner_id!=''">
+
+  and brand.citypartner_id=#{param.citypartner_id}
+
+</if>
+
+<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+
+  and e.id=#{param.enterprise_id}
+
+</if>
+
+<if test="param.shop_id!=null and param.shop_id!=''">
+
+  and shop.id=#{param.shop_id}
+
+</if>
+
+<if test="param.shop_name!=null and param.shop_name!=''">
+
+
+and shop.shop_name like CONCAT('%', #{param.shop_name},'%')
+
+</if>
+
+<if test="param.order_code!=null and param.order_code!=''">
+
+
+and ocn.code=#{param.order_code} 
+
+</if>
+
+<if test="param.customer_name!=null and param.customer_name!=''">
+
+and c.name like CONCAT('%', #{param.customer_name},'%')
+
+</if>
+
+<if test="param.ids!=null and param.ids!=''">
+	
+	
+	   and ocn.id in(${param.ids})
+	
+	
+	</if>
+
+order by ocn.create_time desc
+	</select>
+	<select id="selectorderTotal" parameterType="java.util.Map" resultType="java.util.Map" >
+	
+	
+	
+	
+	select count_result.order_count, price_result.order_totalprice from  (SELECT count(o.id) as order_count,  1 as id
+ FROM   t_biz_order o
+       LEFT JOIN t_biz_shop sp ON sp.id = o.shop_id
+       LEFT JOIN t_biz_brand br ON br.id = o.brand_id
+       left join  t_biz_partner pr on br.citypartner_id = pr.id 
+       LEFT JOIN v_orderstate_max_time omax ON o.id = omax.order_id
+       left join  t_biz_enterprise  ent on ent.id = pr.enterprise_id
+       left join  t_biz_order_state_relation osr on osr.`time` != omax.`time` and  (osr.order_state_code=4000 or osr.order_state_code=3000) and osr.order_id=o.id
+       
+       where 1=1 
+       
+       <if test="brand_id!=null and brand_id!=''">
+     
+        and  br.id=#{brand_id}
+     
+     
+     </if>
+     
+     <if test="shop_id!=null and shop_id!=''">
+     
+        and  sp.id=#{shop_id}
+     
+     
+     </if>
+     
+      <if test="partner_id!=null and partner_id!=''">
+     
+        and  pr.id=#{partner_id}
+     
+     
+     </if>
+     <if test="ent_id!=null and ent_id!=''">
+     
+      and ent.id=#{ent_id}
+     
+     </if>
+       )count_result,
+       
+  (SELECT  FORMAT(sum(o.order_price)+sum(o. deposit_price),2) as order_totalprice,1 as id
+ FROM   t_biz_order o
+       LEFT JOIN t_biz_shop sp ON sp.id = o.shop_id
+       LEFT JOIN t_biz_brand br ON br.id = o.brand_id
+       left join  t_biz_partner pr on br.citypartner_id = pr.id 
+       LEFT JOIN v_orderstate_max_time omax ON o.id = omax.order_id
+       left join  t_biz_enterprise  ent on ent.id = pr.enterprise_id
+       left join  t_biz_order_state_relation osr on osr.`time` != omax.`time` and  osr.order_state_code=4000  and osr.order_id=o.id
+	
+WHERE  1=1 and omax.order_state_code!=4000  and (osr.order_state_code!=4000 or omax.order_state_code!=5000) and omax.order_state_code!=1000
+
+
+<if test="brand_id!=null and brand_id!=''">
+     
+        and  br.id=#{brand_id}
+     
+     
+     </if>
+     
+     <if test="shop_id!=null and shop_id!=''">
+     
+        and  sp.id=#{shop_id}
+     
+     
+     </if>
+     
+      <if test="partner_id!=null and partner_id!=''">
+     
+        and  pr.id=#{partner_id}
+     
+     
+     </if>
+     <if test="ent_id!=null and ent_id!=''">
+     
+      and ent.id=#{ent_id}
+     
+     </if>
+
+)  
+
+price_result where  price_result.id= count_result.id
+
+
+	</select>
+	
+	<select id="selectOrderBrandCouponsPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+	
+		SELECT ocn.id,
+       ocn.code AS code_c,
+       ocn.customer_id,
+       ocn.shop_id,
+       ocn.type,
+       ocn.type_id,
+       ocn.order_price,
+       ocn.exshopper_id,
+       ocn.pay_time,
+       ocn.pay_state,
+       ocn.trade_data,
+       ocn.customer_pay_id,
+       c.name AS customer_name,
+       pv.value AS cash_value,
+       pv.type as coupons_type,
+       e.enterprise_name AS enterpise_name,
+       GROUP_CONCAT(p.principal)  as principal,
+       GROUP_CONCAT(bu.name)  as brand_name,
+       appseller.name AS seller_name,
+       NULL AS pr_price,
+       IF(pv.type = 3, '../../images/discount.jpg' ,IF(pv.type = 2, '../../images/coupons.jpg', '../../images/red.jpg')) AS imgurl,
+       concat(ocn.code, CONCAT('_', IFNULL(ocn.trade_data, '%'))) AS code,
+       date_format(ocn.create_time, '%Y-%m-%d %T') AS create_time,
+       cc.isused, if(pv.end_time &lt; now(),0,1) as exp_date_state, c.phone, date_format(cc.use_time, '%Y-%m-%d %T') AS use_time,
+       cc.product_order_code
+FROM   t_biz_order_cash_new ocn
+       LEFT JOIN t_biz_brand_coupons pv ON pv.id = ocn.type_id
+       LEFT JOIN t_biz_scope_coupons sc ON pv.id = sc.coupons_id
+       LEFT JOIN t_app_customer c ON c.id = ocn.customer_id
+       LEFT JOIN t_biz_brand brand ON sc.brand_id = brand.id
+       LEFT JOIN t_biz_build_enterprise bu ON bu.id = brand.enterprise_id
+       LEFT JOIN t_biz_partner p ON brand.citypartner_id = p.id
+       LEFT JOIN t_biz_enterprise e ON e.id = p.enterprise_id
+       LEFT JOIN t_app_seller appseller ON appseller.id = ocn.exshopper_id
+       LEFT JOIN t_biz_customer_coupons cc on cc.order_code = ocn.code
+WHERE  1 = 1 AND ocn.type = 2 AND ocn.trade_data IS NOT NULL
+                        
+	<if test="param.start_time!=null and param.start_time!=''">
+
+		and date_format(ocn.create_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>
+	</if>
+
+	<if test="param.end_time!=null and param.end_time!=''">
+
+		and date_format(ocn.create_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>
+	</if>
+	
+	<if test="param.customer_name!=null and param.customer_name!=''">
+	
+	     and c.name like CONCAT('%', #{param.customer_name},'%')
+	
+	</if>
+	
+	<if test="param.enterprise_name!=null and param.enterprise_name!=''">
+
+
+and e.enterprise_name like CONCAT('%', #{param.enterprise_name},'%')
+
+</if>
+
+<if test="param.principal!=null and param.principal!=''">
+
+
+and p.principal like CONCAT('%', #{param.principal},'%')
+
+</if>
+
+<if test="param.brand_name!=null and param.brand_name!=''">
+
+
+and bu.name like CONCAT('%', #{param.brand_name},'%')
+
+</if>
+
+<if test="param.brand_id!=null and param.brand_id!=''">
+
+and  brand.id=#{param.brand_id}
+
+</if>
+<if test="param.citypartner_id!=null and param.citypartner_id!=''">
+
+  and brand.citypartner_id=#{param.citypartner_id}
+
+</if>
+
+<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+
+  and e.id=#{param.enterprise_id}
+
+</if>
+
+<if test="param.coupons_name!=null and param.coupons_name!=''">
+
+ and pv.name like CONCAT('%', #{param.coupons_name},'%')
+
+</if>
+
+<if test="param.order_code!=null and param.order_code!=''">
+
+
+and ocn.code=#{param.order_code} 
+
+</if>
+
+<if test="param.ids!=null and param.ids!=''">
+	
+	
+	   and ocn.id in(${param.ids})
+	
+	
+	</if>
+
+group  by ocn.id order by ocn.create_time desc
+	
+	</select>
+	
+	
+	
+</mapper>
+
+
+

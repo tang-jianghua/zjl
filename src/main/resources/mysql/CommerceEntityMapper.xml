@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.commerce.mapper.CommerceEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.commerce.model.CommerceEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="biz_num" jdbcType="VARCHAR" property="biz_num" />
+    <result column="biz_url" jdbcType="VARCHAR" property="biz_url" />
+    <result column="open_acount" jdbcType="VARCHAR" property="open_acount" />
+    <result column="open_acount_url" jdbcType="VARCHAR" property="open_acount_url" />
+    <result column="tax_num" jdbcType="VARCHAR" property="tax_num" />
+    <result column="tax_url" jdbcType="VARCHAR" property="tax_url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, biz_num, biz_url, open_acount, open_acount_url, tax_num, tax_url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_commerce
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_commerce
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert"  useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.commerce.model.CommerceEntity">
+    insert into t_biz_commerce ( biz_num, biz_url, 
+      open_acount, open_acount_url, tax_num, 
+      tax_url)
+    values(#{biz_num,jdbcType=VARCHAR}, #{biz_url,jdbcType=VARCHAR}, 
+      #{open_acount,jdbcType=VARCHAR}, #{open_acount_url,jdbcType=VARCHAR}, #{tax_num,jdbcType=VARCHAR}, 
+      #{tax_url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.commerce.model.CommerceEntity">
+    insert into t_biz_commerce
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      
+      <if test="biz_num != null">
+        biz_num,
+      </if>
+      <if test="biz_url != null">
+        biz_url,
+      </if>
+      <if test="open_acount != null">
+        open_acount,
+      </if>
+      <if test="open_acount_url != null">
+        open_acount_url,
+      </if>
+      <if test="tax_num != null">
+        tax_num,
+      </if>
+      <if test="tax_url != null">
+        tax_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     
+      <if test="biz_num != null">
+        #{biz_num,jdbcType=VARCHAR},
+      </if>
+      <if test="biz_url != null">
+        #{biz_url,jdbcType=VARCHAR},
+      </if>
+      <if test="open_acount != null">
+        #{open_acount,jdbcType=VARCHAR},
+      </if>
+      <if test="open_acount_url != null">
+        #{open_acount_url,jdbcType=VARCHAR},
+      </if>
+      <if test="tax_num != null">
+        #{tax_num,jdbcType=VARCHAR},
+      </if>
+      <if test="tax_url != null">
+        #{tax_url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.commerce.model.CommerceEntity">
+    update t_biz_commerce
+    <set>
+      <if test="biz_num != null">
+        biz_num = #{biz_num,jdbcType=VARCHAR},
+      </if>
+      <if test="biz_url != null">
+        biz_url = #{biz_url,jdbcType=VARCHAR},
+      </if>
+      <if test="open_acount != null">
+        open_acount = #{open_acount,jdbcType=VARCHAR},
+      </if>
+      <if test="open_acount_url != null">
+        open_acount_url = #{open_acount_url,jdbcType=VARCHAR},
+      </if>
+      <if test="tax_num != null">
+        tax_num = #{tax_num,jdbcType=VARCHAR},
+      </if>
+      <if test="tax_url != null">
+        tax_url = #{tax_url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.commerce.model.CommerceEntity">
+    update t_biz_commerce
+    set biz_num = #{biz_num,jdbcType=VARCHAR},
+      biz_url = #{biz_url,jdbcType=VARCHAR},
+      open_acount = #{open_acount,jdbcType=VARCHAR},
+      open_acount_url = #{open_acount_url,jdbcType=VARCHAR},
+      tax_num = #{tax_num,jdbcType=VARCHAR},
+      tax_url = #{tax_url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

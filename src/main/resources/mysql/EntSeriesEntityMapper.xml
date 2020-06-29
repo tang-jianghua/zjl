@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.series.mapper.EntSeriesEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.series.model.EntSeriesEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="classify_id" jdbcType="BIGINT" property="classify_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, classify_id, name, sort
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_ent_series
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_ent_series
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.EntSeriesEntity">
+  
+  <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+        SELECT  NEXTVAL('t_biz_ent_classify') 
+    </selectKey>  
+  
+    insert into t_biz_ent_series (id, classify_id, name, 
+      sort)
+    values (#{id}, #{classify_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.EntSeriesEntity">
+    insert into t_biz_ent_series
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="classify_id != null">
+        classify_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="classify_id != null">
+        #{classify_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.EntSeriesEntity">
+    update t_biz_ent_series
+    <set>
+      <if test="classify_id != null">
+        classify_id = #{classify_id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.series.model.EntSeriesEntity">
+    update t_biz_ent_series
+    set classify_id = #{classify_id,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <select id="getClassifySeries" resultType="java.util.Map" parameterType="java.util.Map" >
+  
+  
+  select c.id, c.name,  null as parent_id  from t_biz_ent_classify c where 1=1
+  <if test="ent_id!=null and ent_id!=''">
+  
+      and c.ent_id=#{ent_id}
+  </if>
+
+union 
+
+SELECT  s.id,  s.name,  s.classify_id as parent_id from t_biz_ent_series s, t_biz_ent_classify c where s.classify_id=c.id
+
+
+ <if test="ent_id!=null and ent_id!=''">
+  
+      and c.ent_id=#{ent_id}
+  </if>
+  </select>
+   <select id="getEntSeriesListByClassify" parameterType="java.util.Map" resultMap="BaseResultMap">
+  
+  select 
+    <include refid="Base_Column_List" />
+    from t_biz_ent_series where classify_id=#{classify_id}
+  
+  </select>
+</mapper>

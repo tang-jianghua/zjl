@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<div ng-controller="promoterCtrl">
+   	<section class="well">
+<section class="well">
+    <!-- 标题 -->
+    <div class="fileAbout backstage">推广员管理
+    </div>
+   		    <div class="idMessage">
+        <div class="form-horizontal form-widgets col-sm-4">
+            <div class="form-group">
+                <label class="control-label col-sm-4">姓名</label>
+                <div class="col-sm-8">
+                    <input ng-model="search.customer_name"  class="k-textbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-4">
+            <div class="form-group">
+                <label class="control-label col-sm-4">用户名</label>
+                <div class="col-sm-8">
+                    <input ng-model="search.customer_name"  class="k-textbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-4">
+            <div class="form-group">
+                <label class="control-label col-sm-4">城市合伙人</label>
+                <div class="col-sm-8">
+                    <input ng-model="search.customer_name"  class="k-textbox"/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttons-wrap">
+            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+        </div>
+
+     
+     <div>
+     	<button class="k-button k-state-default" ng-click="dataExport()" translate="export"></button>
+     </div>
+     <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+          </section>
+</div>
+    
+

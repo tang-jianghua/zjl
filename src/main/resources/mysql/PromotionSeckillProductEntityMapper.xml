@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionSeckillProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+    <result column="time_id" jdbcType="BIGINT" property="time_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="person_product_num" jdbcType="INTEGER" property="person_product_num" />
+    <result column="limit_num" jdbcType="INTEGER" property="limit_num" />
+    <result column="sell_num" jdbcType="INTEGER" property="sell_num" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="note_count" jdbcType="INTEGER" property="note_count" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, promotion_id, time_id, brand_id, product_id,title, price,person_product_num, limit_num, sell_num, state, update_time, info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_seckill_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByPidTimeIdProductId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_seckill_product
+    where promotion_id = #{pid,jdbcType=BIGINT} and time_id = #{time_id,jdbcType=BIGINT} and product_id = #{product_id,jdbcType=BIGINT}
+  </select>
+
+ <select id="selectSumproductByPidTimeId" resultType="java.lang.Integer">
+	 SELECT IFNULL(COUNT(product_id),0)
+    FROM t_biz_promotion_seckill_product
+    WHERE promotion_id = #{pid,jdbcType=BIGINT} and time_id = #{time_id,jdbcType=BIGINT} AND brand_id = #{brand_id,jdbcType=BIGINT} AND state != 4
+  </select>
+ <select id="selectProductAndPriceByTimeId"  parameterType="java.lang.Long" resultType="java.util.Map">
+	SELECT product_id,price as `set` FROM `t_biz_promotion_seckill_product` WHERE state = 1 AND time_id = #{time_id,jdbcType=BIGINT} 
+  </select>
+ <select id="selectProductAndOldPriceByTimeId"  parameterType="java.lang.Long" resultType="java.util.Map">
+	SELECT 
+  psp.product_id,
+  MIN(bps.`price`) AS `set`
+FROM
+  `t_biz_promotion_seckill_product` psp
+  LEFT JOIN t_biz_brand_prod_salesattr bps
+ON psp.`product_id` = bps.`product_id`
+WHERE psp.state = 1 
+  AND bps.`data_flag` != 'del'
+  AND psp.time_id = #{time_id,jdbcType=BIGINT}  
+  GROUP BY psp.`product_id`
+ </select>
+  
+  <select id="selectProductStateForBrandId" resultType="java.lang.Integer">
+	 SELECT IFNULL(COUNT(1),0)
+    FROM t_biz_promotion_seckill_product pp
+    LEFT JOIN t_biz_brand_product bp ON pp.product_id = bp.id
+    WHERE pp.time_id = #{time_id,jdbcType=BIGINT} AND pp.brand_id = #{brand_id,jdbcType=BIGINT} AND pp.state in (1,2,3) and bp.state = 1
+  </select>
+  
+	<select id="selectProductIdAndPrice" resultMap="BaseResultMap">
+		SELECT
+		sp.`product_id`,
+		sp.`price`
+		FROM
+		`t_biz_promotion_seckill_product` sp
+		LEFT JOIN `t_biz_promotion` p
+		ON sp.`promotion_id` = p.`id`
+		LEFT JOIN `t_biz_promotion_seckill_time` st
+		ON sp.`time_id` = st.`id`
+		WHERE NOW() &gt;= p.`start_time`
+		AND NOW() &lt;= p.`end_time`
+		AND NOW() &gt;= st.`pstart_time`
+		AND NOW() &lt;= st.`pend_time`
+	</select>
+    
+    
+  <select id="selectStateCountByPIdBrandIdForBrand" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.ProductState">
+    SELECT state,COUNT(1) as count 
+    FROM t_biz_promotion_seckill_product pp 
+    WHERE pp.promotion_id = #{pid,jdbcType=BIGINT} AND pp.brand_id = #{brand_id,jdbcType=BIGINT} GROUP BY pp.state
+  </select>
+  
+  <select id="selectbrandCountByPIdBrandIdForBrand" resultType="java.lang.Integer">
+    SELECT COUNT(1) as count 
+    FROM t_biz_promotion_seckill_product pp 
+    WHERE pp.promotion_id = #{pid,jdbcType=BIGINT} AND pp.brand_id = #{brand_id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_promotion_seckill_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_seckill_product (promotion_id, time_id, brand_id, 
+      product_id,title, price, person_product_num, limit_num, 
+      sell_num, state,update_time,info)
+    values (#{promotion_id,jdbcType=BIGINT}, #{time_id,jdbcType=BIGINT}, #{brand_id,jdbcType=BIGINT}, 
+      #{product_id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{person_product_num,jdbcType=INTEGER}, #{limit_num,jdbcType=INTEGER}, 
+      #{sell_num,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP}, #{info,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_seckill_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+      <if test="time_id != null">
+        time_id,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="person_product_num != null">
+        person_product_num,
+      </if>
+      <if test="limit_num != null">
+        limit_num,
+      </if>
+      <if test="sell_num != null">
+        sell_num,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="time_id != null">
+        #{time_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="person_product_num != null">
+        #{person_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="limit_num != null">
+        #{limit_num,jdbcType=INTEGER},
+      </if>
+      <if test="sell_num != null">
+        #{sell_num,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    update t_biz_promotion_seckill_product
+    <set>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="time_id != null">
+        time_id = #{time_id,jdbcType=BIGINT},
+      </if>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="person_product_num != null">
+        person_product_num = #{person_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="limit_num != null">
+        limit_num = #{limit_num,jdbcType=INTEGER},
+      </if>
+      <if test="sell_num != null">
+        sell_num = #{sell_num,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    update t_biz_promotion_seckill_product
+    set promotion_id = #{promotion_id,jdbcType=BIGINT},
+      time_id = #{time_id,jdbcType=BIGINT},
+      brand_id = #{brand_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      person_product_num = #{person_product_num,jdbcType=INTEGER},
+      limit_num = #{limit_num,jdbcType=INTEGER},
+      sell_num = #{sell_num,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      info = #{info,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+    <update id="updateSellNumByPrimaryId" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    
+    UPDATE t_biz_promotion_seckill_product SET sell_num = sell_num + #{sell_num,jdbcType=INTEGER} 
+    
+    WHERE  promotion_id = #{promotion_id,jdbcType=BIGINT} AND time_id = #{time_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT}
+
+  </update>
+  
+  <update id="updateSellNumByPrimaryIdForCancelOrder" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    
+    UPDATE t_biz_promotion_seckill_product SET sell_num = sell_num - #{sell_num,jdbcType=INTEGER} 
+    
+    WHERE  promotion_id = #{promotion_id,jdbcType=BIGINT} AND time_id = #{time_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT}
+
+  </update>
+  
+  <update id="updateSellNum_1" >
+    UPDATE t_biz_promotion_seckill_product SET sell_num_1 = FLOOR((FLOOR(RAND()*20) / 100) * limit_num),sell_num_date = NOW(),note_count = FLOOR(RAND()*500) WHERE sell_num_1 &lt;= 0
+  </update>
+  
+   <update id="updateByPidTimeidProductIdSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    update t_biz_promotion_seckill_product
+    <set>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="person_product_num != null">
+        person_product_num = #{person_product_num,jdbcType=INTEGER},
+      </if>
+      <if test="limit_num != null">
+        limit_num = #{limit_num,jdbcType=INTEGER},
+      </if>
+      <if test="sell_num != null">
+        sell_num = #{sell_num,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where promotion_id = #{promotion_id,jdbcType=BIGINT} and time_id = #{time_id,jdbcType=BIGINT} and product_id = #{product_id,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteByPidTimeidProductId" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillProductEntity">
+    delete from t_biz_promotion_seckill_product
+    where promotion_id = #{promotion_id,jdbcType=BIGINT} and time_id = #{time_id,jdbcType=BIGINT} and product_id = #{product_id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByBrandIdForTimePart" >
+    delete from t_biz_promotion_seckill_product
+    where time_id = #{time_id,jdbcType=BIGINT} and brand_id = #{brand_id,jdbcType=BIGINT} and state = 0
+  </delete>
+  <update id="updateNoteCount" >
+    
+    UPDATE t_biz_promotion_seckill_product SET note_count = note_count + 1
+    
+    WHERE  promotion_id = #{pid,jdbcType=BIGINT} AND time_id = #{time_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT}
+
+  </update>
+  
+  <update id="updateDecresrNoteCount" >
+    
+    UPDATE t_biz_promotion_seckill_product SET note_count = IF(note_count - 1 &gt; 0, note_count - 1 , 0)
+    
+    WHERE  promotion_id = #{pid,jdbcType=BIGINT} AND time_id = #{time_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT}
+
+  </update>
+  
+  <select id="selectedExistScendSkillPromotionBrandProduct" resultType="java.lang.String" parameterType="java.util.Map">
+		  SELECT DISTINCT(up.product_id)
+
+FROM t_biz_promotion u
+ 
+LEFT JOIN t_biz_promotion_seckill_product up ON up.promotion_id = u.id
+
+WHERE u.type = 0 AND u.state = 1 AND up.brand_id = ${brand_id} AND up.state != 4 AND
+((u.start_time &lt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &gt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.start_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.start_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.end_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')))
+	
+	</select>
+	
+	<select id="selectedExistManPromotionBrandProduct" resultType="java.lang.String" parameterType="java.util.Map">
+		  SELECT DISTINCT(up.product_id)
+
+FROM t_biz_promotion u
+ 
+LEFT JOIN t_biz_promotion_step_product up ON up.promotion_id = u.id
+
+WHERE u.type != 0 AND u.state = 1 AND up.brand_id = ${brand_id} AND up.state != 4 AND
+((u.start_time &lt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &gt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.start_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.start_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')) || 
+(u.end_time &gt;= DATE_FORMAT('${start_time}', '%Y-%m-%d') AND u.end_time &lt;= DATE_FORMAT('${end_time}', '%Y-%m-%d')))
+	
+	</select>
+</mapper>

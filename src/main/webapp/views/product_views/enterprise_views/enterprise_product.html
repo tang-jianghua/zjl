@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<div ng-controller="enterpriseBrandProduct">
+
+	<section class="well ">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">仓库产品管理</div>
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-12">
+						<div class="form-group">
+							<label class="control-label col-sm-1">标题</label>
+							<div class="col-sm-3">
+								<input ng-model="form.product_name" id="product_title"
+									class="k-textbox" placeholder="输入标题搜索" />
+							</div>
+
+							<label class="col-xs-1 control-label">分类</label>
+							<div class="col-sm-3">
+								<input id="classify" />
+							</div>
+
+							<label class="col-xs-1 control-label">系列</label>
+							<div class="col-sm-3">
+								<input id="series" />
+							</div>
+
+						</div>
+					</div>
+
+					<div class="buttons-wrap">
+						<button class="k-button k-state-default" ng-click="search()">搜索</button>
+					</div>
+				</div>
+			</div>
+			<div>
+				<!-- <button class="k-button k-state-default" ng-click="checkAll()">选中本页</button> -->
+				<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+			 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+				<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+				<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+				<button class="k-button k-state-default"
+					ng-click="productInformation()" id="addchangpin">新增产品</button>
+				<hr class="towGreen"></hr>
+			</div>
+
+
+			<div kendo-grid="grid" k-options="mainGridOptions" id="checkallgrid"></div>
+		</div>
+	</section>
+</div>
+
+

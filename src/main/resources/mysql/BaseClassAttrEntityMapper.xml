@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BaseClassAttrEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseClassAttrEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ismultiple" jdbcType="INTEGER" property="ismultiple" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="isenum" jdbcType="INTEGER" property="isenum" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="iscascading" jdbcType="INTEGER" property="iscascading" />
+    <result column="iswrite" jdbcType="INTEGER" property="iswrite" />
+    <result column="cascading_attr_id" jdbcType="BIGINT" property="cascading_attr_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ismultiple, name, isenum, class_id, iscascading, iswrite, cascading_attr_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_class_attr
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_class_attr
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseClassAttrEntity">
+    insert into t_biz_class_attr (id, ismultiple, name, 
+      isenum, class_id, iscascading, 
+      iswrite, cascading_attr_id)
+    values (#{id,jdbcType=BIGINT}, #{ismultiple,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{isenum,jdbcType=INTEGER}, #{class_id,jdbcType=BIGINT}, #{iscascading,jdbcType=INTEGER}, 
+      #{iswrite,jdbcType=INTEGER}, #{cascading_attr_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseClassAttrEntity">
+    insert into t_biz_class_attr
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ismultiple != null">
+        ismultiple,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="isenum != null">
+        isenum,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="iscascading != null">
+        iscascading,
+      </if>
+      <if test="iswrite != null">
+        iswrite,
+      </if>
+      <if test="cascading_attr_id != null">
+        cascading_attr_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="ismultiple != null">
+        #{ismultiple,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isenum != null">
+        #{isenum,jdbcType=INTEGER},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="iscascading != null">
+        #{iscascading,jdbcType=INTEGER},
+      </if>
+      <if test="iswrite != null">
+        #{iswrite,jdbcType=INTEGER},
+      </if>
+      <if test="cascading_attr_id != null">
+        #{cascading_attr_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseClassAttrEntity">
+    update t_biz_class_attr
+    <set>
+      <if test="ismultiple != null">
+        ismultiple = #{ismultiple,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isenum != null">
+        isenum = #{isenum,jdbcType=INTEGER},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="iscascading != null">
+        iscascading = #{iscascading,jdbcType=INTEGER},
+      </if>
+      <if test="iswrite != null">
+        iswrite = #{iswrite,jdbcType=INTEGER},
+      </if>
+      <if test="cascading_attr_id != null">
+        cascading_attr_id = #{cascading_attr_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseClassAttrEntity">
+    update t_biz_class_attr
+    set ismultiple = #{ismultiple,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      isenum = #{isenum,jdbcType=INTEGER},
+      class_id = #{class_id,jdbcType=BIGINT},
+      iscascading = #{iscascading,jdbcType=INTEGER},
+      iswrite = #{iswrite,jdbcType=INTEGER},
+      cascading_attr_id = #{cascading_attr_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

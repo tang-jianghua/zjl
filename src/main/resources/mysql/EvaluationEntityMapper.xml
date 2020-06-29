@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.evaluation.mapper.EvaluationEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="order_id" jdbcType="BIGINT" property="order_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="sales_property_id" jdbcType="BIGINT" property="sales_property_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="quality" jdbcType="DOUBLE" property="quality" />
+    <result column="service" jdbcType="DOUBLE" property="service" />
+    <result column="evaluation_level" jdbcType="INTEGER" property="evaluation_level" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+    <resultMap id="EvaluationModelMap" type="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="customer_name" jdbcType="BIGINT" property="customer_name" />
+    <result column="order_id" jdbcType="BIGINT" property="order_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="sales_property_id" jdbcType="BIGINT" property="sales_property_id" />
+    <result column="reply_time" jdbcType="TIMESTAMP" property="reply_time" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="color" jdbcType="VARCHAR" property="color" />
+    <result column="quality" jdbcType="DOUBLE" property="quality" />
+    <result column="service" jdbcType="DOUBLE" property="service" />
+    <result column="evaluation_level" jdbcType="INTEGER" property="evaluation_level" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="eva_content" jdbcType="VARCHAR" property="eva_content" />
+    <result column="product_info" jdbcType="VARCHAR" property="product_info" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+        <result column="isline" jdbcType="INTEGER" property="isline" />
+        <result column="standard" jdbcType="VARCHAR" property="standard" />
+          <result column="capacity" jdbcType="VARCHAR" property="capacity" />
+          <result column="reply" jdbcType="VARCHAR" property="reply" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, order_id, product_id, sales_property_id, create_time, quality, service, 
+    evaluation_level, content,state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+   <select id="selectListByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+     from t_biz_evaluation 
+     where order_id = #{order_id,jdbcType=BIGINT}
+  </select>
+   <select id="selectEvaluationListByOrderCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT e.* FROM t_biz_evaluation e,t_biz_order o WHERE o.code =  #{code,jdbcType=VARCHAR} AND o.id= e.order_id
+  </select>
+
+	<select id="selectAllEvaluationNumByProductId"
+		parameterType="java.lang.Long"
+		resultType="java.lang.Long">
+		SELECT COUNT(*)
+		FROM t_biz_evaluation
+		WHERE state = 0 
+		AND product_id = #{product_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectEvaluationNumByProductId"
+		parameterType="java.lang.Long"
+				resultType="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationNumModel">
+			SELECT
+			a.good_num,
+			b.general_num,
+			d.bad_num,
+			c.img_num
+			FROM
+			(SELECT
+			COUNT(*) good_num,
+			product_id
+			FROM
+			t_biz_evaluation
+			WHERE state = 0
+			AND evaluation_level = 3
+			AND product_id = #{product_id,jdbcType=BIGINT}) a,
+			(SELECT
+			COUNT(*) general_num,
+			product_id
+			FROM
+			t_biz_evaluation
+			WHERE state = 0
+			AND evaluation_level = 2
+			AND product_id = #{product_id,jdbcType=BIGINT}) b,
+			(SELECT
+			COUNT(*) bad_num,
+			product_id
+			FROM
+			t_biz_evaluation
+			WHERE state = 0
+			AND evaluation_level = 1
+			AND product_id = #{product_id,jdbcType=BIGINT}) d,
+			(SELECT
+			COUNT(DISTINCT (evaluation_id)) img_num,
+			e.product_id
+			FROM
+			t_biz_evaluation_image em
+			LEFT JOIN t_biz_evaluation e
+			ON em.evaluation_id = e.id
+			WHERE state = 0
+			AND product_id = #{product_id,jdbcType=BIGINT}) c 
+	</select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_evaluation (customer_id, order_id, product_id, 
+      sales_property_id, create_time, quality, 
+      service, evaluation_level, content,state
+      )
+    values (#{customer_id,jdbcType=BIGINT}, #{order_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, 
+      #{sales_property_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, #{quality,jdbcType=DOUBLE}, 
+      #{service,jdbcType=DOUBLE}, #{evaluation_level,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{content,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="order_id != null">
+        order_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="sales_property_id != null">
+        sales_property_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="quality != null">
+        quality,
+      </if>
+      <if test="service != null">
+        service,
+      </if>
+      <if test="evaluation_level != null">
+        evaluation_level,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+        <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="order_id != null">
+        #{order_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="sales_property_id != null">
+        #{sales_property_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="quality != null">
+        #{quality,jdbcType=DOUBLE},
+      </if>
+      <if test="service != null">
+        #{service,jdbcType=DOUBLE},
+      </if>
+      <if test="evaluation_level != null">
+        #{evaluation_level,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+       <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationEntity">
+    update t_biz_evaluation
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="order_id != null">
+        order_id = #{order_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="sales_property_id != null">
+        sales_property_id = #{sales_property_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="quality != null">
+        quality = #{quality,jdbcType=DOUBLE},
+      </if>
+      <if test="service != null">
+        service = #{service,jdbcType=DOUBLE},
+      </if>
+      <if test="evaluation_level != null">
+        evaluation_level = #{evaluation_level,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.evaluation.model.EvaluationEntity">
+    update t_biz_evaluation
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      order_id = #{order_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      sales_property_id = #{sales_property_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      quality = #{quality,jdbcType=DOUBLE},
+      service = #{service,jdbcType=DOUBLE},
+      evaluation_level = #{evaluation_level,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+       state = #{state,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectEvaluationForPage" resultType="java.util.Map" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+   
+   
+   SELECT ts.*,
+       <![CDATA[ group_concat(eimg.imgurl)]]> AS img_info
+  FROM (SELECT temp.*,
+               <![CDATA[  CONCAT(CONCAT('<li>', ifnull(temp.content, ''), '<li>'),
+                      CONCAT('<li>', temp.create_time, '<li>'),
+                      CONCAT('<li>', ifnull(reply.content, ''), '</li>'))
+                  AS reply_content]]>,
+                  
+                  case when reply.content is null 
+                  then 
+                   '1' else '2' end as isreply
+                   
+                  
+                  
+          FROM (SELECT e.id,
+                       e.product_id,
+                       e.sales_property_id,
+                       e.content,
+                       e.state,
+                       e.evaluation_level,
+                       e.create_time,
+                       cadd.region_code,
+                       c.level AS customer_level,
+                       prod.product_title as product_name,
+                       sattr.price,
+                       p.principal as partner_principal,
+                       be.name as brand_name,
+                       ent.enterprise_name,
+                       c.name as customer_name,
+                       sp.shop_name,
+                       sp.id as shop_id,
+                       p.id as partner_id,
+                       ent.id as ent_id,
+                       b.id as brand_id
+                  FROM t_biz_evaluation e,
+                  t_biz_build_enterprise be,
+                       t_biz_brand_product prod,
+                       t_biz_brand_prod_salesattr sattr,
+                       t_biz_brand b,
+                       t_biz_partner p,
+                       t_biz_enterprise ent,
+                       t_biz_shop sp,
+                       t_app_customer c,
+                       t_app_customer_address cadd
+                 WHERE     e.product_id = prod.id
+                       AND prod.id = sattr.product_id
+                       and be.id =prod.build_brand_id
+                       AND prod.brand_id = b.id
+                       and b.citypartner_id =p.id
+                       and p.enterprise_id=ent.id
+                       and b.id=sp.brand_id
+                       AND c.id = e.customer_id
+                       AND cadd.customer_id = c.id
+                       AND cadd.state = 1
+                       and sattr.id=e.sales_property_id
+                GROUP BY e.id) temp
+               LEFT JOIN t_biz_reply reply ON reply.evaluation_id = temp.id
+         WHERE 1=1
+         
+         <if test="param.isreply!=null and param.isreply!=''">
+          and reply.content is not null
+         </if>
+         
+    <if test="param.shop_name!=null and param.shop_name!=''">
+  
+   and temp.shop_name like CONCAT('%',#{param.shop_name},'%') 
+  
+  </if>
+ 
+ <if test="param.brand_name!=null and param.brand_name!=''">
+ 
+   and temp.brand_name like CONCAT('%',#{param.brand_name},'%') 
+ </if>
+ 
+ <if test="param.brand_id!=null and param.brand_id!=''">
+ 
+ 
+  and temp.brand_id =#{param.brand_id}
+ 
+ </if>
+  <if test="param.ent_id!=null and param.ent_id!=''">
+ 
+ 
+   and temp.ent_id =#{param.ent_id}
+ 
+ </if>
+  <if test="param.parnter_id!=null and param.parnter_id!=''">
+ 
+ 
+   and temp.partner_id =#{param.partner_id}
+ 
+ </if>
+ 
+ <if test="param.shop_id!=null and param.shop_id!=''">
+ 
+ 
+  and temp.shop_id =#{param.shop_id}
+ 
+ </if>
+ 
+ 
+ <if test="param.hascontent!=null and param.hascontent!=''">
+ 
+   and temp.content  is not null
+ </if>
+ <if test="param.nocontent!=null and param.nocontent!=''">
+ 
+   and temp.content  is  null
+ </if>
+ 
+  <if test="param.evaluation_level!=null and param.evaluation_level!=''">
+ 
+   and temp.evaluation_level =#{param.evaluation_level}
+ </if>
+ 
+  <if test="param.state!=null and param.state!=''">
+ 
+   and temp.state =#{param.state}
+ </if>
+ 
+ 
+ <if test="param.principal!=null and param.principal!=''">
+ 
+   and temp.partner_principal like CONCAT('%',#{param.principal},'%') 
+ 
+ </if>
+  <if test="param.customer_name!=null and param.customer_name!=''">
+  
+  and temp.customer_name like CONCAT('%',#{param.customer_name},'%') 
+  
+  </if>
+   <if test="param.county!=null and param.county!='' ">
+  
+   and temp.region_code=#{param.county} 
+  
+  </if>
+   <if test="param.province!=null and param.province!=''">
+  
+   and  CONCAT('',left(temp.region_code,2),'0000')=#{param.province} 
+  
+  </if>
+  <if test="param.enterprise_name!=null and param.enterprise_name!=''">
+  
+   and temp.enterprise_name like CONCAT('%',#{param.enterprise_name},'%') 
+  
+  </if>
+  <if test="param.city!=null and param.city!=''">
+  
+   and  CONCAT('',left(temp.region_code,4),'00')=#{param.city} 
+  
+  </if>
+  
+  <if test="param.product_name!=null and param.product_name!=null">
+  
+   and  temp.product_name like CONCAT('%',#{param.product_name},'%') 
+  
+  </if>
+   <if test="param.start_time!=null and param.start_time!=''">
+  
+ 
+    and  date_format(temp.create_time,'%Y-%m-%d %T')   <![CDATA[  >=  #{param.start_time}]]>    
+  </if>
+  
+  <if test="param.end_time!=null and param.end_time!=''">
+  
+    and  date_format(temp.create_time,'%Y-%m-%d %T')  <![CDATA[  <= #{param.end_time}]]>    
+  </if>
+         
+         ) ts
+       LEFT JOIN t_biz_evaluation_image eimg ON ts.id = eimg.evaluation_id
+       
+       where 1=1  
+       
+       <if test="param.hasimg!=null and param.hasimg!=''">
+          and eimg.imgurl is not null
+         </if>
+         
+         <if test="param.noimg!=null and param.noimg!=''">
+          and eimg.imgurl is  null
+         </if>
+    
+GROUP BY ts.id
+ order by ts.create_time desc  
+  </select>
+  
+  
+  <insert id="insertreply" parameterType="java.util.Map">
+   insert into t_biz_reply (content, reply_time, user_id, 
+      evaluation_id
+      )
+    values (#{content}, #{reply_time}, #{user_id}, 
+      #{evaluation_id})
+  </insert>
+
+	<select id="selectOneGoodByProductId" parameterType="java.lang.Long"
+		resultMap="EvaluationModelMap">
+		SELECT
+		id,
+		customer_name,
+		create_time,
+		content AS eva_content,
+		color,
+		model,
+		standard,
+		evaluation_level
+		FROM
+		`v_new_evaluation`
+		WHERE product_id = #{product_id,jdbcType=BIGINT}
+		GROUP BY evaluation_level,id
+		ORDER BY create_time DESC
+		LIMIT 1
+	</select>
+     
+	<select id="selectEvaluationByProductIdForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultMap="EvaluationModelMap">
+		SELECT
+		id,
+		customer_name,
+		create_time,
+		content AS eva_content,
+		color,
+		model,
+		standard,
+		evaluation_level,reply
+		FROM
+		`v_new_evaluation`
+		WHERE product_id = #{param.product_id}
+		<if test="param.select_id == 2">
+		AND evaluation_level = 3
+		</if>
+		<if test="param.select_id == 3">
+		AND evaluation_level = 2
+		</if>
+		<if test="param.select_id == 4">
+		AND evaluation_level = 1
+		</if>
+		<if test="param.select_id == 5">
+		AND imgurl IS NOT NULL
+		</if>
+		GROUP BY id
+		ORDER BY create_time DESC
+	</select>
+</mapper>

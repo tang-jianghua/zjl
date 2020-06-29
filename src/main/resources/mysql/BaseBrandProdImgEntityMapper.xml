@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BaseBrandProdImgEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdImgEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="img_sort" jdbcType="INTEGER" property="img_sort" />
+    <result column="impFlag" jdbcType="VARCHAR" property="impFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, imgurl, product_id, type, img_sort, impFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_prod_img
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_brand_prod_img
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdImgEntity">
+    insert into t_biz_brand_prod_img (imgurl, product_id, 
+      type, img_sort, impFlag
+      )
+    values ( #{imgurl,jdbcType=VARCHAR}, #{product_id,jdbcType=BIGINT}, 
+      #{type,jdbcType=INTEGER}, #{img_sort,jdbcType=INTEGER}, #{impFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdImgEntity">
+    insert into t_biz_brand_prod_img
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="img_sort != null">
+        img_sort,
+      </if>
+      <if test="impFlag != null">
+        impFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="img_sort != null">
+        #{img_sort,jdbcType=INTEGER},
+      </if>
+      <if test="impFlag != null">
+        #{impFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdImgEntity">
+    update t_biz_brand_prod_img
+    <set>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="img_sort != null">
+        img_sort = #{img_sort,jdbcType=INTEGER},
+      </if>
+      <if test="impFlag != null">
+        impFlag = #{impFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdImgEntity">
+    update t_biz_brand_prod_img
+    set imgurl = #{imgurl,jdbcType=VARCHAR},
+      product_id = #{product_id,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      img_sort = #{img_sort,jdbcType=INTEGER},
+      impFlag = #{impFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

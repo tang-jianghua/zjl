@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.seller.mapper.SellerEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.seller.model.SellerEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="seller_type" jdbcType="INTEGER" property="seller_type" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="head_img" jdbcType="VARCHAR" property="head_img" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="invite_code" jdbcType="VARCHAR" property="invite_code" />
+    <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+    <result column="view_orders_time" jdbcType="TIMESTAMP" property="view_orders_time" />
+    <result column="view_tuiguang_time" jdbcType="TIMESTAMP" property="view_tuiguang_time" />
+     <result column="view_shigong_time" jdbcType="TIMESTAMP" property="view_shigong_time" />
+     
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, account, password, seller_type, phone, head_img, state, create_time, name, invite_code, 
+    partner_id,view_orders_time,view_tuiguang_time,view_shigong_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_seller
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectPrimaryByAccount" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_seller
+    where account = #{account,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByAccountOrName" parameterType="com.mfangsoft.zhuangjialong.integration.seller.model.SellerModel" resultMap="BaseResultMap">
+ SELECT * FROM `t_app_seller` WHERE account = #{account,jdbcType=VARCHAR} OR name = #{name,jdbcType=VARCHAR}
+ </select>
+  <select id="selectByAccountOrNameWithoutId" parameterType="com.mfangsoft.zhuangjialong.integration.seller.model.SellerModel" resultMap="BaseResultMap">
+ SELECT * FROM `t_app_seller` WHERE (account = #{account,jdbcType=VARCHAR} OR name = #{name,jdbcType=VARCHAR} ) AND id != #{id,jdbcType=BIGINT}
+  </select>
+   <select id="selectShopGuider" parameterType="java.lang.Long" resultType="map">
+	 SELECT 
+	 s.id,
+	  s.`name`,
+	  s.`account`,
+	  s.`phone`,
+	  sg.`idcard_back`,
+	  sg.`idcard_front`,
+	  sg.`idcard_hold`,
+	  sg.certification_state,
+	  p.`phone_num`,
+	  sg.`no_pass_reason`,
+	  DATE_FORMAT(sg.timestamp,'%Y-%m-%d %T') AS certificate_time,
+	  sg.isgenerate
+	FROM
+	  `t_app_seller` s 
+	  LEFT JOIN `t_app_seller_info` si 
+	    ON s.`id` = si.`seller_id` 
+	  LEFT JOIN `t_app_shop_guider` sg 
+	    ON si.`id` =  sg.`seller_info_id`
+	    LEFT JOIN `t_biz_partner` p
+	    ON s.`partner_id` = p.`id`
+	    WHERE s.id = #{id,jdbcType=BIGINT}
+  </select>
+	<select id="selectShopGuideresForPage"   parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+		resultType="com.mfangsoft.zhuangjialong.integration.seller.model.SellerModel">
+		SELECT
+		id,
+		NAME,
+		phone,
+		create_time,
+		state
+		FROM
+		`t_app_seller`
+		WHERE seller_type = 4
+		<if test="param.name!=null and param.name!=''">
+		AND NAME LIKE CONCAT('%',#{param.name},'%')
+		</if>
+		<if test="param.phone!=null and param.phone != ''">
+		AND phone =#{param.phone}
+		</if>
+		<if test="param.state!=null and param.state != ''">
+		AND state =#{param.state}
+		</if>
+	</select>
+  
+    <select id="selectRateByCustomerId" parameterType="java.lang.Long" resultType="java.lang.Double">
+    SELECT i.commission_rate
+
+FROM t_app_customer c , t_app_seller s,
+t_app_seller_info i
+
+WHERE c.id= #{customer_id,jdbcType=BIGINT} AND c.exshopper_id = s.id AND i.seller_id = s.id 
+  </select>
+  <select id="selectPartnerBySellerId" parameterType="java.lang.Long"  resultType="java.lang.Long">
+         select partner_id from `t_app_seller` where id =#{id} 
+	</select>
+  <select id="selectGuildSellerListPage" resultMap="BaseResultMap">
+	
+	    SELECT s.id,s.NAME,s.account as phone,s.head_img,DATE_FORMAT(s.create_time,'%Y-%m-%d') AS create_time 
+	    FROM  t_app_seller s,t_app_seller_info i 
+	     WHERE s.id = i.seller_id AND i.expand_id = #{param.id} 
+	     ORDER BY s.create_time DESC
+	
+	</select>
+	
+	<select id="selectGuildSellerTodayCount" resultType="java.lang.Integer">
+	    SELECT COUNT(1) 
+	    FROM  t_app_seller s, t_app_seller_info i 
+	    WHERE s.id = i.seller_id AND i.expand_id = #{id,jdbcType=BIGINT}  AND s.create_time >= DATE_FORMAT(#{create_time,jdbcType=TIMESTAMP}, '%Y-%m-%d') 
+	</select>
+
+	<select id="selectGuildSellerSumCount" resultType="java.lang.Integer">
+	   SELECT COUNT(1) FROM t_app_seller_info WHERE expand_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectPartIdBysellerId" resultType="java.lang.Long">
+	    SELECT s.partner_id 
+ 
+ FROM t_app_seller_info i,t_app_seller s 
+ 
+ WHERE i.seller_id = #{seller_id,jdbcType=BIGINT} AND s.id = i.expand_id 
+	</select>
+	
+		<select id="selectGuildSellerUnreadCount" resultType="java.lang.Integer">
+	    SELECT COUNT(1) FROM  t_app_seller s, t_app_seller_info i WHERE s.id = i.seller_id AND i.expand_id = #{id,jdbcType=BIGINT}  AND 
+s.create_time > (SELECT view_tuiguang_time FROM  t_app_seller WHERE id = #{id,jdbcType=BIGINT} )
+	</select>
+		
+  <select id="selectByPrimaryKeyForBack" parameterType="java.lang.Long" resultType="java.util.Map">
+     SELECT se.id, se.account, se.password, se.seller_type, se.phone, se.head_img, se.state, DATE_FORMAT(se.create_time, '%Y-%m-%d %H:%i:%s') create_time, se.name, se.invite_code, 
+    se.partner_id, DATE_FORMAT(se.view_orders_time, '%Y-%m-%d %H:%i:%s') view_orders_time,DATE_FORMAT(se.view_tuiguang_time, '%Y-%m-%d %H:%i:%s') view_tuiguang_time, 
+    DATE_FORMAT(se.view_shigong_time, '%Y-%m-%d %H:%i:%s') view_shigong_time ,si.ali_account
+    FROM t_app_seller se LEFT JOIN t_app_seller_info si ON se.id=si.seller_id
+    WHERE se.id = #{id,jdbcType=BIGINT} 
+  </select>
+    <select id="selectByAccount" resultType="com.mfangsoft.zhuangjialong.app.seller.model.Guild">
+   SELECT 
+  s.id,
+  s.name,
+  s.account,
+  s.password,
+  s.phone,
+  s.head_img,
+  s.state,
+  s.seller_type,
+  s.partner_id,
+  si.ali_account,
+  CASE
+    s.`seller_type` 
+    WHEN 3 
+    THEN IFNULL(ci.certification_state, - 1) 
+    WHEN 4 
+    THEN sg.`certification_state` 
+  END AS certification_state 
+FROM
+  t_app_seller s 
+  LEFT JOIN t_app_seller_info si 
+    ON si.seller_id = s.id 
+  LEFT JOIN t_app_sell_construct_info ci 
+    ON ci.id = si.construct_info_id 
+  LEFT JOIN `t_app_shop_guider` sg 
+    ON si.`id` = sg.`seller_info_id` 
+WHERE s.account =  #{account,jdbcType=VARCHAR}
+  </select>
+   <select id="selectConstructByNameAndServiceTypeForPage" 
+   parameterType="com.mfangsoft.zhuangjialong.common.model.Page"
+    resultType="com.mfangsoft.zhuangjialong.app.seller.model.ConstructModel">
+	SELECT s.id,s.head_img,ci.team_name,s.phone,ci.service_region,ci.certification_state,cst.service_type,ci.unit_name unit,ci.unit_price, IF(ROUND(AVG(ca.score)) IS NULL,5,ROUND(AVG(ca.score))) score
+	FROM t_app_seller s
+	LEFT JOIN t_app_seller_info si ON s.id = si.seller_id
+	LEFT JOIN t_app_sell_construct_info ci ON si.construct_info_id = ci.id
+	LEFT JOIN t_biz_construct_service_type cst ON ci.service_code = cst.service_code
+	LEFT JOIN t_biz_construct_appointment ca ON s.id = ca.construct_id
+	WHERE s.state = 1 
+	AND s.seller_type = 3
+		AND ci.certification_state =1 
+		AND ci.break_off_state = 0
+	 <if test="param.search_content != ''">
+	   ${param.sql}
+      </if>
+       <if test="param.region_code != ''">
+       and find_in_set(#{param.region_code,jdbcType=VARCHAR},ci.service_region)!=0
+      </if>
+           <if test="param.service_code != ''">
+	AND ci.service_code = #{param.service_code,jdbcType=VARCHAR}
+      </if>
+      GROUP BY s.id
+      ORDER BY AVG(ca.score) DESC
+  </select>
+  
+     <select id="selectConstructDetailsById" 
+   parameterType="java.lang.Long"
+    resultType="com.mfangsoft.zhuangjialong.app.seller.model.ConstructModel">
+	SELECT s.id,s.head_img,ci.team_name,ci.certification_state, IF(ROUND(AVG(ca.score)) IS NULL,5,ROUND(AVG(ca.score))) score,ci.construct_about,cst.service_type,ci.service_region,ci.unit_price,ci.unit_name unit,
+	 ci.qualification_one,ci.qualification_two,ci.qualification_three,s.phone
+	FROM t_app_seller s
+	LEFT JOIN t_app_seller_info si ON s.id = si.seller_id
+	LEFT JOIN t_app_sell_construct_info ci ON si.construct_info_id = ci.id
+	LEFT JOIN t_biz_construct_service_type cst ON ci.service_code = cst.service_code
+	LEFT JOIN t_biz_construct_appointment ca ON s.id = ca.construct_id
+	WHERE s.id = #{id,jdbcType=BIGINT}
+  </select>
+   <select id="queryservicetype" resultType="com.mfangsoft.zhuangjialong.app.seller.model.ConstructServiceType">
+    select service_code,service_type from t_biz_construct_service_type ORDER BY unit
+  </select>
+  
+     <select id="queryConstructInfoId" resultType="java.lang.Long">
+    SELECT i.id FROM t_app_sell_construct_info i , t_app_seller_info si WHERE si.seller_id = #{id,jdbcType=BIGINT} AND si.construct_info_id = i.id
+  </select>
+  
+       <select id="queryConstructBreakOffState" resultType="java.lang.Integer">
+    SELECT i.break_off_state FROM t_app_sell_construct_info i , t_app_seller_info si WHERE si.seller_id = #{id,jdbcType=BIGINT} AND si.construct_info_id = i.id
+  </select>
+  
+   <select id="guilderCanDrawedMoneySum" resultType="java.lang.Double">
+	
+	SELECT SUM(amount)
+
+    FROM t_biz_seller_balance_detail bd 
+    
+    LEFT JOIN  t_biz_order o ON o.id = bd.order_id
+    
+    LEFT JOIN t_biz_order_pay p ON bd.order_id = p.order_id
+    
+    LEFT JOIN t_biz_order_state_relation st ON bd.order_id = st.order_id AND st.TIME = (SELECT MAX(TIME) FROM t_biz_order_state_relation WHERE st.order_id = order_id) 
+    
+    WHERE bd.seller_id = #{seller_id,jdbcType=BIGINT} AND bd.type = 1 AND bd.create_time &lt; DATE_SUB(NOW(), INTERVAL 2 WEEK)
+
+    AND p.pay_state = 1  AND st.order_state_code IN (2001,3000)
+    
+    /* AND ((o.isdeposit IS FALSE) OR (o.isdeposit IS TRUE AND p.isdeposit IS TRUE)) */
+	
+  </select>
+  
+     <select id="guilderDrawedMoney" resultType="java.lang.Double">
+	SELECT SUM(amount) FROM t_biz_seller_balance_detail bd WHERE bd.seller_id = #{seller_id,jdbcType=BIGINT} AND bd.type = 2
+  </select>
+  
+  <update id="boundzhifubao">
+    UPDATE t_app_seller_info i SET i.ali_account = #{ali_account,jdbcType=VARCHAR} WHERE i.seller_id = #{seller_id,jdbcType=BIGINT}
+  </update>
+  <update id="updateViewTuiguangTime">
+    UPDATE t_app_seller SET view_tuiguang_time = #{view_tuiguang_time,jdbcType=TIMESTAMP} WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="updateViewOrderTime">
+    UPDATE t_app_seller SET view_orders_time = #{view_orders_time,jdbcType=TIMESTAMP} WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+      <update id="updateViewShigongTime">
+    UPDATE t_app_seller SET view_shigong_time = #{view_shigong_time,jdbcType=TIMESTAMP} WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+   <select id="queryworkerdetailbyid" 
+   parameterType="java.lang.Long"
+    resultType="com.mfangsoft.zhuangjialong.app.seller.model.ConstructModel">
+		SELECT s.id,s.head_img,s.name,ci.team_name,s.phone,temp2.region_name,ci.certification_state,cst.service_type,
+	 AVG(ca.score) score,ci.address_details,ci.construct_about,si.ali_account,CONCAT(ci.unit_price,'/',ci.unit_name) unit, ci.break_off_state
+	FROM t_app_seller s 
+	LEFT JOIN t_app_seller_info si ON s.id = si.seller_id 
+	LEFT JOIN t_app_sell_construct_info ci ON si.construct_info_id = ci.id
+	LEFT JOIN t_biz_construct_service_type cst ON ci.service_code = cst.service_code
+	LEFT JOIN t_biz_construct_appointment ca ON s.id = ca.construct_id,
+	(SELECT GROUP_CONCAT(temp.name SEPARATOR ',') region_name FROM (SELECT re.name FROM t_app_sell_construct_info t, region re,t_app_seller s,t_app_seller_info si 
+	WHERE s.id = #{id,jdbcType=BIGINT} AND s.id = si.seller_id and si.construct_info_id = t.id and FIND_IN_SET(re.code,t.service_region)!=0 AND re.name != '市辖区' AND RIGHT(re.code,2) !='00' GROUP BY re.name) temp) temp2
+	WHERE s.id = #{id,jdbcType=BIGINT}
+  </select>
+     <select id="queryworkerdetailbackbyid" 
+   parameterType="java.lang.Long"
+    resultType="com.mfangsoft.zhuangjialong.app.seller.model.ConstructModel">
+    
+    SELECT s.id,s.head_img,s.name,ci.team_name,s.phone,temp2.region_code,temp3.region_name,ci.certification_state,cst.service_code,cst.service_type,
+	 AVG(ca.score) score,ci.address_details,ci.construct_about,si.ali_account,ci.unit_price,ci.unit_name,ci.info,ci.updatetime,
+	 ci.idcard_front,ci.idcard_back ,ci.idcard_hold,ci.qualification_one ,ci.qualification_two,ci.qualification_three, CONCAT(ci.unit_price,'/',ci.unit_name) AS unit
+	FROM t_app_seller s 
+	LEFT JOIN t_app_seller_info si ON s.id = si.seller_id 
+	LEFT JOIN t_app_sell_construct_info ci ON si.construct_info_id = ci.id
+	LEFT JOIN t_biz_construct_service_type cst ON ci.service_code = cst.service_code
+	LEFT JOIN t_biz_construct_appointment ca ON s.id = ca.construct_id,
+	(SELECT GROUP_CONCAT(temp.code SEPARATOR ',') region_code FROM (SELECT re.code FROM t_app_sell_construct_info t, region re,t_app_seller s,t_app_seller_info si 
+	WHERE s.id = #{id,jdbcType=BIGINT} AND s.id = si.seller_id AND si.construct_info_id = t.id AND FIND_IN_SET(re.code,t.service_region)!=0 ) temp) temp2,
+	(SELECT GROUP_CONCAT(temp.name SEPARATOR ',') region_name FROM (SELECT re.name FROM t_app_sell_construct_info t, region re,t_app_seller s,t_app_seller_info si 
+	WHERE s.id = #{id,jdbcType=BIGINT} AND s.id = si.seller_id AND si.construct_info_id = t.id AND FIND_IN_SET(re.code,t.service_region)!=0 GROUP BY re.name) temp) temp3
+	WHERE s.id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_app_seller
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_seller (account, password, seller_type, 
+      phone, head_img, state, 
+      create_time, name, invite_code, 
+      partner_id,view_orders_time,view_tuiguang_time,view_shigong_time)
+    values (#{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{seller_type,jdbcType=INTEGER}, 
+      #{phone,jdbcType=VARCHAR}, #{head_img,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, #{invite_code,jdbcType=VARCHAR}, 
+      #{partner_id,jdbcType=BIGINT},#{view_orders_time,jdbcType=TIMESTAMP},#{view_tuiguang_time,jdbcType=TIMESTAMP},#{view_shigong_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_seller
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="account != null">
+        account,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="seller_type != null">
+        seller_type,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="head_img != null">
+        head_img,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="invite_code != null">
+        invite_code,
+      </if>
+      <if test="partner_id != null">
+        partner_id,
+      </if>
+      <if test="view_orders_time != null">
+        view_orders_time,
+      </if>
+      <if test="view_tuiguang_time != null">
+        view_tuiguang_time,
+      </if>
+       <if test="view_shigong_time != null">
+        view_shigong_time,
+      </if>
+       
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="seller_type != null">
+        #{seller_type,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="head_img != null">
+        #{head_img,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="invite_code != null">
+        #{invite_code,jdbcType=VARCHAR},
+      </if>
+      <if test="partner_id != null">
+        #{partner_id,jdbcType=BIGINT},
+      </if>
+       <if test="view_orders_time != null">
+        #{view_orders_time,jdbcType=TIMESTAMP},
+      </if>
+       <if test="view_tuiguang_time != null">
+        #{view_tuiguang_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="view_shigong_time != null">
+        #{view_shigong_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerEntity">
+    update t_app_seller
+    <set>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="seller_type != null">
+        seller_type = #{seller_type,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="head_img != null">
+        head_img = #{head_img,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="invite_code != null">
+        invite_code = #{invite_code,jdbcType=VARCHAR},
+      </if>
+      <if test="partner_id != null">
+        partner_id = #{partner_id,jdbcType=BIGINT},
+      </if>
+      <if test="view_orders_time != null">
+        view_orders_time = #{view_orders_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="view_tuiguang_time != null">
+        view_tuiguang_time = #{view_tuiguang_time,jdbcType=TIMESTAMP},
+      </if>
+     <if test="view_shigong_time != null">
+        view_shigong_time = #{view_shigong_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerEntity">
+    update t_app_seller
+    set account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      seller_type = #{seller_type,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      head_img = #{head_img,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      invite_code = #{invite_code,jdbcType=VARCHAR},
+      partner_id = #{partner_id,jdbcType=BIGINT},
+      view_orders_time = #{view_orders_time,jdbcType=TIMESTAMP},
+      view_tuiguang_time = #{view_tuiguang_time,jdbcType=TIMESTAMP},
+      view_shigong_time = #{view_shigong_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateConstructInfoIdBySellerId" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerEntity">
+    update t_app_seller_info
+    set construct_info_id = #{construct_info_id,jdbcType=VARCHAR}
+        where seller_id = #{seller_id,jdbcType=BIGINT}
+  </update>
+  <update id="updateSellerState" >
+    update t_app_seller set state = #{state,jdbcType=INTEGER} where id = #{seller_id,jdbcType=BIGINT}
+  </update>
+   <update id="updateTuiguangTime" >
+    update t_app_seller set view_tuiguang_time = #{date,jdbcType=TIMESTAMP} where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="getTuiguangSellerForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  
+SELECT    s.id,
+  s.name, -- 卖家名
+  s.account, -- 卖家用户名
+  s.phone, -- 卖家电话
+  p.principal, -- 合伙人名字
+  DATE_FORMAT(s.create_time, '%Y-%m-%d %H:%i:%s') create_time, -- 创建时间
+  s.state, -- 状态
+  if(s.state = 0 ,'禁用','正常') as state_e, 
+  s2.name AS expand_name, -- 推广员姓名
+  IFNULL(temp.invite_count,0) as invite_count, -- 推广数
+  IFNULL(temp2.seller_num,0) as seller_num, -- 推广卖家数
+  st.service_type, -- 施工种类
+  CONCAT(ci.unit_price,'/', ci.unit_name) unit, -- 施工单价
+  ci.certification_state -- 施工认证状态
+    FROM  
+    
+    t_app_seller s 
+    LEFT JOIN (SELECT se.id,temp.seller_num FROM t_app_seller se,(SELECT expand_id,COUNT(expand_id) AS seller_num FROM t_app_seller_info GROUP BY expand_id) temp WHERE  se.seller_type = 1 AND se.id = temp.expand_id) temp2 ON temp2.id = s.id
+    LEFT JOIN  t_biz_partner p ON p.id=s.partner_id
+    LEFT JOIN t_app_seller_info i ON i.seller_id = s.id 
+    LEFT JOIN t_app_seller s2 ON s2.id = i.expand_id 
+    LEFT JOIN (SELECT s.id,COUNT(c.exshopper_id) AS invite_count FROM t_app_customer c,t_app_seller s WHERE c.exshopper_id = s.id  AND s.seller_type = 1 GROUP BY c.exshopper_id) temp ON temp.id = s.id
+    LEFT JOIN t_app_sell_construct_info ci ON i.construct_info_id = ci.id
+    LEFT JOIN t_biz_construct_service_type st ON st.service_code = ci.service_code
+    
+    WHERE s.seller_type = 1  
+
+	<if test="param.partner_id!=null and param.partner_id!=''">
+			and s.partner_id = #{param.partner_id}
+	</if>
+
+	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+			and p.enterprise_id = #{param.enterprise_id}
+	</if>
+	
+    <if test="param.name!=null and param.name!=''">
+			and s.name like CONCAT('%',#{param.name},'%')
+	</if>
+	
+  	<if test="param.account!=null and param.account!=''">
+			and s.account=#{param.account}
+	</if>
+	
+ 	 <if test="param.phone!=null and param.phone!=''">
+			and s.phone=#{param.phone}
+	</if>
+	<if test="param.state!=null and param.state!=''">
+			and s.state=#{param.state}
+	</if>
+	<if test="param.principal!=null and param.principal!=''">
+	
+			and p.principal like CONCAT('%',#{param.principal},'%')
+	</if>
+	<if test="param.sort!=null">
+	order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	 	 ${sort.field}  ${sort.dir}
+ 	</foreach>
+ 	</if>
+  </select>
+  
+  <select id="getSeller23ForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" resultType="java.util.Map">
+  
+SELECT    s.id,
+  s.name, -- 卖家名
+  s.account, -- 卖家用户名
+  s.phone, -- 卖家电话
+  p.principal, -- 合伙人名字
+  DATE_FORMAT(s.create_time, '%Y-%m-%d %H:%i:%s') create_time, -- 创建时间
+  s.state, -- 状态
+  if(s.state = 0 ,'禁用','正常') as state_e,
+  s2.name AS expand_name, -- 推广员姓名
+  IFNULL(temp.invite_count,0) as invite_count, -- 推广数
+  st.service_type, -- 施工种类
+  CONCAT(ci.unit_price,'/', ci.unit_name) unit, -- 施工单价
+  ci.certification_state, -- 施工认证状态
+  if(ci.certification_state is null,'未提交',if(ci.certification_state=0,'未通过',if(ci.certification_state=1,if(s.state = 0 ,'禁用','正常'),'待审核'))) c_state -- 施工认证状态
+    FROM  
+    
+    t_app_seller s 
+    LEFT JOIN t_app_seller_info i ON i.seller_id = s.id  
+    LEFT JOIN (SELECT s.id,COUNT(c.exshopper_id) AS invite_count FROM t_app_customer c LEFT JOIN t_app_seller s ON c.exshopper_id = s.id GROUP BY c.exshopper_id) temp ON temp.id = s.id
+    LEFT JOIN t_app_sell_construct_info ci ON i.construct_info_id = ci.id
+    LEFT JOIN t_biz_construct_service_type st ON st.service_code = ci.service_code
+    LEFT JOIN t_app_seller s2 ON s2.id = i.expand_id 
+    LEFT JOIN  t_biz_partner p ON p.id=s2.partner_id
+    
+    
+    WHERE s.seller_type = #{param.seller_type}  
+
+	<if test="param.partner_id!=null and param.partner_id!=''">
+			and s2.partner_id = #{param.partner_id}
+	</if>
+
+	<if test="param.enterprise_id!=null and param.enterprise_id!=''">
+			and p.enterprise_id = #{param.enterprise_id}
+	</if>
+	
+    <if test="param.name!=null and param.name!=''">
+			and s.name like CONCAT('%',#{param.name},'%')
+	</if>
+  	<if test="param.account!=null and param.account!=''">
+			and s.account=#{param.account}
+	</if>
+ 	 <if test="param.phone!=null and param.phone!=''">
+			and s.phone=#{param.phone}
+	</if>
+	<if test="param.state!=null and param.state!=''">
+			and s.state=#{param.state}
+	</if>
+	<if test="param.principal!=null and param.principal!=''">
+			and p.principal like CONCAT('%',#{param.principal},'%')  
+	</if>
+		<if test="param.expand_name!=null and param.expand_name!=''">
+			and s2.name like CONCAT('%',#{param.expand_name},'%')  
+	</if>
+	<if test="param.sort!=null">
+	order by
+ 		<foreach collection="param.sort" index="index" item="sort" separator=",">
+ 	 	 ${sort.field}  ${sort.dir}
+ 	</foreach>
+ 	</if>
+  </select>
+  
+  <insert id="insertSellerInfo" parameterType="com.mfangsoft.zhuangjialong.app.seller.model.SellerInfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_seller_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="seller_id != null">
+        seller_id,
+      </if>
+      <if test="ali_account != null">
+        ali_account,
+      </if>
+      <if test="construct_info_id != null">
+        construct_info_id,
+      </if>
+      <if test="commission_rate != null">
+        commission_rate,
+      </if>
+      <if test="expand_id != null">
+        expand_id
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="seller_id != null">
+        #{seller_id,jdbcType=INTEGER},
+      </if>
+      <if test="ali_account != null">
+        #{ali_account,jdbcType=VARCHAR},
+      </if>
+      <if test="construct_info_id != null">
+        #{construct_info_id,jdbcType=INTEGER},
+      </if>
+      <if test="commission_rate != null">
+        #{commission_rate,jdbcType=DOUBLE},
+      </if>
+      <if test="expand_id != null">
+        #{expand_id,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectPassShopGuiderByShopId" parameterType="java.lang.Long" resultType="map">
+SELECT 
+  s.`id`,
+  s.`name` 
+FROM
+  `t_app_seller` s 
+  LEFT JOIN `t_app_seller_info` si 
+    ON s.`id` = si.`seller_id`
+  LEFT JOIN `t_app_shop_guider` sg 
+    ON sg.`seller_info_id` = si.`id` 
+WHERE s.`seller_type` = 4 
+  AND s.`state` = 1 
+  AND sg.`certification_state` = 2 
+  AND sg.`shop_id` =  #{shop_id,jdbcType=BIGINT} 
+  </select>
+</mapper>

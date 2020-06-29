@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.personalCenter.mapper.MessageTypeEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageTypeEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type_id" jdbcType="INTEGER" property="type_id" />
+     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="group" jdbcType="INTEGER" property="group" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type_id, title, content, group
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_customer_message_type
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_app_customer_message_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageTypeEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_customer_message_type (type_id,title, content, group
+      )
+    values (#{type_id,jdbcType=INTEGER},#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{group,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageTypeEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_customer_message_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type_id != null">
+        type_id,
+      </if>
+            <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="group != null">
+        group,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type_id != null">
+        #{type_id,jdbcType=INTEGER},
+      </if>
+            <if test="title != null">
+         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="group != null">
+        #{group,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageTypeEntity">
+    update t_app_customer_message_type
+    <set>
+      <if test="type_id != null">
+        type_id = #{type_id,jdbcType=INTEGER},
+      </if>
+            <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="group != null">
+        group = #{group,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageTypeEntity">
+    update t_app_customer_message_type
+    set type_id = #{type_id,jdbcType=INTEGER},
+    title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      group = #{group,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

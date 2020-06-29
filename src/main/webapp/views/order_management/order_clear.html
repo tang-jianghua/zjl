@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<style>
+.blackText {
+    color: black;
+    line-height: 30px;
+    text-align: center; 
+}
+</style>
+<div ng-controller="orderClearCtrl">
+    <!-- 标题 -->
+    <section class="well">
+	    <div class="fileAbout backstage">订单结算</div>
+	    <div style="float: right;margin: -35px 10px;" ng-show="clearSet_show">
+	    	<button class="k-button k-state-default" ng-click="clearSet()">结算设置</button>
+	    </div>
+	    
+	   	<div class="idMessage">
+		   	  <div class="form-horizontal form-widgets col-sm-12 gray">
+			      <div class="form-group">
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">结算编号</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.shell_code" class="k-textbox" placeholder=""/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">结算状态</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="clear_state"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">结算日期（始）</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="start_time"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">结算日期（止）</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="end_time"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="enterprise_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">企业名称</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="enterprise_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="partner_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">合伙人</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="partner_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="brand_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">品牌名称</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="brand_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="shop_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">店铺名称</label>
+				                <div class="col-sm-8">
+				                    <input type="text" id="shop_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        
+				        <div class="buttons-wrap clearBoth">
+				            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+				        </div>
+		     	</div>
+		     </div>
+		    <div class="interval">
+		    	 <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+		    </div>
+	     </div>
+     </section>
+     
+     <div kendo-window="clearSetWindow" k-title="'结算设置'" k-width="800" k-min-height="200" k-visible="false" k-modal="true">
+    	<div class="form-horizontal form-widgets col-sm-12">
+			<div class="form-group">
+				<label class="control-label col-sm-2">结算周期</label>
+				<div class="col-sm-7">
+					<input type="number" ng-model="clearSetForm.days" class="k-textbox" />
+				</div>
+				<div class="col-sm-1 blackText">天</div>
+			</div>	
+		</div>
+		<div class="form-horizontal form-widgets col-sm-12">
+			<div class="form-group">
+				<label class="control-label col-sm-2">佣金比例</label>
+				<div class="col-sm-7">
+					<input type="number" ng-model="clearSetForm.rate" class="k-textbox" />
+				</div>
+			</div>	
+		</div>
+		<div class="form-group  text-center">
+			<button class="k-button k-state-defaul" ng-click="clearSetSubmit()">确定</button>
+		</div>
+    </div>
+    
+</div>
+    
+

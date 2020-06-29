@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<style>
+.oneClassHeader{
+    width: 80%;
+    height: 50px;
+    background-color: #caa359; 
+    margin: 3px auto;
+    font-size: 20px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px 5px 0px 0px;
+}
+.oneClassHeader:HOVER{
+	background-color: #04a570;
+}
+.oneClass{
+    width: 80%;
+    height: 45px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 18px;
+    line-height:45px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+.decorateLeft{
+	width: 90%;
+    float: left;
+    padding-left: 33px;
+}
+.decorateRight{
+	width:10%;
+	float:left;
+}
+.decorateTop{
+	width: 67%;
+    float: left;
+    padding: 0 10px;
+}
+.decorateBotton{
+	width: 8%;
+	padding-right: 8px
+}
+ .oneClass .content{
+	float: left;
+    margin:auto;
+}
+.oneClass .delete{
+	float: right;
+}
+.choose{
+	background-color: #37cec5;
+	color:#fff;
+	border:none;
+}
+.addClass{
+    width: 80%;
+    height: 50px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 16px;
+    color: #bdb9b9;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0px 0px 5px 5px;
+}
+.addClass:HOVER{
+	background-color: #e2e2e2;
+}
+.blueBackground{
+	background:#0096ff;
+	color:#fff;
+}
+.imgContainer1{ 
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+}
+.imgContainer1 .imgBackground1{
+    width: 98px;
+    height: 98px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 98px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+    width: 100px;
+    height: 100px;
+}
+
+
+.imgContainer2{ 
+    width: 120px;
+    height: 180px;
+    margin: 20px auto;
+}
+.imgContainer2 .imgBackground1{
+    width: 120px;
+    height: 180px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 180px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer2 .imgBackground2{
+	width: 120px;
+    height: 180px;
+    position: absolute;
+    margin: 1px;
+}
+.imgContainer2 .k-upload{
+	opacity: 0;
+}
+.imgContainer2 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer2 .k-upload .k-upload-button{
+    width: 120px;
+    height: 180px;
+} 
+
+ 
+.fixwdCenter{
+	padding:5px;
+}
+.beffeact{
+	width:45px;
+	height:45px;
+	float: left;
+	padding:3px;
+}
+</style>
+
+<div ng-controller="productClassifyCtrl" id="productClassifyCtrl"> 
+   	<section class="well">
+   	  <!-- 标题 -->
+    <div class="fileAbout backstage">产品属性
+    </div>
+        <div class="idMessage" >
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+            	<div class="col-sm-4" style="padding:0">
+			    	<div class="col-sm-12 oneClassHeader">行业分类</div>
+			    	<div id="firstClass">
+			    	
+			    	
+			    	</div>
+			    	<div class="col-sm-12 addClass outPadding" ng-click="addClass(1)">+点击增加分类</div>
+   	 		    </div>
+   	 		    
+   	 		    <div class="col-sm-4" style="padding:0">
+			    	<div class="col-sm-12 oneClassHeader">品类分类</div>
+			    	<div id="secondClass">
+			    	
+			    	
+			    	</div>
+			    	<div class="col-sm-12 addClass outPadding" ng-click="addClass(2) ">+点击增加分类</div>
+   	 		    </div>
+   	 		    
+   	 		    <div class="col-sm-4" style="padding:0">
+			    	<div class="col-sm-12 oneClassHeader">品牌名称</div>
+			    	<div id="thirdClass" style="overflow:overlay;max-height:660px;">
+			    	
+			    	
+			    	</div>
+			    	<div class="col-sm-12 addClass outPadding" ng-click="addClass(3)" >+点击增加分类</div>
+   	 		    </div>
+            
+               
+            </div>
+        </div>
+         </div>
+         
+         <div id="addClassify" kendo-window="addClassify" k-width="450" k-min-height="340"  k-visible="false">
+	         <section>
+	         	<input type="hidden" id="addClassifyType"/>
+	       		<input type="hidden" id="addClassifyType1"/>
+	       		<input type="hidden" id="addClassifyId"/>
+	       		<div class="form-group" style="margin:auto;height:40px;" id="addClassifyName">
+	       			
+	       		</div>
+			 	<div class="form-group" id="addClassifyImg" style="height: 150px;">
+				 	<div style="width:100%px;height:20px;">
+		       			<p style="text-align:center;">品类图：(图片大小尺寸150*150   保持20KB以内 格式JPG)</p>
+		       		</div>
+			        <div class="col-sm-11">
+		   	 			<div class="imgContainer1">
+		                	<div class="imgBackground1">
+		                		<span class="glyphicon glyphicon-plus"></span>
+		                	</div>
+		                	<div class="imgBackground2" id="addClass_img"></div>
+		                	<input type="file" name="file" id="addClass"/>
+		                	<input type="hidden" id="addClass_url"/>
+	                	</div>
+	   	 			</div>
+			    </div>
+			    
+			    <div id="classSpecial" ng-show="classSpecial_show">
+				    <div class="form-group">
+					 	<div style="width:100%px;height:20px;">
+			       			<p style="text-align:center;">示意图：(图片大小尺寸224*315   保持80KB以内 格式JPG/PNG)</p>
+			       		</div>
+				        <div class="col-sm-11">
+			   	 			<div class="imgContainer2">
+			                	<div class="imgBackground1">
+			                		<span class="glyphicon glyphicon-plus"></span>
+			                	</div>
+			                	<div class="imgBackground2" id="showClass_img"></div>
+			                	<input type="file" name="file" id="showClass"/>
+			                	<input type="hidden" id="showClass_url"/>
+		                	</div>
+		   	 			</div>
+				    </div>
+				    <div class="form-group">
+				    	<label class="control-label col-sm-2" >色值</label>
+				    	<div class="col-sm-8">
+				    		<input type="color" id="classRGB"/>
+				    	</div>
+				    </div>
+			    </div>
+			    
+			    
+			
+			 	<div class="col-sm-11 fixwdCenter">
+					<button class="k-state-default k-button centerButton" value="" ng-click="yesAddClassify()">确定</button>
+				</div>
+	         </section>
+		</div>
+         
+     </section>
+
+</div>
+    
+

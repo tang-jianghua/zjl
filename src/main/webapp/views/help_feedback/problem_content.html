@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<style>
+.oneClassHeader{
+    width: 80%;
+    height: 50px;
+    background-color: #caa359;
+    margin: 3px auto;
+    font-size: 20px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px 5px 0px 0px;
+}
+.oneClassHeader:HOVER{
+	background-color: #04a570;
+}
+.active{
+	background-color: #89e4c6 !important;
+}
+.oneClass{
+    width: 80%;
+    height: 50px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 20px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+.oneClass .content{
+	float: left;
+    width: 90%;
+    padding-left:30px;
+}
+.oneClass .delete{
+	float: right;
+}
+.addClass{
+    width: 80%;
+    height: 50px;
+    background-color: #dadada;
+    margin: 3px auto;
+    font-size: 16px;
+    color: #bdb9b9;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0px 0px 5px 5px;
+}
+.button_center{
+    display: inherit;
+	margin: 0px auto;
+}
+.imgContainer_localPicture{ 
+    width: 90%;
+    height: 150px;
+    margin: 5px auto;
+}
+.imgContainer_localPicture .imgBackground1{
+    width: 85%;
+    height: 150px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 150px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer_localPicture .imgBackground2{
+    width: 85%;
+    height: 150px;
+    position: absolute;
+}
+.imgContainer_localPicture .k-upload{
+	opacity: 0;
+}
+.imgContainer_localPicture .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer_localPicture .k-upload .k-upload-button{
+	width: 100%;
+    height: 150px;   
+}  
+#problem_1:focus{
+	    outline: -webkit-focus-ring-color auto 0px;
+}
+#problem_2:focus{
+		outline: -webkit-focus-ring-color auto 0px;
+}
+#problemClassify .oneClass:hover{
+	background:#caa359;
+	color:#fff;
+}
+</style>
+
+<div ng-controller="problemContentCtrl">
+    <!-- 标题 -->
+  <section class="well">
+    <div class="fileAbout backstage">问题分类
+    </div>
+<div class="idMessage">
+     <div class="greenLine"  >
+     	<button class="oneList choose " id="problemType_1" ng-click="changeToBuyLayer()" >买家端问题</button>
+     	<button class="oneList" id="problemType_2" ng-click="changeToSailLayer()">卖家端问题</button>
+     </div>
+        <div class="form-horizontal form-widgets col-sm-12 interval">
+            <div class="form-group">
+            	<div class="col-sm-4">
+			    	<div class="col-sm-12 oneClassHeader">问题分类</div>
+			    	<div id="problemClassify">
+
+			    	</div>
+			    	<div class="col-sm-12 addClass" ng-click="addClass()">+点击增加分类</div>
+   	 		    </div>
+   	 		    <div class="col-sm-8">
+   	 		    	<button class="k-button k-state-default" ng-click="addProblem()">新增问题</button>
+			    	<div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+   	 		    </div>  
+            </div>
+        </div>
+     
+     <div kendo-window="addProblemWindow" k-title="'新增问题'" k-width="900" k-min-height="400" k-visible="false" k-modal="true">
+     	<div class="form-horizontal form-widgets col-sm-11">
+     		 <input type="hidden" ng-model="form.question_type_id"/>
+            <input type="hidden" ng-model="form.id"/>
+            <section style="height:70px;">
+	     		<div class="form-group">
+	                <label class="control-label col-sm-2">问题名称</label>
+	                <div class="col-sm-9">
+	                    <input ng-model="form.title" class="k-textbox"/>
+	                </div>
+	            </div>
+            </section>
+            <div>
+                <label class="control-label col-sm-2">详情</label>
+                <div class="col-sm-9">
+                    <textarea id="editor"></textarea>
+           		   <button class="k-button k-state-default button_center " ng-click="addNewProblem()" style="margin-top:10px">确定</button>
+              </div>
+      		</div>
+    	 </div>
+     </div>
+ 
+</section>
+</div>
+    
+

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<style>
+.title {
+	font-size: 16px;
+	color: black;
+	text-align: right;
+}
+
+.text {
+	font-size: 16px;
+	color: gray;
+	text-align: left;
+}
+
+.title2 {
+	font-size: 18px;
+	color: black;
+	text-align: center;
+	padding: 5px;
+}
+
+.text2 {
+	font-size: 18px;
+	color: gray;
+	text-align: center;
+	padding: 5px;
+}
+
+.button_center {
+	display: inherit;
+	margin: auto;
+}
+
+.img_commerce {
+	width: 100%;
+	height: 244px;
+	margin: 0px auto;
+	background: #caa359;
+}
+
+.sureone {
+	background: #0096ff;
+}
+
+font {
+	color: red;
+	font-size: 20px;
+}
+</style>
+<div ng-controller="partnerBackInformationCtrl">
+	<section class="well" style="min-height: 906px">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">
+			后台信息 > <span>合伙人账号信息</span>
+		</div>
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+						<div class="col-sm-6">
+							<input ng-model="principal" class="k-textbox" />
+						</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+
+						<label class="col-sm-2 title">联系方式：</label>
+						<div class="col-sm-6">
+							<input ng-model="phone_num" class="k-textbox" />
+						</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">企业属性：</label>
+						<div class="col-sm-6 text" ng-cloak>{{enterprise_name}}</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">服务区域：</label>
+						<div class="col-sm-6 text">
+							<span ng-bind-html="region_str"></span>
+						</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+						<div class="col-sm-6 text" ng-cloak>{{userEntity.account}}</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+						<div class="col-sm-6 text">******</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12"
+				style="float: left">
+				<div class="form-group">
+					<label class="col-sm-2 title">工商注册信息<font>*</font></label>
+					<div class="col-sm-6 text"></div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="col-sm-2"></label>
+					<div class="col-sm-8">
+						<div class="col-sm-4">
+							<div class="col-sm-12 title2">营业执照</div>
+							<div class="col-sm-12 img_commerce" id="biz_img"></div>
+							<div class="col-sm-12 text2" ng-cloak>{{commerceInfo.biz_num}}</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="col-sm-12 title2">开户许可证</div>
+							<div class="col-sm-12 img_commerce" id="open_img"></div>
+							<div class="col-sm-12 text2" ng-cloak>{{commerceInfo.open_acount}}</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="col-sm-12 title2">税务登记证</div>
+							<div class="col-sm-12 img_commerce" id="tax_img"></div>
+							<div class="col-sm-12 text2" ng-cloak>{{commerceInfo.tax_num}}</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12"
+				style="float: left">
+				<div class="form-group">
+					<label class="col-sm-2 title">银行信息<font>*</font></label>
+					<div class="col-sm-6 text"></div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+						<div class="col-sm-6 text" ng-cloak>{{bankInfo.name}}</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">对公账号：</label>
+						<div class="col-sm-6 text" ng-cloak>{{bankInfo.account}}</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">开&nbsp;&nbsp;户&nbsp;&nbsp;行：</label>
+						<div class="col-sm-6 text" ng-cloak>{{bankInfo.addr}}</div>
+						<div class="col-sm-4"></div>
+					</div>
+				</div>
+			</div>
+							<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-3 title" style="text-align:center">第三方账户（至少一项）<font>*</font></label>
+						<div class="col-sm-4 text"></div>
+					</div>
+				</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">支&nbsp;&nbsp;&nbsp;付&nbsp;&nbsp;&nbsp;宝：</label>
+						<div class="col-sm-6 text" ng-cloak>{{bankInfo.pay_account}}</div>
+						<div class="col-sm-4 text"></div>
+					</div>
+				</div>
+				<div class="form-horizontal form-widgets col-sm-12">
+					<div class="form-group">
+						<label class="col-sm-2 title">微&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;信：</label>
+						<div class="col-sm-6 text" ng-cloak>{{bankInfo.pay_account}}</div>
+						<div class="col-sm-4 text"></div>
+					</div>
+				</div>
+			</div>
+			<div  class="form-horizontal form-widgets col-sm-12">
+				<button class="k-button k-state-default button_center sureone"
+					ng-click="formSubmit()">确定</button>
+			</div>
+	</section>
+</div>
+</div>

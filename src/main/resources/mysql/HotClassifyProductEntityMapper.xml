@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.brand.mapper.HotClassifyProductEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.brand.model.HotClassifyProductEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="hot_classify_id" jdbcType="BIGINT" property="hot_classify_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, hot_classify_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_hot_classify_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_hot_classify_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.HotClassifyProductEntity">
+    insert into t_biz_hot_classify_product (product_id, hot_classify_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, #{hot_classify_id,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.HotClassifyProductEntity">
+    insert into t_biz_hot_classify_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="hot_classify_id != null">
+        hot_classify_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="hot_classify_id != null">
+        #{hot_classify_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.HotClassifyProductEntity">
+    update t_biz_hot_classify_product
+    <set>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="hot_classify_id != null">
+        hot_classify_id = #{hot_classify_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.HotClassifyProductEntity">
+    update t_biz_hot_classify_product
+    set product_id = #{product_id,jdbcType=BIGINT},
+      hot_classify_id = #{hot_classify_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

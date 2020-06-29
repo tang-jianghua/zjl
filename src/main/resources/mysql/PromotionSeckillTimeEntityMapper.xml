@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionSeckillTimeEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillTimeEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="pstart_time" jdbcType="TIME" property="pstart_time" />
+    <result column="pend_time" jdbcType="TIME" property="pend_time" />
+    <result column="now_time" jdbcType="TIME" property="now_time" />
+    <result column="iscurrent" jdbcType="TINYINT" property="iscurrent" />
+    <result column="promotion_brand_num" jdbcType="INTEGER" property="promotion_brand_num" />
+    <result column="brand_id" jdbcType="VARCHAR" property="brand_id" />
+    <result column="brand_id_count" jdbcType="INTEGER" property="brand_id_count" />
+    <result column="has_registered_flag" jdbcType="INTEGER" property="has_registered_flag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pid, pstart_time, pend_time,promotion_brand_num,brand_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_seckill_time
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAtNowForProductCore"  resultMap="BaseResultMap">
+  SELECT 
+  pst.`id`,
+  pst.`pstart_time`,
+  pst.`pend_time`,
+  DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 SECOND),'%T') AS  now_time 
+  FROM `t_biz_promotion_seckill_time` pst 
+LEFT JOIN `t_biz_promotion` p
+ON pst.`pid` = p.`id`
+WHERE DATE_ADD(NOW(), INTERVAL 2 SECOND) &gt;= p.`start_time`
+AND DATE_ADD(NOW(), INTERVAL 2 SECOND) &lt;= p.`end_time`
+AND p.`state` = 1
+AND TYPE = 0
+AND pst.pstart_time IS NOT NULL
+AND pst.pend_time IS NOT NULL
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_promotion_seckill_time
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillTimeEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_seckill_time (pid, pstart_time, pend_time, promotion_brand_num, brand_id 
+      )
+    values (#{pid,jdbcType=BIGINT}, #{pstart_time,jdbcType=TIME}, #{pend_time,jdbcType=TIME}, #{promotion_brand_num,jdbcType=INTEGER}, #{brand_id,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillTimeEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_seckill_time
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="pstart_time != null">
+        pstart_time,
+      </if>
+      <if test="pend_time != null">
+        pend_time,
+      </if>
+      <if test="promotion_brand_num != null">
+        promotion_brand_num,
+      </if>
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="pstart_time != null">
+        #{pstart_time,jdbcType=TIME},
+      </if>
+      <if test="pend_time != null">
+        #{pend_time,jdbcType=TIME},
+      </if>
+      <if test="promotion_brand_num != null">
+        #{promotion_brand_num,jdbcType=INTEGER},
+      </if>
+       <if test="brand_id != null">
+        #{brand_id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillTimeEntity">
+    update t_biz_promotion_seckill_time
+    <set>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="pstart_time != null">
+        pstart_time = #{pstart_time,jdbcType=TIME},
+      </if>
+      <if test="pend_time != null">
+        pend_time = #{pend_time,jdbcType=TIME},
+      </if>
+      <if test="promotion_brand_num != null">
+        promotion_brand_num = #{promotion_brand_num,jdbcType=INTEGER},
+      </if>
+       <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionSeckillTimeEntity">
+    update t_biz_promotion_seckill_time
+    set pid = #{pid,jdbcType=BIGINT},
+      pstart_time = #{pstart_time,jdbcType=TIME},
+      pend_time = #{pend_time,jdbcType=TIME},
+      promotion_brand_num = #{promotion_brand_num,jdbcType=INTEGER},
+      brand_id = #{brand_id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateBrandIdByPrimaryKey" >
+    update t_biz_promotion_seckill_time
+    set brand_id = #{brand_id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

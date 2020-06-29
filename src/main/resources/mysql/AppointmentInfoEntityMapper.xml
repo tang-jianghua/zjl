@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.appointment.mapper.AppointmentInfoEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfoEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="class_id" jdbcType="BIGINT" property="class_id" />
+    <result column="appointment_id" jdbcType="BIGINT" property="appointment_id" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="server_id" jdbcType="BIGINT" property="server_id" />
+    <result column="needs" jdbcType="VARCHAR" property="needs" />
+    <result column="min_price" jdbcType="DOUBLE" property="min_price" />
+    <result column="max_price" jdbcType="DOUBLE" property="max_price" />
+    <result column="style_id" jdbcType="BIGINT" property="style_id" />
+    <result column="space_id" jdbcType="BIGINT" property="space_id" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfoEntity">
+    <result column="deal_info" jdbcType="LONGVARCHAR" property="deal_info" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, brand_id, shop_id, class_id, appointment_id, start_time, end_time, state, server_id, 
+    needs, min_price, max_price, style_id, space_id
+  </sql>
+  <sql id="Blob_Column_List">
+    deal_info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_appointment_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    
+  <select id="selectInfoById" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.app.appointment.model.Appointment">
+   	 SELECT s.shop_name,a.customer_id
+	FROM t_biz_appointment_info i,t_biz_appointment a,t_biz_shop s
+	WHERE i.id = #{id,jdbcType=BIGINT} and i.appointment_id = a.id AND s.id = i.shop_id
+  </select>
+  
+   <select id="selectByAppointmentInfo" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfo" resultType="java.lang.Long">
+    select 
+    id
+    from t_biz_appointment_info
+    where 1 = 1
+    <if test="brand_id != null">
+       AND brand_id = #{brand_id,jdbcType=BIGINT}
+      </if>
+      <if test="shop_id != null">
+       AND shop_id = #{shop_id,jdbcType=BIGINT}
+      </if>
+      <if test="class_id != null">
+      AND  class_id = #{class_id,jdbcType=BIGINT}
+      </if>
+      <if test="appointment_id != null">
+       AND appointment_id = #{appointment_id,jdbcType=BIGINT}
+      </if>
+      <if test="start_time != null">
+       AND start_time = #{start_time,jdbcType=TIMESTAMP}
+      </if>
+      <if test="end_time != null">
+       AND end_time = #{end_time,jdbcType=TIMESTAMP}
+      </if>
+      <if test="state != null">
+       AND state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="needs != null">
+       AND needs = #{needs,jdbcType=VARCHAR}
+      </if>
+      <if test="min_price != null">
+      AND  min_price = #{min_price,jdbcType=DOUBLE}
+      </if>
+      <if test="max_price != null">
+       AND max_price = #{max_price,jdbcType=DOUBLE}
+      </if>
+      <if test="style_id != null">
+       AND style_id = #{style_id,jdbcType=BIGINT}
+      </if>
+      <if test="space_id != null">
+       AND space_id = #{space_id,jdbcType=BIGINT}
+      </if>
+     
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_appointment_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_appointment_info (brand_id, shop_id, class_id, 
+      appointment_id, start_time, end_time, 
+      state, server_id, needs, 
+      min_price, max_price, style_id, 
+      space_id, deal_info)
+    values (#{brand_id,jdbcType=BIGINT}, #{shop_id,jdbcType=BIGINT}, #{class_id,jdbcType=BIGINT}, 
+      #{appointment_id,jdbcType=BIGINT}, #{start_time,jdbcType=TIMESTAMP}, #{end_time,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER}, #{server_id,jdbcType=BIGINT}, #{needs,jdbcType=VARCHAR}, 
+      #{minprice,jdbcType=DOUBLE}, #{maxprice,jdbcType=DOUBLE}, #{style_id,jdbcType=BIGINT}, 
+      #{space_id,jdbcType=BIGINT}, #{dealinfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_appointment_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="shop_id != null">
+        shop_id,
+      </if>
+      <if test="class_id != null">
+        class_id,
+      </if>
+      <if test="appointment_id != null">
+        appointment_id,
+      </if>
+      <if test="start_time != null">
+        start_time,
+      </if>
+      <if test="end_time != null">
+        end_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="server_id != null">
+        server_id,
+      </if>
+      <if test="needs != null">
+        needs,
+      </if>
+      <if test="min_price != null">
+        min_price,
+      </if>
+      <if test="max_price != null">
+        max_price,
+      </if>
+      <if test="style_id != null">
+        style_id,
+      </if>
+      <if test="space_id != null">
+        space_id,
+      </if>
+      <if test="deal_info != null">
+        deal_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_id != null">
+        #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="appointment_id != null">
+        #{appointment_id,jdbcType=BIGINT},
+      </if>
+      <if test="start_time != null">
+        #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="server_id != null">
+        #{server_id,jdbcType=BIGINT},
+      </if>
+      <if test="needs != null">
+        #{needs,jdbcType=VARCHAR},
+      </if>
+      <if test="min_price != null">
+        #{min_price,jdbcType=DOUBLE},
+      </if>
+      <if test="max_price != null">
+        #{max_price,jdbcType=DOUBLE},
+      </if>
+      <if test="style_id != null">
+        #{style_id,jdbcType=BIGINT},
+      </if>
+      <if test="space_id != null">
+        #{space_id,jdbcType=BIGINT},
+      </if>
+      <if test="deal_info != null">
+        #{deal_info,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfoEntity">
+    update t_biz_appointment_info
+    <set>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        shop_id = #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="class_id != null">
+        class_id = #{class_id,jdbcType=BIGINT},
+      </if>
+      <if test="appointment_id != null">
+        appointment_id = #{appointment_id,jdbcType=BIGINT},
+      </if>
+      <if test="start_time != null">
+        start_time = #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        end_time = #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="server_id != null">
+        server_id = #{server_id,jdbcType=BIGINT},
+      </if>
+      <if test="needs != null">
+        needs = #{needs,jdbcType=VARCHAR},
+      </if>
+      <if test="min_price != null">
+        min_price = #{min_price,jdbcType=DOUBLE},
+      </if>
+      <if test="max_price != null">
+        max_price = #{max_price,jdbcType=DOUBLE},
+      </if>
+      <if test="style_id != null">
+        style_id = #{style_id,jdbcType=BIGINT},
+      </if>
+      <if test="space_id != null">
+        space_id = #{space_id,jdbcType=BIGINT},
+      </if>
+      <if test="deal_info != null">
+        deal_info = #{deal_info,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfoEntity">
+    update t_biz_appointment_info
+    set brand_id = #{brand_id,jdbcType=BIGINT},
+      shop_id = #{shop_id,jdbcType=BIGINT},
+      class_id = #{class_id,jdbcType=BIGINT},
+      appointment_id = #{appointment_id,jdbcType=BIGINT},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      server_id = #{server_id,jdbcType=BIGINT},
+      needs = #{needs,jdbcType=VARCHAR},
+      min_price = #{min_price,jdbcType=DOUBLE},
+      max_price = #{max_price,jdbcType=DOUBLE},
+      style_id = #{style_id,jdbcType=BIGINT},
+      space_id = #{space_id,jdbcType=BIGINT},
+      deal_info = #{deal_info,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.AppointmentInfoEntity">
+    update t_biz_appointment_info
+    set brand_id = #{brand_id,jdbcType=BIGINT},
+      shop_id = #{shop_id,jdbcType=BIGINT},
+      class_id = #{class_id,jdbcType=BIGINT},
+      appointment_id = #{appointment_id,jdbcType=BIGINT},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      server_id = #{server_id,jdbcType=BIGINT},
+      needs = #{needs,jdbcType=VARCHAR},
+      min_price = #{min_price,jdbcType=DOUBLE},
+      max_price = #{max_price,jdbcType=DOUBLE},
+      style_id = #{style_id,jdbcType=BIGINT},
+      space_id = #{space_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryBrandAppDetail" parameterType="java.lang.Long"  resultType="java.util.Map">
+ SELECT temp.*,
+       REPLACE(
+          REPLACE(
+             REPLACE(REPLACE(temp.deal_info, '%3s', IFNULL(s.name,'')),
+                     '%3d',
+                     IFNULL(s.phone,'')),
+             '%2s',
+             IFNULL(temp.shop_name,'')),
+          '%6s',
+          IFNULL(s.name,''))
+          AS ap_info,
+       s.name AS server_name,
+       spa.value AS app_space,
+      ste.value AS app_style
+  FROM (SELECT ap.id,
+               t.address_details,
+               ap.deal_info,
+               ap.needs,
+               ap.min_price,
+               ap.max_price,
+               bc.name AS class_name,
+               t.door_model_img,
+               t.receiver_name AS name,
+               t.phone_num AS phone,
+               shop.shop_name,
+               DATE_FORMAT(ap.start_time, '%Y-%m-%d %T') AS start_time,
+               DATE_FORMAT(ap.end_time, '%Y-%m-%d %T') AS end_time,
+               ent.name AS brand_name,
+               ap.state,
+               ap.server_id,
+               ap.space_id,
+               ap.style_id,
+               brand.region_code
+          FROM t_biz_appointment t,
+               t_app_customer c,
+               t_biz_appointment_info ap,
+               t_biz_shop shop,
+               t_biz_brand brand,
+               t_biz_build_enterprise ent,
+              
+               t_biz_build_class bc
+               
+         WHERE     t.customer_id = c.id
+               AND t.id = ap.appointment_id
+               AND shop.id = ap.shop_id
+               AND brand.id = ap.brand_id
+               AND ent.id = brand.enterprise_id
+               AND ap.class_id = bc.id
+              
+               AND ap.id = #{id}) temp
+       LEFT JOIN `t_app_seller` s ON s.id = temp.server_id
+       LEFT JOIN t_biz_class_attr_value spa ON temp.space_id = spa.id AND spa.attr_id=1
+       LEFT JOIN  t_biz_class_attr_value ste ON  temp.style_id = ste.id AND ste.attr_id=2
+ 
+  </select>
+</mapper>

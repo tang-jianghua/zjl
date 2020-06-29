@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.cart.mapper.CartEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.cart.model.CartEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="sales_property_id" jdbcType="BIGINT" property="sales_property_id" />
+  </resultMap>
+  
+    <resultMap id="CartMultiShopResultMap" type="com.mfangsoft.zhuangjialong.app.cart.model.CartShop">
+    <id column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+	<collection property="products" foreignColumn="shop_id" ofType="com.mfangsoft.zhuangjialong.app.cart.model.CartProduct" >
+		<id column="product_id" jdbcType="BIGINT" property="product_id" />
+		<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+		<result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+		<result column="num" jdbcType="INTEGER" property="num" />
+		<result column="info" jdbcType="VARCHAR" property="info" />
+		<result column="sales_model" jdbcType="VARCHAR" property="sales_model" />
+			<association property="sales_property" javaType="com.mfangsoft.zhuangjialong.app.order.model.Salespropiety" >
+				<id column="id" jdbcType="BIGINT" property="id" />
+				<result column="product_id" jdbcType="BIGINT" property="product_id" />
+	    		<result column="color" jdbcType="VARCHAR" property="color" />
+	    		<result column="model" jdbcType="VARCHAR" property="model" />
+	    		<result column="standard" jdbcType="VARCHAR" property="standard" />
+	   		 	<result column="stock" jdbcType="BIGINT" property="stock" />
+	    		<result column="price" jdbcType="DOUBLE" property="price" />
+	    		<result column="product_unit" jdbcType="VARCHAR" property="product_unit" />
+			</association>
+	</collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, product_id, shop_id, num, sales_property_id
+  </sql>
+  
+      <select id="selectShopIdByCustomerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    DISTINCT shop_id
+    from t_biz_cart
+    where customer_id = #{customer_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCustomerId"  resultMap="CartMultiShopResultMap">
+  SELECT c.customer_id,c.shop_id,s.shop_name,s.brand_id,CONCAT(LEFT(s.region_code,4),'00') region_code, c.product_id AS product_id, p.product_title AS product_name, img.imgurl AS imgurl, 
+
+c.num AS num, p.sales_model AS sales_model, c.sales_property_id AS id, ps.color AS color ,
+
+ps.price AS price,ps.standard AS standard ,ps.stock AS stock ,p.product_unit AS product_unit
+
+FROM t_biz_cart c 
+
+LEFT JOIN t_biz_shop s ON s.id=c.shop_id 
+LEFT JOIN t_biz_brand_product p ON p.id = c.product_id
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.id = c.sales_property_id 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = c.product_id AND TYPE = 1 AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id AND TYPE = 1)
+
+ 	WHERE c.customer_id = #{customer_id} 
+ 	and p.state = 1 and ps.data_flag != 'del'
+ 	<if test="region_code!=null and region_code!=''">
+		AND LEFT(s.region_code,4) = LEFT(#{region_code},4) 
+	</if>
+ 	
+ 	ORDER BY c.id DESC
+ 	
+  </select>
+    <select id="selectByCartId"  resultMap="CartMultiShopResultMap">
+   SELECT c.customer_id,c.shop_id,s.shop_name,s.brand_id,CONCAT(LEFT(s.region_code,4),'00') region_code, c.product_id AS product_id, p.product_title AS product_name, img.imgurl AS imgurl, 
+
+c.num AS num, p.sales_model AS sales_model, c.sales_property_id AS id, ps.color AS color ,
+
+ps.price AS price,ps.standard AS standard ,ps.stock AS stock ,p.product_unit AS product_unit 
+
+FROM t_biz_cart c 
+
+LEFT JOIN t_biz_shop s ON s.id=c.shop_id 
+LEFT JOIN t_biz_brand_product p ON p.id = c.product_id
+LEFT JOIN t_biz_brand_prod_salesattr ps ON ps.id = c.sales_property_id 
+LEFT JOIN t_biz_brand_prod_img img ON img.product_id = c.product_id AND TYPE = 1 AND img.img_sort = (SELECT MIN(img_sort) FROM t_biz_brand_prod_img WHERE product_id = img.product_id AND TYPE = 1)
+
+ 	WHERE c.id = #{id} 
+ 	and p.state = 1 and ps.data_flag != 'del'
+ 	ORDER BY c.id DESC
+ 	
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_cart
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByProductIdAndSaleInfoId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_cart c 
+    where customer_id = #{customer_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT} AND sales_property_id = #{sales_property_id,jdbcType=BIGINT}
+    AND shop_id = #{shop_id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_cart
+    where customer_id = #{customer_id,jdbcType=BIGINT} AND product_id = #{product_id,jdbcType=BIGINT} AND sales_property_id = #{sales_property_id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.cart.model.CartEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_cart (customer_id, product_id, shop_id, 
+      num, sales_property_id)
+    values (#{customer_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, #{shop_id,jdbcType=BIGINT}, 
+      #{num,jdbcType=INTEGER}, #{sales_property_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.app.cart.model.CartEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="shop_id != null">
+        shop_id,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="sales_property_id != null">
+        sales_property_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="sales_property_id != null">
+        #{sales_property_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.cart.model.CartEntity">
+    update t_biz_cart
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="shop_id != null">
+        shop_id = #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="sales_property_id != null">
+        sales_property_id = #{sales_property_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where customer_id = #{customer_id,jdbcType=BIGINT} and product_id = #{product_id,jdbcType=BIGINT} AND sales_property_id = #{sales_property_id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.cart.model.CartEntity">
+    update t_biz_cart
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      shop_id = #{shop_id,jdbcType=BIGINT},
+      num = #{num,jdbcType=INTEGER},
+      sales_property_id = #{sales_property_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

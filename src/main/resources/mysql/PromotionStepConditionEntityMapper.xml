@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.PromotionStepConditionEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepConditionEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="promotion_id" jdbcType="BIGINT" property="promotion_id" />
+    <result column="value1" jdbcType="INTEGER" property="value1" />
+    <result column="value2" jdbcType="INTEGER" property="value2" />
+    <result column="discount" jdbcType="DOUBLE" property="discount" />
+    <result column="note_time" jdbcType="TIMESTAMP" property="note_time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, promotion_id, value1, value2, discount, note_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_step_condition
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectListByPromotionId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_promotion_step_condition
+    where promotion_id = #{promotion_id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_promotion_step_condition
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepConditionEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_step_condition (promotion_id, value1, value2, 
+      discount, note_time)
+    values (#{promotion_id,jdbcType=BIGINT}, #{value1,jdbcType=INTEGER}, #{value2,jdbcType=INTEGER}, 
+      #{discount,jdbcType=DOUBLE}, #{note_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepConditionEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_promotion_step_condition
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+      <if test="value1 != null">
+        value1,
+      </if>
+      <if test="value2 != null">
+        value2,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="note_time != null">
+        note_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="value1 != null">
+        #{value1,jdbcType=INTEGER},
+      </if>
+      <if test="value2 != null">
+        #{value2,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="note_time != null">
+        #{note_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepConditionEntity">
+    update t_biz_promotion_step_condition
+    <set>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=BIGINT},
+      </if>
+      <if test="value1 != null">
+        value1 = #{value1,jdbcType=INTEGER},
+      </if>
+      <if test="value2 != null">
+        value2 = #{value2,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="note_time != null">
+        note_time = #{note_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.PromotionStepConditionEntity">
+    update t_biz_promotion_step_condition
+    set promotion_id = #{promotion_id,jdbcType=BIGINT},
+      value1 = #{value1,jdbcType=INTEGER},
+      value2 = #{value2,jdbcType=INTEGER},
+      discount = #{discount,jdbcType=DOUBLE},
+      note_time = #{note_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

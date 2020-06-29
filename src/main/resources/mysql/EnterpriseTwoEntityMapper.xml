@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.EnterpriseTwoEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.BaseEnterpriseTwoEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="one_id" jdbcType="BIGINT" property="one_id" />
+    <result column="img_url" jdbcType="VARCHAR" property="img_url" />
+    <result column="width" jdbcType="INTEGER" property="width" />
+    <result column="height" jdbcType="INTEGER" property="height" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, one_id, img_url, width, height
+  </sql>
+
+     <select id="selectEnterpriseTwoByOne" parameterType="java.lang.Long" resultType="java.util.Map">
+       select <include refid="Base_Column_List" />
+        from t_biz_enterprise_two t where  t.one_id=#{id}
+  </select>
+  
+  
+    <select id="selectEnterpriseTwoByOneId" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseTwoEntity">
+       select <include refid="Base_Column_List" />
+        from t_biz_enterprise_two t where  t.one_id=#{one_id,jdbcType=BIGINT}
+  </select>
+  
+  <delete  id="removeEnterpriseTwoByOneId" parameterType="java.lang.Long" >
+  
+    delete from t_biz_enterprise_two  where  one_id=#{id}  
+  
+  </delete>
+  
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.article.mapper.ArticleEvaluationMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleEvaluationEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="article_id" jdbcType="INTEGER" property="article_id" />
+    <result column="album_id" jdbcType="BIGINT" property="album_id" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="like_num" jdbcType="INTEGER" property="like_num" />
+    <result column="parent_cus_id" jdbcType="BIGINT" property="parent_cus_id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parent_id" />
+    <result column="main_id" jdbcType="INTEGER" property="main_id" />
+  </resultMap>
+  <resultMap id="ReplyResultMap" type="com.mfangsoft.zhuangjialong.integration.column.model.ArticleEvaluationReplyModel">
+  
+    <result column="article_title" jdbcType="VARCHAR" property="article_title" />
+    <result column="album_title" jdbcType="VARCHAR" property="album_title" />
+        <collection property="articleEvaluationModels" ofType="com.mfangsoft.zhuangjialong.integration.column.model.ArticleEvaluationModel" >
+        <id column="id" jdbcType="INTEGER" property="id" />
+          <result column="customer_name" jdbcType="VARCHAR" property="customer_name" />
+          <result column="parent_cus_name" jdbcType="VARCHAR" property="parent_cus_name" />
+          <result column="content" jdbcType="VARCHAR" property="content" />
+          <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+          <result column="state" jdbcType="TINYINT" property="state" />
+            <result column="main_id" jdbcType="INTEGER" property="main_id" />
+        </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, create_time, content, article_id, album_id, state, like_num, parent_cus_id, 
+    parent_id, main_id
+  </sql>
+  
+  <select id="selectLikeNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  select like_num from t_biz_article_evaluation where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectRepliesNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  SELECT COUNT(1) FROM `t_biz_article_evaluation` WHERE main_id = #{main_id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectServerArticleEvaluationReply" parameterType="java.lang.Integer" 
+          resultMap="ReplyResultMap">
+   SELECT 
+   ae.`id`,
+   a.`title` AS article_title,
+   abum.`name` AS album_title,
+   ac.`name` AS customer_name,
+   pc.`name` AS parent_cus_name,
+   ae.`create_time`,
+   ae.`content`,
+   ae.`state`,
+   ae.main_id
+FROM
+  `t_biz_article_evaluation` ae
+  LEFT JOIN `t_app_customer` ac
+  ON ae.`customer_id` = ac.`id`
+  LEFT JOIN `t_biz_article` a
+  ON ae.`article_id` = a.`id`
+  LEFT JOIN `t_biz_abum` abum
+  ON ae.`album_id` = abum.`id`
+  LEFT JOIN t_app_customer pc
+  ON ae.`parent_cus_id` = pc.`id`
+  WHERE ae.`main_id` =#{id,jdbcType=INTEGER}
+  OR ae.`id` = #{id,jdbcType=INTEGER}
+  ORDER BY ae.`create_time` 
+  </select>
+  
+  
+  <select id="selectServerArticleEvaluationsForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+          resultType="com.mfangsoft.zhuangjialong.integration.column.model.ArticleEvaluationModel">
+   SELECT 
+   ae.id,
+   a.`title` AS article_title,
+   abum.`name` AS album_title,
+   ac.`name` AS customer_name,
+   ae.`create_time`,
+   ae.`content`,
+   ae.`state`
+FROM
+  `t_biz_article_evaluation` ae
+  LEFT JOIN `t_app_customer` ac
+  ON ae.`customer_id` = ac.`id`
+  LEFT JOIN `t_biz_article` a
+  ON ae.`article_id` = a.`id`
+  LEFT JOIN `t_biz_abum` abum
+  ON ae.`album_id` = abum.`id`
+  WHERE ae.parent_id = 0
+  <if test="param.album_title != null and param.album_title !=''">
+  AND abum.`name` LIKE CONCAT('%',#{param.album_title,jdbcType=VARCHAR},'%')
+  </if>
+    <if test="param.article_title != null and param.article_title !=''">
+  AND a.`title` LIKE CONCAT('%',#{param.article_title,jdbcType=VARCHAR},'%')
+  </if>
+    <if test="param.customer_name != null and param.customer_name !=''">
+  AND ac.`name` LIKE CONCAT('%',#{param.customer_name,jdbcType=VARCHAR},'%')
+  </if>
+    <if test="param.create_time != null and param.create_time !=''">
+  AND DAYOFYEAR(ae.`create_time`) = DAYOFYEAR(#{param.create_time,jdbcType=TIMESTAMP})
+  </if>
+  ORDER BY ae.`create_time` DESC
+  </select>
+  <select id="selectAppArticleEvaluationsForPage" parameterType="com.mfangsoft.zhuangjialong.common.model.Page" 
+          resultType="com.mfangsoft.zhuangjialong.app.article.model.AppArticleEvaluationModel">
+    SELECT 
+     ae.id,
+   ac.`head_url`,
+   ac.`name` AS customer_name,
+   ae.`create_time`,
+   ae.`content`,
+   ae.`like_num`,
+   ae.customer_id
+FROM
+  `t_biz_article_evaluation` ae
+  LEFT JOIN `t_app_customer` ac
+  ON ae.`customer_id` = ac.`id`
+  WHERE ae.parent_id = 0
+  AND ae.`state` = 1
+  AND ae.`article_id` = #{param.article_id,jdbcType=BIGINT}
+  ORDER BY ae.`create_time` DESC
+  </select>
+  <select id="selectAppArticleReplies" parameterType="java.lang.Integer" 
+          resultType="com.mfangsoft.zhuangjialong.app.article.model.AppArticleEvaluationModel">
+       SELECT 
+     ae.id,
+     ae.`customer_id`,
+   ac.`name` AS customer_name,
+  ae.`parent_cus_id`,
+   pc.`name` AS parent_cus_name,
+   ae.`create_time`,
+   ae.`content`
+FROM
+  `t_biz_article_evaluation` ae
+  LEFT JOIN `t_app_customer` ac
+  ON ae.`customer_id` = ac.`id`
+    LEFT JOIN t_app_customer pc
+  ON ae.`parent_cus_id` = pc.`id`
+  WHERE ae.parent_id != 0
+  AND ae.`state` = 1
+  AND ae.`main_id`=#{article_id,jdbcType=INTEGER}
+  ORDER BY ae.`create_time` 
+  </select>
+  <select id="selectArticleScrollComments" parameterType="java.lang.Long" 
+          resultType="java.lang.String">
+ SELECT 
+   `content`
+FROM
+  `t_biz_article_evaluation` 
+  WHERE parent_id = 0
+  AND `state` = 1
+  AND  `article_id` = #{article_id,jdbcType=BIGINT}
+  ORDER BY  `create_time` DESC
+  LIMIT 3
+  </select>
+  <select id="selectArticleEvaluationNum" parameterType="java.lang.Long" 
+          resultType="java.lang.Integer">
+SELECT 
+  COUNT(1) 
+FROM
+  `t_biz_article_evaluation` 
+WHERE parent_id = 0 
+  AND state = 1 
+  AND article_id = #{article_id,jdbcType=BIGINT}
+  LIMIT 3
+  </select>
+  
+   <update id="updateArticleEvaluationLikesNum"  parameterType="java.lang.Integer">
+	   UPDATE 
+	  `t_biz_article_evaluation` 
+	SET
+	  `like_num` = like_num+1
+	WHERE `id` = #{id,jdbcType=BIGINT}
+	   </update>
+  
+</mapper>

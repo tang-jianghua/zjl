@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.EnterpriseOneEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseOneEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="enterprise_id" jdbcType="BIGINT" property="enterprise_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, type, enterprise_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_enterprise_one
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectEnterpriseOneByBrandId" parameterType="com.mfangsoft.zhuangjialong.app.brand.model.BrandModel" resultMap="BaseResultMap">
+    SELECT 
+     eo.id,
+  eo.`name`
+FROM
+  `t_biz_enterprise_one` eo 
+  LEFT JOIN `t_biz_enterprise` e 
+    ON eo.`enterprise_id` = e.`id` 
+    LEFT JOIN `t_biz_build_enterprise` be
+    ON e.`build_enterpise` = be.`id`
+    LEFT JOIN `t_biz_brand` b
+    ON be.`id` = b.`enterprise_id`
+    WHERE  b.`id` =  #{brand_id,jdbcType=BIGINT}
+    AND eo.type = #{type,jdbcType=INTEGER}
+     ORDER BY eo.`id`
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_enterprise_one
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseOneEntity">
+    insert into t_biz_enterprise_one (id, name, type, 
+      enterprise_id)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{enterprise_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseOneEntity">
+    insert into t_biz_enterprise_one
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="enterprise_id != null">
+        enterprise_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="enterprise_id != null">
+        #{enterprise_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseOneEntity">
+    update t_biz_enterprise_one
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="enterprise_id != null">
+        enterprise_id = #{enterprise_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.EnterpriseOneEntity">
+    update t_biz_enterprise_one
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      enterprise_id = #{enterprise_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getEnterpriseOneByEntIdList" resultType="java.util.Map" parameterType="java.util.Map">
+  
+  select  one.id,  one.name  from t_biz_enterprise_one one where  one.type=#{type} and  one.enterprise_id=#{enterprise_id} 
+  </select>
+  
+</mapper>

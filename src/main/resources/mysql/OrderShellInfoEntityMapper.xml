@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.order.mapper.OrderShellInfoEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellInfoEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="days" jdbcType="INTEGER" property="days" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="old_days" jdbcType="INTEGER" property="old_days" />
+    <result column="exu_state" jdbcType="INTEGER" property="exu_state" />
+    <result column="rate" jdbcType="REAL" property="rate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, days, start_time, end_time, update_time, old_days, exu_state, rate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_shell_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectData" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_shell_info 
+  </select>
+  <select id="selectWholeData" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_shell_info
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_order_shell_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellInfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_shell_info (days, start_time, end_time, 
+      update_time, old_days, exu_state, 
+      rate)
+    values (#{days,jdbcType=INTEGER}, #{start_time,jdbcType=TIMESTAMP}, #{end_time,jdbcType=TIMESTAMP}, 
+      #{update_time,jdbcType=TIMESTAMP}, #{old_days,jdbcType=INTEGER}, #{exu_state,jdbcType=INTEGER}, 
+      #{rate,jdbcType=REAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellInfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_shell_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="days != null">
+        days,
+      </if>
+      <if test="start_time != null">
+        start_time,
+      </if>
+      <if test="end_time != null">
+        end_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="old_days != null">
+        old_days,
+      </if>
+      <if test="exu_state != null">
+        exu_state,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="days != null">
+        #{days,jdbcType=INTEGER},
+      </if>
+      <if test="start_time != null">
+        #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="old_days != null">
+        #{old_days,jdbcType=INTEGER},
+      </if>
+      <if test="exu_state != null">
+        #{exu_state,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellInfoEntity">
+    update t_biz_order_shell_info
+    <set>
+      <if test="days != null">
+        days = #{days,jdbcType=INTEGER},
+      </if>
+      <if test="start_time != null">
+        start_time = #{start_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_time != null">
+        end_time = #{end_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="old_days != null">
+        old_days = #{old_days,jdbcType=INTEGER},
+      </if>
+      <if test="exu_state != null">
+        exu_state = #{exu_state,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=REAL},
+      </if>
+    </set>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellInfoEntity">
+    update t_biz_order_shell_info
+    set days = #{days,jdbcType=INTEGER},
+      start_time = #{start_time,jdbcType=TIMESTAMP},
+      end_time = #{end_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      old_days = #{old_days,jdbcType=INTEGER},
+      exu_state = #{exu_state,jdbcType=INTEGER},
+      rate = #{rate,jdbcType=REAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

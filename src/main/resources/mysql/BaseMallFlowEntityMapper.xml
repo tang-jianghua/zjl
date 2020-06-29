@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.pointmall.mapper.BaseMallFlowEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseMallFlowEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="flow_group_id" jdbcType="VARCHAR" property="flow_group_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, flow_group_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_mall_flow
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_mall_flow
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseMallFlowEntity">
+    insert into t_biz_mall_flow (id, product_id, flow_group_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{product_id,jdbcType=BIGINT}, #{flow_group_id,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseMallFlowEntity">
+    insert into t_biz_mall_flow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="flow_group_id != null">
+        flow_group_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="flow_group_id != null">
+        #{flow_group_id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseMallFlowEntity">
+    update t_biz_mall_flow
+    <set>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="flow_group_id != null">
+        flow_group_id = #{flow_group_id,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.pointmall.model.BaseMallFlowEntity">
+    update t_biz_mall_flow
+    set product_id = #{product_id,jdbcType=BIGINT},
+      flow_group_id = #{flow_group_id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

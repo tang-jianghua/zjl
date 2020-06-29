@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.brand.mapper.BaseBrandStateApplyEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.brand.model.BaseBrandStateApplyEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="deal_time" jdbcType="TIMESTAMP" property="deal_time" />
+    <result column="user_id" jdbcType="BIGINT" property="user_id" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, brand_id, create_time, deal_time, user_id, reason, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_state_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_brand_state_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BaseBrandStateApplyEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_brand_state_apply (brand_id, create_time, deal_time, 
+      user_id, reason, state
+      )
+    values (#{brand_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, #{deal_time,jdbcType=TIMESTAMP}, 
+      #{user_id,jdbcType=BIGINT}, #{reason,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BaseBrandStateApplyEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_brand_state_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="brand_id != null">
+        brand_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="deal_time != null">
+        deal_time,
+      </if>
+      <if test="user_id != null">
+        user_id,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="brand_id != null">
+        #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deal_time != null">
+        #{deal_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user_id != null">
+        #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BaseBrandStateApplyEntity">
+    update t_biz_brand_state_apply
+    <set>
+      <if test="brand_id != null">
+        brand_id = #{brand_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deal_time != null">
+        deal_time = #{deal_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user_id != null">
+        user_id = #{user_id,jdbcType=BIGINT},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.brand.model.BaseBrandStateApplyEntity">
+    update t_biz_brand_state_apply
+    set brand_id = #{brand_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      deal_time = #{deal_time,jdbcType=TIMESTAMP},
+      user_id = #{user_id,jdbcType=BIGINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

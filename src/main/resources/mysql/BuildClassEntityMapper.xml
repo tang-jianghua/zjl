@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.enterprise.mapper.BuildClassEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildClassEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="base_table" jdbcType="VARCHAR" property="base_table" />
+    <result column="sales_table" jdbcType="VARCHAR" property="sales_table" />
+    <result column="build_Id" jdbcType="BIGINT" property="build_Id" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="sort" jdbcType="BIGINT" property="sort" />
+    <result column="appshow_imgurl" jdbcType="VARCHAR" property="appshow_imgurl" />
+    <result column="rgb" jdbcType="VARCHAR" property="rgb" />
+  </resultMap>
+  
+    <resultMap id="ClassBrandResultMap" type="com.mfangsoft.zhuangjialong.app.DIYdesign.model.ClassBrandModel">
+    <id column="id" jdbcType="BIGINT" property="class_id" />
+    <result column="class_name" jdbcType="VARCHAR" property="class_name" />
+    <collection property="brands"  ofType="com.mfangsoft.zhuangjialong.app.brand.model.Brand">
+       <id column="brand_id" jdbcType="BIGINT" property="brand_id" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+    <result column="brand_image" jdbcType="VARCHAR" property="brand_image" />
+    <result column="id" jdbcType="BIGINT" property="class_id" />
+    </collection>
+  </resultMap>
+  
+  
+  
+  
+  <sql id="Base_Column_List">
+    id, name, base_table, sales_table, build_Id, imgurl, sort, appshow_imgurl, rgb
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_build_class
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectAllClasses" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT DISTINCT(c.`id`),
+  c.`name` 
+FROM
+  `t_biz_brand` b 
+  LEFT JOIN `t_biz_build_enterprise` e 
+    ON b.`enterprise_id` = e.`id` 
+  LEFT JOIN `t_biz_build_class` c 
+    ON e.`class_id` = c.`id` 
+ORDER BY c.`id` 
+  </select>
+  
+  <select id="selectClassesByRegion" parameterType="java.util.Map" resultMap="BaseResultMap">
+SELECT DISTINCT(bc.id),bc.name,bc.imgurl FROM  `t_biz_brand` b
+LEFT JOIN `t_biz_build_enterprise` be ON b.`enterprise_id` = be.`id`
+LEFT JOIN `t_biz_build_class` bc ON bc.`id`=be.`class_id`
+LEFT JOIN `t_biz_partner` p ON p.`id` = b.`citypartner_id`
+WHERE 
+  p.check_state = 2 
+	<if test="region_code != null  ||  region_code !=''">
+			and
+			find_in_set(#{region_code,jdbcType=VARCHAR},p.`region_id`)!=0
+		</if>
+  ORDER BY bc.id
+  </select>
+
+	<select id="selectDIYClassesByRegion" parameterType="java.util.Map"
+		resultMap="ClassBrandResultMap">
+		SELECT
+		bc.`id`,
+		bc.`name` class_name,
+		b.`id` brand_id,
+		be.`imgurl` brand_image,
+		be.`name` brand_name
+		FROM
+		`t_biz_brand` b
+		LEFT JOIN `t_biz_build_enterprise` be
+		ON b.`enterprise_id` = be.`id`
+		LEFT JOIN `t_biz_partner` p
+		ON b.`citypartner_id` = p.`id`
+		LEFT JOIN `t_biz_build_class` bc
+		ON be.`class_id` = bc.`id`
+		WHERE be.`class_id` IN (1, 2, 3)
+		AND p.check_state = 2
+		AND b.state !=0
+		<if test="region_code != null  ||  region_code !=''">
+			and
+			find_in_set(#{region_code,jdbcType=VARCHAR},p.`region_id`)!=0
+		</if>
+		ORDER BY bc.id
+	</select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_build_class
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true"  keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildClassEntity">
+    
+    insert into t_biz_build_class (name, base_table, sales_table, 
+      build_Id, imgurl, sort, appshow_imgurl, rgb
+      )
+    values (#{name,jdbcType=VARCHAR}, #{base_table,jdbcType=VARCHAR}, #{sales_table,jdbcType=VARCHAR}, 
+      #{build_Id,jdbcType=BIGINT}, #{imgurl,jdbcType=VARCHAR}, #{sort,jdbcType=BIGINT}, #{appshow_imgurl,jdbcType=VARCHAR}, #{rgb,jdbcType=VARCHAR} 
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildClassEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_build_class
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="base_table != null">
+        base_table,
+      </if>
+      <if test="sales_table != null">
+        sales_table,
+      </if>
+      <if test="build_Id != null">
+        build_Id,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+       <if test="appshow_imgurl != null">
+        appshow_imgurl,
+      </if>
+       <if test="rgb != null">
+        rgb,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="base_table != null">
+        #{base_table,jdbcType=VARCHAR},
+      </if>
+      <if test="sales_table != null">
+        #{sales_table,jdbcType=VARCHAR},
+      </if>
+      <if test="build_Id != null">
+        #{build_Id,jdbcType=BIGINT},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=BIGINT},
+      </if>
+       <if test="appshow_imgurl != null">
+        #{appshow_imgurl,jdbcType=VARCHAR},
+      </if>
+       <if test="rgb != null">
+        #{rgb,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildClassEntity">
+    update t_biz_build_class
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="base_table != null">
+        base_table = #{base_table,jdbcType=VARCHAR},
+      </if>
+      <if test="sales_table != null">
+        sales_table = #{sales_table,jdbcType=VARCHAR},
+      </if>
+      <if test="build_Id != null">
+        build_Id = #{build_Id,jdbcType=BIGINT},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=BIGINT},
+      </if>
+       <if test="appshow_imgurl != null">
+        appshow_imgurl = #{appshow_imgurl,jdbcType=VARCHAR},
+      </if>
+       <if test="rgb != null">
+        rgb = #{rgb,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.enterprise.model.BuildClassEntity">
+    update t_biz_build_class
+    set name = #{name,jdbcType=VARCHAR},
+      base_table = #{base_table,jdbcType=VARCHAR},
+      sales_table = #{sales_table,jdbcType=VARCHAR},
+      build_Id = #{build_Id,jdbcType=BIGINT},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="geBuildClassEntities" resultMap="BaseResultMap"  >
+  
+  
+   select 
+    <include refid="Base_Column_List" />
+    from t_biz_build_class
+  
+  </select>
+  
+  
+  
+  <select id="geBuildClassEntitiesBybuildId" resultMap="BaseResultMap"  parameterType="java.lang.Long" >
+  
+  
+   select 
+    <include refid="Base_Column_List" />
+    from t_biz_build_class where build_Id=#{build_id}
+  
+  </select>
+  
+  
+  <select id="getClassifyList" resultType="java.util.Map">
+  
+  
+  select bm.id,bm.name, null parent_id  from  t_biz_build_materials  bm 
+union 
+
+select  bc.id,bc.name, bm.ID as parent_id  from  t_biz_build_class bc , t_biz_build_materials bm where  bm.id=bc.build_Id 
+
+union 
+select be.id,be.name as name,bc.id as parent_id  from   t_biz_build_enterprise be,t_biz_build_class bc where  be.class_id=bc.id 
+  
+  </select>
+  
+  
+</mapper>

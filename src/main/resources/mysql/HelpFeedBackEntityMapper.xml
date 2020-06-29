@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.helpfeedback.mapper.HelpFeedBackEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="feedbacker_id" jdbcType="BIGINT" property="feedbacker_id" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="create_date" jdbcType="DATE" property="create_date" />
+    <result column="feedbacker_type" jdbcType="INTEGER" property="feedbacker_type" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="img_url" jdbcType="VARCHAR" property="img_url" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, feedbacker_id, phone_num, create_date, feedbacker_type,state,img_url
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_help_feedback
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_help_feedback
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    insert into t_biz_help_feedback (id, feedbacker_id, phone_num, 
+      create_date, feedbacker_type, content,state
+      )
+    values (#{id,jdbcType=INTEGER}, #{feedbacker_id,jdbcType=BIGINT}, #{phone_num,jdbcType=VARCHAR}, 
+      #{create_date,jdbcType=DATE}, #{feedbacker_type,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    insert into t_biz_help_feedback
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="feedbacker_id != null">
+        feedbacker_id,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="create_date != null">
+        create_date,
+      </if>
+      <if test="feedbacker_type != null">
+        feedbacker_type,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+        <if test="state != null">
+        state,
+      </if>
+      <if test="img_url != null">
+        img_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="feedbacker_id != null">
+        #{feedbacker_id,jdbcType=BIGINT},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="create_date != null">
+        #{create_date,jdbcType=DATE},
+      </if>
+      <if test="feedbacker_type != null">
+        #{feedbacker_type,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+        <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="img_url != null">
+        #{img_url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    update t_biz_help_feedback
+    <set>
+      <if test="feedbacker_id != null">
+        feedbacker_id = #{feedbacker_id,jdbcType=BIGINT},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="create_date != null">
+        create_date = #{create_date,jdbcType=DATE},
+      </if>
+      <if test="feedbacker_type != null">
+        feedbacker_type = #{feedbacker_type,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+          <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+       <if test="img_url != null">
+        #{img_url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    update t_biz_help_feedback
+    set feedbacker_id = #{feedbacker_id,jdbcType=BIGINT},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      create_date = #{create_date,jdbcType=DATE},
+      feedbacker_type = #{feedbacker_type,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR},
+            state = #{state,jdbcType=INTEGER},
+           img_url = #{img_url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.helpfeedback.model.HelpFeedBackEntity">
+    update t_biz_help_feedback
+    set feedbacker_id = #{feedbacker_id,jdbcType=BIGINT},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      create_date = #{create_date,jdbcType=DATE},
+      feedbacker_type = #{feedbacker_type,jdbcType=INTEGER},
+            state = #{state,jdbcType=INTEGER},
+            img_url = #{img_url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getHelpFeedBackForPage"  resultType="java.util.Map"  parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+
+select t.feedbacker_id,t.id,  t.create_date, t.phone_num,t.content, IFNULL(c.name,s.name ) as name, c.gender,t.feedbacker_type,t.img_url from t_biz_help_feedback t
+
+left join 
+
+t_app_customer c on  t.feedbacker_id = c.id and t.feedbacker_type=1
+
+left join t_app_seller s  on t.feedbacker_id=s.id and t.feedbacker_type=2
+  where  1=1
+  
+  <if test="param.name!=null and param.name!=''">
+     
+    and temp.name like CONCAT('%', #{param.name},'%') 
+  
+  </if>
+  
+   <if test="param.phone_num!=null and param.phone_num!=''">
+     
+    and  temp.phone_num like CONCAT('%', #{param.phone_num},'%') 
+  
+  </if>
+
+   order by t.create_date desc
+
+  </select>
+</mapper>

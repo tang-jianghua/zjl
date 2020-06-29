@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BaseBrandProdSeriesEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdSeriesEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="series_id" jdbcType="BIGINT" property="series_id" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="impFlag" jdbcType="VARCHAR" property="impFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, series_id, product_id, impFlag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_prod_series
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_brand_prod_series
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdSeriesEntity">
+    insert into t_biz_brand_prod_series (series_id, product_id, 
+      impFlag)
+    values (#{series_id,jdbcType=BIGINT}, #{product_id,jdbcType=BIGINT}, 
+      #{impFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdSeriesEntity">
+    insert into t_biz_brand_prod_series
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+     
+      <if test="series_id != null">
+        series_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="impFlag != null">
+        impFlag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      
+      <if test="series_id != null">
+        #{series_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="impFlag != null">
+        #{impFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdSeriesEntity">
+    update t_biz_brand_prod_series
+    <set>
+      <if test="series_id != null">
+        series_id = #{series_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=BIGINT},
+      </if>
+      <if test="impFlag != null">
+        impFlag = #{impFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdSeriesEntity">
+    update t_biz_brand_prod_series
+    set series_id = #{series_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=BIGINT},
+      impFlag = #{impFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteProdSeriesByProductId" parameterType="java.lang.Long" >
+  
+   delete from t_biz_brand_prod_series where product_id=#{product_id}
+  </delete>
+  
+  <select id="selectBySeriesId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_biz_brand_prod_series  where series_id =#{seriesId} 
+  
+  </select>
+  
+</mapper>

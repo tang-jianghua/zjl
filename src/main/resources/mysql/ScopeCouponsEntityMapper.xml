@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newcoupons.mapper.ScopeCouponsEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newcoupons.model.BaseScopeCouponsEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="coupons_id" jdbcType="BIGINT" property="coupons_id" />
+    <result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brand_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, coupons_id, partner_id, brand_id
+  </sql>
+ 
+   <select id="selectScopeCouponsByBrandId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   
+      select <include refid="Base_Column_List"></include> from t_biz_scope_coupons where  coupons_id=#{coupons_id} and brand_id=#{brand_id}
+   
+   
+   
+   </select>
+ 
+    <select id="selectScopeCouponsByCouponsId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    
+    select brand_id from t_biz_scope_coupons where  coupons_id=#{coupons_id}
+    
+    </select>
+    
+    <delete id="deleteScopeCouponsByCouponsId" parameterType="java.lang.Long">
+    
+        delete  from  t_biz_scope_coupons where coupons_id=#{coupons_id}
+    
+    </delete>
+ 
+ 
+</mapper>

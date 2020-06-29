@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<style>
+.productImage{
+	width: 120px;
+	height: 120px;
+}
+</style>
+<div ng-controller="deviceManagementCtrl">
+    <!-- 标题 -->
+    <section class="well">
+	    <div class="fileAbout backstage">设备管理</div>
+	    
+	   	<div class="idMessage">
+		   	  <div class="form-horizontal form-widgets col-sm-12 gray">
+			      <div class="form-group">
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">卡券名称</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.cardName" class="k-textbox" placeholder="请填写卡券名称"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="buttons-wrap clearBoth">
+				            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+				        </div>
+		     	</div>
+		     </div>
+	
+		    <div class="interval">
+		    	 <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+		    </div>
+	     </div>
+     </section>
+</div>
+    
+

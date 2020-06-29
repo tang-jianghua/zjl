@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.newproduct.mapper.BrandProdImgEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.newproduct.model.BaseBrandProdImgEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="product_id" jdbcType="BIGINT" property="product_id" />
+    <result column="img_sort" jdbcType="INTEGER" property="img_sort" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, imgurl, product_id, img_sort,type
+  </sql>
+  <select id="selectCaseImgByProductId" parameterType="java.lang.Long" resultType="java.lang.String">
+	select imgurl from t_biz_brand_prod_img
+	where  type = 2 
+	and product_id = #{product_id,jdbcType=BIGINT} 
+	order by img_sort
+  </select>
+    <select id="selectImgByProductId" parameterType="java.lang.Long" resultType="java.lang.String">
+	select imgurl from t_biz_brand_prod_img
+	where  type = 1
+	and product_id = #{product_id,jdbcType=BIGINT} 
+	order by img_sort
+  </select>
+  <delete id="deleteByProductId" parameterType="java.lang.Long">
+    delete from t_biz_brand_prod_img
+    where product_id = #{product_id,jdbcType=BIGINT} 
+  </delete>
+</mapper>

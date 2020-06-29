@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.role.mapper.RoleEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.role.model.RoleEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="role_name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, role_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_sys_role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.role.model.RoleEntity">
+    insert into t_sys_role (role_name)
+    values (#{role_name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.mfangsoft.zhuangjialong.integration.role.model.RoleEntity">
+    insert into t_sys_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="role_name != null">
+        role_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="role_name != null">
+        #{role_name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.role.model.RoleEntity">
+    update t_sys_role
+    <set>
+      <if test="role_name != null">
+        role_name = #{role_name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.role.model.RoleEntity">
+    update t_sys_role
+    set role_name = #{role_name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getRoleListForPage" resultMap="BaseResultMap" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  select 
+         r.id,r.role_name
+    from t_sys_role r left join t_sys_role_position p  on r.id=p.role_id
+    where 1=1
+    
+    <if test="param.position_id!=null and param.position_id!=''">
+    
+        and p.position_id=#{param.position_id}
+    
+    </if>
+  
+  </select>
+</mapper>

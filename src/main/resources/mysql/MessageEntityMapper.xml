@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.personalCenter.mapper.MessageEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="type_id" jdbcType="INTEGER" property="type_id" />
+    <result column="params" jdbcType="VARCHAR" property="params" />
+    <result column="isread" jdbcType="TINYINT" property="isread" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="group" jdbcType="INTEGER" property="group" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, type_id, params, isread,time ,imgurl
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_customer_message
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCustomer_Id" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT m.id, m.type_id, m.params, m.isread, m.time,m.imgurl,t.title, t.content, t.group
+    FROM t_app_customer_message m ,t_app_customer_message_type t
+    WHERE m.customer_id = #{customer_id,jdbcType=BIGINT} AND m.type_id = t.type_id order by m.time desc;
+  </select>
+   <select id="selectUnReadByCustomerId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM t_app_customer_message m WHERE  m.customer_id = #{customer_id,jdbcType=BIGINT};
+  </select>
+  <select id="updatemessagestate" parameterType="java.lang.Long">
+    UPDATE t_app_customer_message SET isread = TRUE WHERE customer_id = #{customer_id,jdbcType=BIGINT} AND id IN 	
+    	<foreach collection="id_array"  index="index" item="item" open="("
+			separator="," close=")">
+			${item}
+		</foreach>;
+  </select>
+  <delete id="deleteByCustomerId" parameterType="java.lang.Long">
+    delete from t_app_customer_message
+    where customer_id = #{customer_id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_customer_message (customer_id, type_id, params, 
+      isread,time,imgurl)
+    values (#{customer_id,jdbcType=BIGINT}, #{type_id,jdbcType=INTEGER}, #{params,jdbcType=VARCHAR}, 
+      #{isread,jdbcType=TINYINT},#{time,jdbcType=TIMESTAMP},#{imgurl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_customer_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="type_id != null">
+        type_id,
+      </if>
+      <if test="params != null">
+        params,
+      </if>
+      <if test="isread != null">
+        isread,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="type_id != null">
+        #{type_id,jdbcType=INTEGER},
+      </if>
+      <if test="params != null">
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="isread != null">
+        #{isread,jdbcType=TINYINT},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>      
+    </trim>
+  </insert>
+  <update id="updateByCustomerIdSelective" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageEntity">
+    update t_app_customer_message
+    <set>
+      <if test="isread != null">
+        isread = #{isread,jdbcType=TINYINT},
+      </if>
+    </set>
+    where customer_id = #{customer_id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.personalCenter.model.MessageEntity">
+    update t_app_customer_message
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      type_id = #{type_id,jdbcType=INTEGER},
+      params = #{params,jdbcType=VARCHAR},
+      isread = #{isread,jdbcType=TINYINT},
+      time = #{time,jdbcType=TIMESTAMP},
+      imgurl = #{imgurl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

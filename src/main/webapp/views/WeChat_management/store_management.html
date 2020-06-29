@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<style>
+.productImage{
+	width: 120px;
+	height: 120px;
+}
+</style>
+<div ng-controller="storeManagementCtrl">
+    <!-- 标题 -->
+    <section class="well">
+	    <div class="fileAbout backstage">门店管理</div>
+	    
+	   	<div class="idMessage">
+		   	  <div class="form-horizontal form-widgets col-sm-12 gray">
+			      <div class="form-group">
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">店铺名称</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.shop_name" class="k-textbox" placeholder="请填写店铺名称"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">门店名称</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.business_name" class="k-textbox" placeholder="请填写门店名称"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="buttons-wrap clearBoth">
+				            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+				        </div>
+		     	</div>
+		     </div>
+		     <div>
+		     	<button class="k-button k-state-default" ng-click="addStore()">新增门店</button>
+		     	<hr class="towGreen">
+	     	</div>
+	
+		    <div class="interval">
+		    	 <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+		    </div>
+	     </div>
+     </section>
+     
+     <div kendo-window="storeDetailsWindow" k-title="'门店详情'" k-width="800" k-min-height="500" k-visible="false" k-modal="true">
+    	<div class="col-sm-11">
+	    	<table class="col-sm-12 table table-striped">
+	    		<tr>
+	                <td class="col-sm-2">门店名称：</td>
+	                <td class="col-sm-10">{{details.name}}</td>
+                </tr>
+                <tr>
+	                <td>专辑图像：</td>
+	                <td>
+	                	<div id="albumImage" style="width:500px;height:200px;"/></div>
+	                </td>
+                </tr>
+	    	</table> 
+	    </div>
+    </div>
+    
+</div>
+    
+

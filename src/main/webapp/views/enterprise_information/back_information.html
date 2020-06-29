@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<style>
+.title{
+	font-size: 17px;
+	color: black;
+    text-align: right;
+}
+.text{
+	font-size: 18px;
+	color: gray; 
+    text-align: left;
+}
+.button_center{
+	display: inherit;
+    margin: auto;
+}
+font {
+    color: red;
+    font-size: 20px;
+}
+</style>
+<div ng-controller="enterpriseBackInformationCtrl"> 
+   	<section class="well" style="min-height:720px">
+   	   <!-- 标题 -->
+    <div class="fileAbout backstage">后台信息   >
+    <span>企业账号信息</span> 
+    </div>
+    <div class="idMessage">
+   		<div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+            <div class="form-horizontal form-widgets col-sm-6">
+                <label class="col-sm-4 title">企业名称：</label>
+                <div class="col-sm-6 text outPadding" ng-cloak>{{enterprise_name}}</div>
+            </div>
+            </div>
+        </div>
+     <div class="form-horizontal form-widgets col-sm-6">
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">联系地址：</label>
+                <div class="col-sm-6 text" ng-cloak>{{addr}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">负&nbsp;&nbsp;责&nbsp;&nbsp;人：</label>
+                <div class="col-sm-6"><input ng-model="principal"  class="k-textbox"/></div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">联系方式：</label>
+                <div class="col-sm-6"><input ng-model="phone_num"  class="k-textbox"/></div>
+            </div>
+        </div>
+        
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">创建账号：</label>
+                <div class="col-sm-6 text" ng-cloak>{{userEntity.account}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">创建密码：</label>
+                <div class="col-sm-6 text">******</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">产品品类：</label>
+                <div class="col-sm-6 text" ng-cloak>{{class_name}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">品牌名称：</label>
+                <div class="col-sm-6 text" ng-cloak>{{brand_name}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">LOGO：</label>
+                <div class="col-sm-6 text">
+                	<div id="logo_img" style="width: 150px; height: 150px;border: 1px dotted gray;"></div>
+                </div>
+            </div>
+        </div>
+       </div>
+    <div class="form-horizontal form-widgets col-sm-6">
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-7 title" style="text-align:left">银行信息<font >*</font></label>
+                <div class="col-sm-6 text"></div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                <div class="col-sm-6 text" ng-cloak>{{bankEntity.name}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">企业账号：</label>
+                <div class="col-sm-6 text" ng-cloak>{{bankEntity.account}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">开&nbsp;&nbsp;户&nbsp;&nbsp;行：</label>
+                <div class="col-sm-6 text" ng-cloak>{{bankEntity.addr}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-7 title" style="text-align:left">第三方账户（至少一项）<font >*</font></label>
+                <div class="col-sm-6 text"></div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">支&nbsp;&nbsp;付&nbsp;&nbsp;宝：</label>
+                <div class="col-sm-6 text" ng-cloak>{{bankEntity.pay_account}}</div>
+            </div>
+        </div>
+        <div class="form-horizontal form-widgets col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-4 title">微&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;信：</label>
+                <div class="col-sm-6 text" ng-cloak>{{bankEntity.pay_account}}</div>
+            </div>
+        </div>
+	</div>
+	<div class="col-sm-12" style="float:left">
+        <button class="k-button k-state-default button_center" ng-click="formSubmit()">确定</button>
+        	</div>
+        </div>	
+    </section>   
+</div>
+    
+

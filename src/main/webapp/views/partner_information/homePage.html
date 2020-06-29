@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<style>
+.title1{
+	color: #caa359;
+    font-size: 20px;	
+}
+.title2{
+	font-size: 14px;	
+}
+.text{
+	text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #232323;
+    font-family: '微软雅黑';
+    padding: 8px;
+}
+</style>
+
+<style>
+.imgContainer1{ 
+    width:350px;
+    height:175px;
+    margin: 15px auto;
+}
+.imgContainer1 .imgBackground1{
+    width:350px;
+    height:149px;
+    border: 1px dashed #999999;
+    text-align: center;
+    line-height: 149px;
+    font-size: 100px;
+    background-color: #eeeeee;
+    color: #999999; 
+    position: absolute;
+}
+.imgContainer1 .imgBackground2{
+    width:350px;
+    height:149px;
+    position: absolute;
+}
+.imgContainer1 .k-upload{
+	opacity: 0;
+	height:164px;
+}
+.imgContainer1 .k-upload .k-dropzone{
+	padding: 0px;
+}
+.imgContainer1 .k-upload .k-upload-button{
+	width: 100%;
+    height: 125px;  
+} 
+.bannerJump{
+	display:block;
+	padding:0;
+}
+</style>
+
+<div ng-controller="homePageCtrl">
+    <!-- 标题 -->
+   	<section class="well">
+   	    <div class="fileAbout backstage">首页管理</div>
+	    <div class="idMessage">
+	   		<div>
+		   		<span class="title1">Banner设定</span>
+		   		<span class="title2">（最多可设定5张，【尺寸要求】高度:320px &nbsp;&nbsp; 宽度:750px &nbsp;&nbsp; 大小:150Kb以内  &nbsp;&nbsp; 格式:jpg）</span>
+	   		</div>
+	        <div class="form-horizontal form-widgets col-sm-12">
+	   	 		<div class="form-group" id="bannerContainer">
+	   	 			<!-- <div class="col-sm-4">
+		   	 			<div class="imgContainer1">
+		                	<div class="imgBackground1">
+		                		<span class="glyphicon glyphicon-plus"></span>
+		                	</div>
+		                	<div class="imgBackground2" id="banner1_img"></div>
+		                	<input type="file" name="file" id="banner1"/>
+		                	<input type="hidden" id="banner1_url"/>
+		                	<div>
+			                	<input type="text" class="col-sm-12 k-button" ng-model="banner.link1" placeholder="请输入连接地址"/>
+					    		<button class="col-sm-4 btn btn-info k-button" ng-click="contentJump()">内容跳转</button>
+		                	</div>
+	                	</div>
+	   	 			</div> -->
+	   	 			
+	   	 		</div>
+	        </div>
+        </div>
+     </section>
+ 
+</div>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.inviteconvert.mapper.InviteConvertEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.inviteconvert.model.InviteConvertEntity">
+    <id column="convert_no" jdbcType="VARCHAR" property="convert_no" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="product_id" jdbcType="INTEGER" property="product_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="back_time" jdbcType="TIMESTAMP" property="back_time" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    convert_no, customer_id, product_id, create_time, back_time, state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_invite_convert
+    where convert_no = #{convert_no,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="selectConvertedInviteNo" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    SELECT IFNULL(SUM(p.`invite_no`),0) FROM `t_biz_invite_convert` v
+LEFT JOIN `t_biz_invite_product` p
+ON v.`product_id` = p.`id`
+WHERE  v.`state`!= 3 AND v.`customer_id` =  #{customer_id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_biz_invite_convert
+    where convert_no = #{convert_no,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.inviteconvert.model.InviteConvertEntity">
+    insert into t_biz_invite_convert (convert_no, customer_id, product_id, 
+      create_time, back_time, state
+      )
+    values (#{convert_no,jdbcType=VARCHAR}, #{customer_id,jdbcType=BIGINT}, #{product_id,jdbcType=INTEGER}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{back_time,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.inviteconvert.model.InviteConvertEntity">
+    insert into t_biz_invite_convert
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="convert_no != null">
+        convert_no,
+      </if>
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="product_id != null">
+        product_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="back_time != null">
+        back_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="convert_no != null">
+        #{convert_no,jdbcType=VARCHAR},
+      </if>
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        #{product_id,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="back_time != null">
+        #{back_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.inviteconvert.model.InviteConvertEntity">
+    update t_biz_invite_convert
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="back_time != null">
+        back_time = #{back_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where convert_no = #{convert_no,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.inviteconvert.model.InviteConvertEntity">
+    update t_biz_invite_convert
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      product_id = #{product_id,jdbcType=INTEGER},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      back_time = #{back_time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where convert_no = #{convert_no,jdbcType=VARCHAR}
+  </update>
+</mapper>

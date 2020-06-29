@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.appointment.mapper.BaseAppointmentMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="address_id" jdbcType="BIGINT" property="address_id" />
+    <result column="address_details" jdbcType="VARCHAR" property="address_details" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phone_num" />
+    <result column="region_code" jdbcType="VARCHAR" property="region_code" />
+    <result column="seen_state" jdbcType="INTEGER" property="seen_state" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    <result column="door_model_img" jdbcType="LONGVARCHAR" property="door_model_img" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, create_time, address_id, address_details, receiver_name, phone_num, 
+    region_code, seen_state
+  </sql>
+  <sql id="Blob_Column_List">
+    door_model_img
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_appointment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_appointment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_appointment (customer_id, create_time, address_id, 
+      address_details, receiver_name, phone_num, 
+      region_code, seen_state, door_model_img
+      )
+    values (#{customer_id,jdbcType=BIGINT}, #{create_time,jdbcType=TIMESTAMP}, #{address_id,jdbcType=BIGINT}, 
+      #{address_details,jdbcType=VARCHAR}, #{receiver_name,jdbcType=VARCHAR}, #{phone_num,jdbcType=VARCHAR}, 
+      #{region_code,jdbcType=VARCHAR}, #{seen_state,jdbcType=INTEGER}, #{door_model_img,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_appointment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="address_id != null">
+        address_id,
+      </if>
+      <if test="address_details != null">
+        address_details,
+      </if>
+      <if test="receiver_name != null">
+        receiver_name,
+      </if>
+      <if test="phone_num != null">
+        phone_num,
+      </if>
+      <if test="region_code != null">
+        region_code,
+      </if>
+      <if test="seen_state != null">
+        seen_state,
+      </if>
+      <if test="door_model_img != null">
+        door_model_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address_id != null">
+        #{address_id,jdbcType=BIGINT},
+      </if>
+      <if test="address_details != null">
+        #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver_name != null">
+        #{receiver_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="seen_state != null">
+        #{seen_state,jdbcType=INTEGER},
+      </if>
+      <if test="door_model_img != null">
+        #{door_model_img,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    update t_biz_appointment
+    <set>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address_id != null">
+        address_id = #{address_id,jdbcType=BIGINT},
+      </if>
+      <if test="address_details != null">
+        address_details = #{address_details,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver_name != null">
+        receiver_name = #{receiver_name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone_num != null">
+        phone_num = #{phone_num,jdbcType=VARCHAR},
+      </if>
+      <if test="region_code != null">
+        region_code = #{region_code,jdbcType=VARCHAR},
+      </if>
+      <if test="seen_state != null">
+        seen_state = #{seen_state,jdbcType=INTEGER},
+      </if>
+      <if test="door_model_img != null">
+        door_model_img = #{door_model_img,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    update t_biz_appointment
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      address_id = #{address_id,jdbcType=BIGINT},
+      address_details = #{address_details,jdbcType=VARCHAR},
+      receiver_name = #{receiver_name,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      seen_state = #{seen_state,jdbcType=INTEGER},
+      door_model_img = #{door_model_img,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.appointment.model.BaseAppointment">
+    update t_biz_appointment
+    set customer_id = #{customer_id,jdbcType=BIGINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      address_id = #{address_id,jdbcType=BIGINT},
+      address_details = #{address_details,jdbcType=VARCHAR},
+      receiver_name = #{receiver_name,jdbcType=VARCHAR},
+      phone_num = #{phone_num,jdbcType=VARCHAR},
+      region_code = #{region_code,jdbcType=VARCHAR},
+      seen_state = #{seen_state,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

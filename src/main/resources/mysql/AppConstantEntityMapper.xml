@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.constant.mapper.AppConstantEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="value_int" jdbcType="INTEGER" property="value_int" />
+    <result column="value_str" jdbcType="VARCHAR" property="value_str" />
+    <result column="value_date" jdbcType="TIMESTAMP" property="value_date" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="value_long" jdbcType="BIGINT" property="value_long" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    <result column="value_txt" jdbcType="LONGVARCHAR" property="value_txt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, value_int, value_str, value_date, description, value_long, key, type
+  </sql>
+  <sql id="Blob_Column_List">
+    value_txt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_app_constant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+   <select id="selectByKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+   SELECT 
+  a.id,
+  a.value_int,
+  a.value_str,
+  a.value_date,
+  a.description,
+  a.value_long,
+  a.type,
+  a.value_txt 
+FROM
+  t_app_constant a 
+WHERE a.key =  #{key,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_app_constant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_constant (value_int, value_str, value_date, 
+      description, value_long, key, 
+      type, value_txt)
+    values (#{value_int,jdbcType=INTEGER}, #{value_str,jdbcType=VARCHAR}, #{value_date,jdbcType=TIMESTAMP}, 
+      #{description,jdbcType=VARCHAR}, #{value_long,jdbcType=BIGINT}, #{key,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{value_txt,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_app_constant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="value_int != null">
+        value_int,
+      </if>
+      <if test="value_str != null">
+        value_str,
+      </if>
+      <if test="value_date != null">
+        value_date,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="value_long != null">
+        value_long,
+      </if>
+      <if test="key != null">
+        key,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="value_txt != null">
+        value_txt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="value_int != null">
+        #{value_int,jdbcType=INTEGER},
+      </if>
+      <if test="value_str != null">
+        #{value_str,jdbcType=VARCHAR},
+      </if>
+      <if test="value_date != null">
+        #{value_date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="value_long != null">
+        #{value_long,jdbcType=BIGINT},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="value_txt != null">
+        #{value_txt,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    update t_app_constant
+    <set>
+      <if test="value_int != null">
+        value_int = #{value_int,jdbcType=INTEGER},
+      </if>
+      <if test="value_str != null">
+        value_str = #{value_str,jdbcType=VARCHAR},
+      </if>
+      <if test="value_date != null">
+        value_date = #{value_date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="value_long != null">
+        value_long = #{value_long,jdbcType=BIGINT},
+      </if>
+      <if test="key != null">
+        key = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="value_txt != null">
+        value_txt = #{value_txt,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    update t_app_constant
+    set value_int = #{value_int,jdbcType=INTEGER},
+      value_str = #{value_str,jdbcType=VARCHAR},
+      value_date = #{value_date,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR},
+      value_long = #{value_long,jdbcType=BIGINT},
+      key = #{key,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      value_txt = #{value_txt,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.constant.model.AppConstantEntity">
+    update t_app_constant
+    set value_int = #{value_int,jdbcType=INTEGER},
+      value_str = #{value_str,jdbcType=VARCHAR},
+      value_date = #{value_date,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR},
+      value_long = #{value_long,jdbcType=BIGINT},
+      key = #{key,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

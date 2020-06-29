@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.mapservice.mapper.SellerServiceMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+    <id column="lbs" jdbcType="VARCHAR" property="lbs" />
+    <result column="brand_url" jdbcType="VARCHAR" property="brand_url" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shop_name" />
+    <collection property="services" ofType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="easemob_account" jdbcType="VARCHAR" property="easemob_account" />
+    <result column="seller_name" jdbcType="VARCHAR" property="seller_name" />
+    <result column="head_img" jdbcType="VARCHAR" property="head_img" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, service_type,  seller_id, class_id, brand_id, shop_id, lbs, content, 
+    create_time, update_time, state
+  </sql>
+   <select id="selectByLBSWithoutSellerId" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.BaseSellerServiceEntity" resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+	SELECT 
+	*
+	FROM `t_biz_seller_service` 
+	WHERE service_type = 2
+	and state = 1
+	and seller_id != #{seller_id,jdbcType=BIGINT}
+	and  lbs = #{lbs,jdbcType=VARCHAR}
+  </select>
+  <select id="selectById" parameterType="java.lang.Integer" resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+	SELECT 
+	ss.id ,
+	tas.`id` AS seller_id,
+	tas.`name` AS seller_name,
+	tas.`head_img`,
+	s.`lbs`,
+	s.`shop_name`,
+	ss.`content`
+	FROM `t_biz_seller_service` ss
+	LEFT JOIN `t_app_seller` tas
+	ON ss.`seller_id` = tas.`id`
+	LEFT JOIN `t_biz_shop` s
+	ON ss.`shop_id` = s.`id`
+	WHERE ss.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectConstructServiceById" parameterType="java.lang.Integer" resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+		SELECT 
+	ss.id ,
+	tas.`id` AS seller_id,
+	tas.`name` AS seller_name,
+	tas.`head_img`,
+	ss.`lbs`,
+	sci.`team_name` AS `shop_name`,
+	ss.`content`,
+	tas.`phone`
+	FROM `t_biz_seller_service` ss
+	LEFT JOIN `t_app_seller` tas
+	ON ss.`seller_id` = tas.`id`
+	LEFT JOIN `t_app_seller_info` si
+	ON tas.`id` = si.`seller_id`
+	LEFT JOIN `t_app_sell_construct_info` sci
+	ON si.`construct_info_id` = sci.`id`
+	WHERE ss.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectConstructServiceDetailById" parameterType="java.lang.Integer" resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+		SELECT 
+	tas.`id` AS seller_id,
+	tas.`name` AS seller_name,
+	tas.`head_img`,
+	ss.`lbs`,
+	sci.`team_name`,
+	cst.`service_type` AS construct_type,
+	ss.`content`
+	FROM `t_biz_seller_service` ss
+	LEFT JOIN `t_app_seller` tas
+	ON ss.`seller_id` = tas.`id`
+	LEFT JOIN `t_app_seller_info` si
+	ON tas.`id` = si.`seller_id`
+	LEFT JOIN `t_app_sell_construct_info` sci
+	ON si.`construct_info_id` = sci.`id`
+	LEFT JOIN `t_biz_construct_service_type` cst
+	ON sci.`service_code` = cst.`service_code`
+	WHERE ss.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectDetailById" parameterType="java.lang.Integer" resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+	    SELECT tas.`id` AS seller_id,
+	tas.`name` AS seller_name,
+	tas.`head_img`,
+	be.`name` AS brand_name,
+	bc.`name` AS class_name,
+	s.`shop_name`,
+	s.`address`,
+	ss.`content`
+	FROM `t_biz_seller_service` ss
+	LEFT JOIN `t_app_seller` tas
+	ON ss.`seller_id` = tas.`id`
+	LEFT JOIN `t_biz_brand` b
+	ON ss.`brand_id` = b.`id`
+	LEFT JOIN `t_biz_build_enterprise` be
+	ON b.`enterprise_id` = be.`id`
+	LEFT JOIN `t_biz_build_class` bc
+	ON ss.`class_id` = bc.`id`
+	LEFT JOIN `t_biz_shop` s
+	ON ss.`shop_id` = s.`id`
+	WHERE ss.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByClassIdAndReionCode" parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel"
+   resultMap="BaseResultMap">
+	SELECT 
+	s.shop_name,
+	s.address,
+	ss.`id`,
+	tas.`head_img`,
+	tas.`name` AS seller_name,
+	tas.`phone`,
+	s.`lbs`,
+	be.`imgurl` AS brand_url ,
+	CONCAT(tas.id,'SELLER') AS easemob_account
+	FROM 	
+	`t_biz_seller_service` ss
+	LEFT JOIN `t_app_seller` tas
+	ON ss.`seller_id` = tas.`id`
+	LEFT JOIN `t_biz_shop` s
+	ON ss.`shop_id` = s.`id`
+	LEFT JOIN `t_biz_brand` b
+	ON s.`brand_id` = b.`id`
+	LEFT JOIN `t_biz_build_enterprise` be
+	ON b.`enterprise_id` = be.`id`
+	WHERE
+	ss.`state` = 1
+	AND ss.`service_type` = 1
+<if test="class_id != '' and class_id != null">
+AND ss.`class_id` =  #{class_id,jdbcType=INTEGER} 
+</if>
+AND s.`region_code`= #{region_code,jdbcType=VARCHAR} 
+  </select>
+	<select id="selectByConstructTypeAndReionCode"
+		parameterType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel"
+		resultType="com.mfangsoft.zhuangjialong.app.mapservice.model.SellerServiceModel">
+	SELECT
+	ss.`id`,
+	tas.`head_img`,
+	ss.`lbs`
+	FROM `t_biz_seller_service` ss
+	LEFT JOIN `t_app_seller` tas
+	ON ss.`seller_id` = tas.`id`
+	LEFT JOIN `t_app_seller_info` si
+	ON tas.`id` = si.`seller_id`
+	LEFT JOIN `t_app_sell_construct_info` sci
+	ON si.`construct_info_id` = sci.`id`
+	WHERE ss.`state` = 1
+	AND ss.`service_type` = 2
+	AND ss.`region_code` = #{region_code,jdbcType=VARCHAR}
+		<if test="construct_type != '' and construct_type != null">
+			AND sci.`service_code` =#{construct_type,jdbcType=VARCHAR}
+		</if>
+	</select>
+  <update id="hideService" parameterType="java.lang.Long">
+  UPDATE `t_biz_seller_service` SET state = 2 WHERE state = 1 AND seller_id = #{seller_id,jdbcType=INTEGER}
+  </update>
+</mapper>

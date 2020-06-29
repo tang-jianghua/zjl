@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<style>
+.productImage{
+	width: 120px;
+	height: 120px;
+}
+</style>
+<div ng-controller="cardListCtrl">
+    <!-- 标题 -->
+    <section class="well">
+	    <div class="fileAbout backstage">订单详情</div>
+	    
+	   	<div class="idMessage">
+	   		<div class="greenLine">
+				<div id="list_1" class="oneList" ng-click="chooseList(1)">产品订单</div>
+				<div id="list_2" class="oneList" ng-click="chooseList(2)">店面定金订单</div>
+				<div id="list_3" class="oneList" ng-click="chooseList(3)" ng-show="list3_show">特权现金券订单</div>
+				<div id="list_4" class="oneList choose" ng-click="chooseList(4)" ng-show="list4_show">卡券列表</div>
+			</div>
+		   	  <div class="form-horizontal form-widgets col-sm-12 gray">
+			      <div class="form-group">
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="enterprise_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">企业名称</label>
+				                <div class="col-sm-8">
+				                    <input id="enterprise_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="partner_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">合伙人名称</label>
+				                <div class="col-sm-8">
+				                    <input id="partner_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4" ng-show="brand_show">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">品牌名称</label>
+				                <div class="col-sm-8">
+				                    <input id="brand_name"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">卡券名称</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.coupons_name"  class="k-textbox" placeholder="请填写卡券名称"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">买家昵称</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.customer_name"  class="k-textbox" placeholder="请填写买家姓名"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">订单编号</label>
+				                <div class="col-sm-8">
+				                    <input ng-model="search.order_code"  class="k-textbox" placeholder="请填写订单编号"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">成交时间（始）</label>
+				                <div class="col-sm-8">
+				                    <input id="start_time"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="form-horizontal form-widgets col-sm-4">
+				            <div class="form-group">
+				                <label class="control-label col-sm-4">成交时间（止）</label>
+				                <div class="col-sm-8">
+				                    <input id="end_time"/>
+				                </div>
+				            </div>
+				        </div>
+				        <div class="buttons-wrap clearBoth">
+				            <button class="k-button k-state-default" ng-click="search()" >查询</button>
+				        </div>
+		     	</div>
+		     </div>
+	
+		    <div class="interval">
+		    	 <div kendo-grid="grid"  k-options="mainGridOptions" ></div>
+		    </div>
+	     </div>
+     </section>
+</div>
+    
+

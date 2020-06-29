@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<style>
+.imgContainer1 {
+	width: 180px;
+	height: 180px;
+	margin: 5px auto;
+}
+
+.imgContainer1 .imgBackground1 {
+	width: 180px;
+	height: 180px;
+	border: 1px dashed #999999;
+	text-align: center;
+	line-height: 180px;
+	font-size: 100px;
+	background-color: #eeeeee;
+	color: #999999;
+	position: absolute;
+}
+
+.imgContainer1 .imgBackground2 {
+	width: 180px;
+	height: 180px;
+	position: absolute;
+}
+
+.imgContainer1 .k-upload {
+	opacity: 0;
+}
+
+.imgContainer1 .k-upload .k-dropzone {
+	padding: 0px;
+}
+
+.imgContainer1 .k-upload .k-upload-button {
+	width: 100%;
+	height: 180px;
+}
+font {
+	color: red;
+	font-size: 20px;
+}
+</style>
+
+
+<div ng-controller="addStoreInformationCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">
+			店铺信息管理 > <span>创建店铺账号信息</span>
+		</div>
+
+    <div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-10">
+						<div class="form-group">
+							<div class="form-horizontal form-widgets col-sm-6">
+								<div class="form-horizontal form-widgets col-sm-12">
+									<div class="form-group">
+										<label class="control-label col-sm-2 outPadding">店面名称<font>*</font></label>
+										<div class="col-sm-8">
+											<input ng-model="form.shop_name" class="k-textbox"
+												placeholder="请输入店面名称" />
+										</div>
+									</div>
+								</div>
+								<div class="form-horizontal form-widgets col-sm-12">
+									<div class="form-group">
+										<label class="control-label col-sm-2 outPadding">负责人<font>*</font></label>
+										<div class="col-sm-8">
+											<input ng-model="form.principal" class="k-textbox"
+												placeholder="请输入负责人" />
+										</div>
+									</div>
+								</div>
+								<div class="form-horizontal form-widgets col-sm-12">
+									<div class="form-group">
+										<label class="control-label col-sm-2 outPadding">联系方式<font>*</font></label>
+										<div class="col-sm-8">
+											<input ng-model="form.phone_num" ng-blur="checkPhoneNumber()" class="k-textbox"
+												placeholder="请输入联系方式" />
+										</div>
+									</div>
+								</div>
+								<div class="form-horizontal form-widgets col-sm-12">
+									<div class="form-group">
+										<label class="control-label col-sm-2 outPadding"
+											style="padding-top: 0" style="text-align: center">店铺属性</label>
+										<div class="col-sm-8">
+											<div class="col-sm-8">{{brandName}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-horizontal form-widgets col-sm-6">
+								<div class="form-horizontal form-widgets col-sm-12">
+									<div class="form-group">
+										<label class="control-label col-sm-2">LOGO<font>*</font></label>
+										<div class="col-sm-5">
+											<div class="imgContainer1">
+												<div class="imgBackground1">
+													<span class="glyphicon glyphicon-plus"></span>
+												</div>
+												<div class="imgBackground2" id="logo_img"></div>
+												<input type="file" name="file" id="logo" /> <input
+													type="hidden" id="logo_url" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-10">
+						<label class="control-label col-sm-1 outPadding">店铺区域<font>*</font></label>
+						<div class="col-sm-3">
+							<input id="province" />
+						</div>
+						<div class="col-sm-3">
+							<input id="city" />
+						</div>
+						<div class="col-sm-3">
+							<input id="area" />
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-sm-2"></div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-10">
+						<label class="control-label col-sm-1 outPadding">详细地址<font>*</font></label>
+						<div class="col-sm-9">
+							<input ng-model="form.address" class="k-textbox"
+								placeholder="请输入详细地址" />
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-sm-2"></div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-1"></label>
+					<div class="col-sm-3 businessl">
+						<input class="k-textbox" placeholder="输入搜索位置" id="search_location" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-1"></label>
+					<div class="col-sm-8">
+						<div class="col-sm-12" style="height: 400px;" id="map_container"></div>
+						<input class="col-sm-12 k-textbox" placeholder="坐标点"
+							readonly="readonly" ng-model="form.lbs" id="search_coordinate"
+							style="margin-top: 10px" />
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<label class="control-label col-sm-1">创建账号<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.userEntity.account" ng-blur="checkNotContainChinese(1);checkAccount();"
+							class="k-textbox" placeholder="设置账号" />
+					</div>
+					<label class="control-label col-sm-1">创建密码<font>*</font></label>
+					<div class="col-sm-3">
+						<input ng-model="form.userEntity.pwd" ng-blur="checkNotContainChinese(2)" class="k-textbox"
+							placeholder="设置密码" id="pwd" />
+					</div>
+					<div class="col-sm-3">
+						<button class="k-button k-state-default" id="resetPasswordBtn" ng-click="resetPassword()">重置</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal form-widgets col-sm-12">
+				<div class="form-group">
+					<div class="buttons-wrap clearBoth col-sm-8">
+							<button class="k-button k-state-default centerButton" ng-click="formSubmit()" id="formSubmitButton">确定</button>
+					</div>
+				</div>
+			</div>
+			</div>
+		</section>
+</div>
+
+

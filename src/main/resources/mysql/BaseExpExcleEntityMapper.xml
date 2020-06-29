@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.excelexp.mapper.BaseExpExcleEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.excelexp.model.BaseExpExcleEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="module_code" jdbcType="VARCHAR" property="module_code" />
+    <result column="module_name" jdbcType="VARCHAR" property="module_name" />
+    <result column="template_name" jdbcType="VARCHAR" property="template_name" />
+    <result column="export_class" jdbcType="VARCHAR" property="export_class" />
+    <result column="is_user_type" jdbcType="BIT" property="is_user_type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, module_code, module_name, template_name, export_class, is_user_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_exp_excel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_exp_excel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.excelexp.model.BaseExpExcleEntity">
+    insert into t_biz_exp_excel (id, module_code, module_name, 
+      template_name, export_class, is_user_type
+      )
+    values (#{id,jdbcType=INTEGER}, #{module_code,jdbcType=VARCHAR}, #{module_name,jdbcType=VARCHAR}, 
+      #{template_name,jdbcType=VARCHAR}, #{export_class,jdbcType=VARCHAR}, #{is_user_type,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.excelexp.model.BaseExpExcleEntity">
+    insert into t_biz_exp_excel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="module_code != null">
+        module_code,
+      </if>
+      <if test="module_name != null">
+        module_name,
+      </if>
+      <if test="template_name != null">
+        template_name,
+      </if>
+      <if test="export_class != null">
+        export_class,
+      </if>
+      <if test="is_user_type != null">
+        is_user_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="module_code != null">
+        #{module_code,jdbcType=VARCHAR},
+      </if>
+      <if test="module_name != null">
+        #{module_name,jdbcType=VARCHAR},
+      </if>
+      <if test="template_name != null">
+        #{template_name,jdbcType=VARCHAR},
+      </if>
+      <if test="export_class != null">
+        #{export_class,jdbcType=VARCHAR},
+      </if>
+      <if test="is_user_type != null">
+        #{is_user_type,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.excelexp.model.BaseExpExcleEntity">
+    update t_biz_exp_excel
+    <set>
+      <if test="module_code != null">
+        module_code = #{module_code,jdbcType=VARCHAR},
+      </if>
+      <if test="module_name != null">
+        module_name = #{module_name,jdbcType=VARCHAR},
+      </if>
+      <if test="template_name != null">
+        template_name = #{template_name,jdbcType=VARCHAR},
+      </if>
+      <if test="export_class != null">
+        export_class = #{export_class,jdbcType=VARCHAR},
+      </if>
+      <if test="is_user_type != null">
+        is_user_type = #{is_user_type,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.excelexp.model.BaseExpExcleEntity">
+    update t_biz_exp_excel
+    set module_code = #{module_code,jdbcType=VARCHAR},
+      module_name = #{module_name,jdbcType=VARCHAR},
+      template_name = #{template_name,jdbcType=VARCHAR},
+      export_class = #{export_class,jdbcType=VARCHAR},
+      is_user_type = #{is_user_type,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getExpExcelEntity" parameterType="java.lang.String" resultMap="BaseResultMap">
+  
+  
+   select 
+    <include refid="Base_Column_List" />
+    from t_biz_exp_excel where module_code=#{module_code}
+  
+  
+  </select>
+  
+</mapper>

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.promotion.mapper.UnionCustomerMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="promotion_id" jdbcType="INTEGER" property="promotion_id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="use_time" jdbcType="TIMESTAMP" property="use_time" />
+    <result column="order_code" jdbcType="VARCHAR" property="order_code" />
+    <result column="product_order_code" jdbcType="VARCHAR" property="product_order_code" />
+  </resultMap>
+  
+  <resultMap id="UnionPromotionResultMap" type="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotionParam">
+  	
+  		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		<result column="buy_time" jdbcType="DATE" property="buy_time" />
+		<result column="start_time" jdbcType="TIMESTAMP" property="start_time" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="end_time" />
+		<result column="rule" jdbcType="VARCHAR" property="rule" />
+		<result column="brand_ids" jdbcType="VARCHAR" property="brand_ids" />
+		<result column="partner_id" jdbcType="BIGINT" property="partner_id" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="onOffFlag" jdbcType="INTEGER" property="onOffFlag" />
+		<result column="ca_state" jdbcType="INTEGER" property="ca_state" />
+		<result column="discount" jdbcType="DOUBLE" property="discount" />
+		<result column="cash_value" jdbcType="DOUBLE" property="cash_value" />
+		<result column="price" jdbcType="DOUBLE" property="price" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="details" jdbcType="VARCHAR" property="details" />
+		<result column="images" jdbcType="VARCHAR" property="images" />
+		<result column="image" jdbcType="VARCHAR" property="image" />
+		<result column="sales_num" jdbcType="INTEGER" property="sales_num" />
+		
+		<result column="apply_end_time" jdbcType="TIMESTAMP" property="apply_end_time" />
+		<result column="cash_prom_price" jdbcType="DOUBLE" property="cash_prom_price" />
+		<result column="cash_time" jdbcType="BIGINT" property="cash_time" />
+		<result column="cash_start_time" jdbcType="TIMESTAMP" property="cash_start_time" />
+		<result column="cash_end_time" jdbcType="TIMESTAMP" property="cash_end_time" />
+		<result column="cash_prom_num" jdbcType="INTEGER" property="cash_prom_num" />
+		<result column="cash_sell_num" jdbcType="INTEGER" property="cash_sell_num" />
+		<result column="cash_promotion_flag" jdbcType="INTEGER" property="cash_promotion_flag" />
+		
+  		<collection property="product" column="id" ofType="com.mfangsoft.zhuangjialong.app.product.model.Product" columnPrefix="p_">
+  			<result column="product_id" jdbcType="BIGINT" property="product_id" />
+		</collection>
+   </resultMap>
+   
+  <sql id="Base_Column_List">
+    id, promotion_id, customer_id, state, create_time, use_time, order_code, product_order_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_cash_customer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+     <select id="selectByEntity" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_unionpro_product
+    where promotion_id =#{promotion_id,jdbcType=INTEGER}
+    and customer_id =#{customer_id,jdbcType=BIGINT}
+  </select>
+  <select id="selectBase" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_cash_customer
+    where promotion_id =#{promotion_id,jdbcType=INTEGER}
+    and customer_id =#{customer_id,jdbcType=BIGINT}
+  </select>
+   <select id="selectWitherHasCash" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM `t_biz_cash_customer` 
+WHERE promotion_id = #{promotion_id,jdbcType=INTEGER} 
+AND customer_id = #{customer_id,jdbcType=BIGINT} 
+  </select>
+  
+   <select id="selectHaveCashForCart" resultType="java.lang.Integer">
+      SELECT COUNT(1) 
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u 
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} AND FIND_IN_SET(#{brand_id,jdbcType=INTEGER},u.brand_ids)  AND 
+ 
+ c.state = 0 AND c.promotion_id=u.id AND u.state = 1 AND 
+ 
+ u.start_time &lt; NOW() AND u.end_time &gt; NOW() 
+     
+  </select>
+  
+  <select id="selectHaveCashListForCart" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+   SELECT u.id, u.name, u.discount,u.cash_value,u.start_time,u.end_time ,p.product_id
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u ,t_biz_unionpro_product p
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} 
+  AND  c.state = 0 AND c.promotion_id=u.id AND u.state = 1 
+   AND p.promotion_id = u.id AND  
+    u.start_time &lt; NOW() AND u.end_time &gt; NOW() AND p.product_id IN 
+ <foreach collection="productIdList" index="index" item="item" open="("
+			separator="," close=")">
+			${item}
+</foreach> 
+AND 
+c.promotion_id NOT IN 
+<foreach collection="r_List" item="item_r" open="("
+			separator="," close=")">
+			${item_r}
+</foreach> 
+ GROUP BY u.id
+  
+  </select>
+    <select id="selectOneProductByProductId" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+      SELECT u.id, u.name, u.discount,u.cash_value, u.brand_ids, u.start_time,u.end_time 
+ 	FROM t_biz_unionpromotion u 
+ 	LEFT JOIN t_biz_unionpro_product p ON p.promotion_id = u.id
+ 	WHERE u.state = 1 AND u.start_time &lt; NOW() AND u.end_time &gt; NOW() AND p.product_id = #{product_id,jdbcType=BIGINT} limit 1 
+  </select>
+  
+      <select id="selectCanUseCashListForCartOrderPriceByCustomerId" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+      SELECT u.id, u.name, u.discount,u.cash_value, u.brand_ids, u.start_time,u.end_time 
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u ,t_biz_unionpro_product p
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} AND 
+ 	c.promotion_id=u.id AND u.state = 1 AND u.start_time &lt; NOW() AND u.end_time &gt; NOW() and 
+  p.promotion_id = u.id AND p.product_id = #{product_id,jdbcType=BIGINT}
+	limit 1
+  </select>
+  
+   <select id="selectCanUseCashOneForCartOrderPrice" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+      SELECT u.id, u.name, u.discount,u.cash_value,u.start_time,u.end_time 
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u 
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} AND FIND_IN_SET(#{brand_id,jdbcType=INTEGER},u.brand_ids)  AND 
+ 
+  c.promotion_id=u.id AND u.state = 1 AND 
+ 
+ u.start_time &lt; NOW() AND u.end_time &gt; NOW() limit 1
+     
+  </select>
+  
+    <select id="selectListForCartByCustomerAndPromId" resultType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionPromotion">
+    SELECT u.id, u.name, u.discount,u.cash_value,u.start_time,u.end_time ,p.product_id
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u ,t_biz_unionpro_product p
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} AND c.promotion_id IN
+    <foreach collection="promotionIdList" index="index" item="item" open="(" 
+			separator="," close=")">
+			${item}
+</foreach>
+      AND  c.state = 0 AND c.promotion_id=u.id AND u.state = 1 AND  
+    u.start_time &lt; NOW() AND u.end_time &gt; NOW() 
+    AND p.promotion_id = u.id
+  
+  </select>
+  
+  <select id="selectListForCartByCustomerAndPromIdNew" resultMap="UnionPromotionResultMap">
+    SELECT u.id, u.name, u.discount,u.cash_value,u.start_time,u.end_time ,p.product_id as p_product_id
+ 
+ FROM  t_biz_cash_customer c, t_biz_unionpromotion u ,t_biz_unionpro_product p
+ 
+ WHERE c.customer_id = #{customer_id,jdbcType=BIGINT} AND c.promotion_id IN
+    <foreach collection="promotionIdList" index="index" item="item" open="(" 
+			separator="," close=")">
+			${item}
+</foreach>
+      AND c.state = 0 AND c.promotion_id=u.id AND u.state = 1 AND  
+    u.start_time &lt; NOW() AND u.end_time &gt; NOW() 
+    AND p.promotion_id = u.id
+  
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_cash_customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_cash_customer (promotion_id, customer_id, state, 
+      create_time, use_time)
+    values (#{promotion_id,jdbcType=INTEGER}, #{customer_id,jdbcType=BIGINT}, #{state,jdbcType=INTEGER}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{use_time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_cash_customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        promotion_id,
+      </if>
+      <if test="customer_id != null">
+        customer_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="use_time != null">
+        use_time,
+      </if>
+      <if test="order_code != null">
+        order_code,
+      </if>
+      <if test="product_order_code != null">
+        product_order_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="promotion_id != null">
+        #{promotion_id,jdbcType=INTEGER},
+      </if>
+      <if test="customer_id != null">
+        #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="use_time != null">
+        #{use_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order_code != null">
+        #{order_code,jdbcType=VARCHAR},
+      </if>
+      <if test="product_order_code != null">
+        #{product_order_code,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer">
+    update t_biz_cash_customer
+    <set>
+      <if test="promotion_id != null">
+        promotion_id = #{promotion_id,jdbcType=INTEGER},
+      </if>
+      <if test="customer_id != null">
+        customer_id = #{customer_id,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="use_time != null">
+        use_time = #{use_time,jdbcType=TIMESTAMP},
+      </if>
+       <if test="order_code != null">
+        order_code = #{order_code,jdbcType=VARCHAR},
+      </if>
+      <if test="product_order_code != null">
+        product_order_code = #{product_order_code,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer">
+    update t_biz_cash_customer
+    set promotion_id = #{promotion_id,jdbcType=INTEGER},
+      customer_id = #{customer_id,jdbcType=BIGINT},
+      state = #{state,jdbcType=INTEGER},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      use_time = #{use_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPromotion_Id" parameterType="com.mfangsoft.zhuangjialong.integration.promotion.model.UnionCustomer">
+    update t_biz_cash_customer 
+    set use_time = #{use_time,jdbcType=TIMESTAMP} , state = #{state,jdbcType=INTEGER}, product_order_code = #{product_order_code,jdbcType=VARCHAR}
+    where promotion_id = #{promotion_id,jdbcType=INTEGER} and customer_id = #{customer_id,jdbcType=BIGINT}
+  </update>
+  <update id="updateUnuseStateByPromotionId" >
+    update t_biz_cash_customer 
+    set use_time = NULL, state = 0, product_order_code = NULL
+    where promotion_id = #{promotion_id,jdbcType=INTEGER} and customer_id = #{customer_id,jdbcType=BIGINT}
+  </update>
+</mapper>

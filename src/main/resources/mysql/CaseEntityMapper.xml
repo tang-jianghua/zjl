@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.main.mapper.CaseEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="link_url" jdbcType="VARCHAR" property="link_url" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="case_resource_url" jdbcType="VARCHAR" property="case_resource_url" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="list_img" jdbcType="VARCHAR" property="list_img" />
+    <result column="panoramic_img" jdbcType="VARCHAR" property="panoramic_img" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="partner_ids" jdbcType="VARCHAR" property="partner_ids" />
+     <result column="partner_names" jdbcType="VARCHAR" property="partner_names" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, link_url, type, case_resource_url, name, title, create_time, list_img, panoramic_img, 
+    state, partner_ids
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+  <resultMap id="CaseProductResultMap" type="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="list_img" jdbcType="VARCHAR" property="list_img" />
+    <result column="panoramic_img" jdbcType="VARCHAR" property="panoramic_img" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    
+    <collection property="products" ofType="com.mfangsoft.zhuangjialong.app.main.model.CaseProduct">  
+            <id column="product_id" property="product_id"/>  
+            <result column="product_id" property="product_id"/>  
+        </collection>
+  </resultMap>
+
+     <resultMap extends="CaseProductResultMap" id="ProductResultMapWithBLOBs" type="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+
+
+      <select id="selectForCaseDetails" parameterType="java.lang.Long" resultType="com.mfangsoft.zhuangjialong.app.article.model.ArticleEntity">
+  select a.details,a.title from t_biz_case c left join t_biz_article a on c.link_url = a.id where c.id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectCaseList" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+       SELECT 
+    c.id,c.name, c.list_img
+    FROM t_biz_case c
+    LEFT JOIN `t_biz_partner` p
+    ON FIND_IN_SET(p.id,c.`partner_ids`)!=0
+    WHERE state = 1 AND FIND_IN_SET(#{region_code,jdbcType=VARCHAR},p.`region_id`)!=0
+  </select>
+
+   <select id="selectCaseListForPage" resultMap="BaseResultMap" parameterType="com.mfangsoft.zhuangjialong.common.model.Page">
+  
+    select 
+    t.id, t.link_url, t.type, t.case_resource_url, t.name, t.title, t.create_time, t.list_img, t.panoramic_img, 
+    t.state, t.partner_ids, group_concat(pa.principal) as partner_names
+    from t_biz_case t left join  t_biz_partner pa on  find_in_set(pa.id,t.partner_ids)
+    
+    where 1=1
+    <if test="param.type!=null and param.type!=''">
+    
+     and t.type=#{param.type}
+    </if>
+    group  by t.id order by  t.id desc
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_biz_case
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_case
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_case (link_url, type, case_resource_url, 
+      name, title, create_time, 
+      list_img, panoramic_img, state, 
+      partner_ids, description)
+    values (#{link_url,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{case_resource_url,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{list_img,jdbcType=VARCHAR}, #{panoramic_img,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{partner_ids,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_case
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="link_url != null">
+        link_url,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="case_resource_url != null">
+        case_resource_url,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="list_img != null">
+        list_img,
+      </if>
+      <if test="panoramic_img != null">
+        panoramic_img,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="partner_ids != null">
+        partner_ids,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="link_url != null">
+        #{link_url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="case_resource_url != null">
+        #{case_resource_url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="list_img != null">
+        #{list_img,jdbcType=VARCHAR},
+      </if>
+      <if test="panoramic_img != null">
+        #{panoramic_img,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="partner_ids != null">
+        #{partner_ids,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    update t_biz_case
+    <set>
+      <if test="link_url != null">
+        link_url = #{link_url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="case_resource_url != null">
+        case_resource_url = #{case_resource_url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="list_img != null">
+        list_img = #{list_img,jdbcType=VARCHAR},
+      </if>
+      <if test="panoramic_img != null">
+        panoramic_img = #{panoramic_img,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="partner_ids != null">
+        partner_ids = #{partner_ids,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    update t_biz_case
+    set link_url = #{link_url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      case_resource_url = #{case_resource_url,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      list_img = #{list_img,jdbcType=VARCHAR},
+      panoramic_img = #{panoramic_img,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      partner_ids = #{partner_ids,jdbcType=VARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.app.main.model.CaseEntity">
+    update t_biz_case
+    set link_url = #{link_url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      case_resource_url = #{case_resource_url,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      list_img = #{list_img,jdbcType=VARCHAR},
+      panoramic_img = #{panoramic_img,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      partner_ids = #{partner_ids,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

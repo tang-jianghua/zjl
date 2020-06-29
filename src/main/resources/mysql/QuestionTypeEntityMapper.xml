@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.question.mapper.QuestionTypeEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.question.model.QuestionTypeEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="question_type" jdbcType="VARCHAR" property="question_type" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  
+   <resultMap id="QuestionResultMap" type="com.mfangsoft.zhuangjialong.integration.question.model.QuestionTypeEntity">
+    <result column="question_type" jdbcType="VARCHAR" property="question_type" />
+    <collection property="questions"  column="question_type"	ofType="com.mfangsoft.zhuangjialong.integration.question.model.QuestionEntity">
+    <id column="question_id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    </collection>
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List">
+    id, question_type, url,type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_question_type
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectQuestionTypes"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_question_type where type=#{type}
+  </select>
+  <select id="selectQuestionsInTypes"  resultMap="QuestionResultMap">
+	SELECT t.question_type,q.id question_id,q.title title
+	FROM t_biz_question_type t
+	LEFT JOIN t_biz_question q ON t.id = q.question_type_id
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_biz_question_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.question.model.QuestionTypeEntity">
+    insert into t_biz_question_type (question_type, url)
+    values (#{question_type,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},#{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.question.model.QuestionTypeEntity">
+    
+    insert into t_biz_question_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="question_type != null">
+        question_type,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+        <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="question_type != null">
+        #{question_type,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      
+       <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.question.model.QuestionTypeEntity">
+    update t_biz_question_type
+    <set>
+      <if test="question_type != null">
+        question_type = #{question_type,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+       <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.question.model.QuestionTypeEntity">
+    update t_biz_question_type
+    set question_type = #{question_type,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}, type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

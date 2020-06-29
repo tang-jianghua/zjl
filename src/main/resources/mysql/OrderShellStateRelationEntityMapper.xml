@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.order.mapper.OrderShellStateRelationEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellStateRelationEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shell_id" jdbcType="BIGINT" property="shell_id" />
+    <result column="shell_state" jdbcType="INTEGER" property="shell_state" />
+    <result column="state_time" jdbcType="TIMESTAMP" property="state_time" />
+    <result column="param" jdbcType="VARCHAR" property="param" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, shell_id, shell_state, state_time, param
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_biz_order_shell_state_relation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_biz_order_shell_state_relation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellStateRelationEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_shell_state_relation (shell_id, shell_state, state_time, 
+      param)
+    values (#{shell_id,jdbcType=BIGINT}, #{shell_state,jdbcType=INTEGER}, #{state_time,jdbcType=TIMESTAMP}, 
+      #{param,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellStateRelationEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_biz_order_shell_state_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shell_id != null">
+        shell_id,
+      </if>
+      <if test="shell_state != null">
+        shell_state,
+      </if>
+      <if test="state_time != null">
+        state_time,
+      </if>
+      <if test="param != null">
+        param,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shell_id != null">
+        #{shell_id,jdbcType=BIGINT},
+      </if>
+      <if test="shell_state != null">
+        #{shell_state,jdbcType=INTEGER},
+      </if>
+      <if test="state_time != null">
+        #{state_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="param != null">
+        #{param,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellStateRelationEntity">
+    update t_biz_order_shell_state_relation
+    <set>
+      <if test="shell_id != null">
+        shell_id = #{shell_id,jdbcType=BIGINT},
+      </if>
+      <if test="shell_state != null">
+        shell_state = #{shell_state,jdbcType=INTEGER},
+      </if>
+      <if test="state_time != null">
+        state_time = #{state_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="param != null">
+        param = #{param,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.order.model.OrderShellStateRelationEntity">
+    update t_biz_order_shell_state_relation
+    set shell_id = #{shell_id,jdbcType=BIGINT},
+      shell_state = #{shell_state,jdbcType=INTEGER},
+      state_time = #{state_time,jdbcType=TIMESTAMP},
+      param = #{param,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

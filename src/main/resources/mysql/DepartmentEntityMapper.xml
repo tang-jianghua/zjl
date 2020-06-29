@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.integration.department.mapper.DepartmentEntityMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.integration.department.model.DepartmentEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parent_id" />
+    <result column="is_position" jdbcType="INTEGER" property="is_position" />
+    <result column="role_id" jdbcType="BIGINT" property="role_id"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, parent_id, is_position
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_department
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_sys_department
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mfangsoft.zhuangjialong.integration.department.model.DepartmentEntity">
+    insert into t_sys_department (name, parent_id, is_position,role_id
+      )
+    values (#{name,jdbcType=VARCHAR}, #{parent_id,jdbcType=BIGINT}, #{is_position,jdbcType=INTEGER},#{role_id,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mfangsoft.zhuangjialong.integration.department.model.DepartmentEntity">
+    insert into t_sys_department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parent_id != null">
+        parent_id,
+      </if>
+      <if test="is_position != null">
+        is_position,
+      </if>
+       <if test="role_id != null">
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parent_id != null">
+        #{parent_id,jdbcType=BIGINT},
+      </if>
+      <if test="is_position != null">
+        #{is_position,jdbcType=INTEGER},
+      </if>
+       <if test="role_id != null">
+        #{role_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mfangsoft.zhuangjialong.integration.department.model.DepartmentEntity">
+    update t_sys_department
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parent_id != null">
+        parent_id = #{parent_id,jdbcType=BIGINT},
+      </if>
+      <if test="is_position != null">
+        is_position = #{is_position,jdbcType=INTEGER},
+      </if>
+       <if test="role_id != null">
+        role_id = #{role_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mfangsoft.zhuangjialong.integration.department.model.DepartmentEntity">
+    update t_sys_department
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parent_id,jdbcType=BIGINT},
+      is_position = #{is_position,jdbcType=INTEGER},
+       role_id = #{role_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.mfangsoft.zhuangjialong.integration.department.model.DepartmentEntity">
+  
+     select   t.id, name, parent_id, is_position
+      from t_sys_department t 
+      
+      left join t_sys_user  ur on t.role_id=ur.id
+      
+      where 1=1
+      
+      <if test="parent_id!=null">
+       and  parent_id = #{parent_id,jdbcType=BIGINT}
+      </if>
+      
+      <if test="user_type!=null">
+      
+         and ur.user_type=#{user_type}
+      
+      </if>
+  
+  </select>
+  
+  <select id="getDepForCombox" resultMap="BaseResultMap" >
+  
+  select   t.id, name, parent_id, is_position
+      from t_sys_department t
+      
+       left join t_sys_user  ur on t.role_id=ur.id
+       where is_position=1 and ur.user_type=#{user_type}
+  
+  </select>
+  
+    <select id="getPositionForCombox" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  
+  select   <include refid="Base_Column_List" />
+      from t_sys_department where parent_id=#{id}
+  
+  </select>
+  
+  
+  
+  
+</mapper>

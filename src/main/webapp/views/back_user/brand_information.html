@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<style class="ng-scope">
+.noOperate{
+	color: gray !important;
+}
+.pannel{
+    padding: 10px 20px;
+    background-color: #efefef;
+    border-radius: 5px;
+}
+.button_center {
+	display: inherit;
+	margin: 10px auto;
+}
+</style>
+<div ng-controller="brandInformationCtrl">
+	<section class="well">
+	    <!-- 标题 -->
+	    <div class="fileAbout backstage">品牌信息管理</div>
+	    
+		<div class="idMessage">
+			<div class="greenLine" id="tabContainer" style="display: none;">
+				<div id="pannel_1" class="oneList" ng-click="choosePannel(1)">品牌信息管理</div>
+				<div id="pannel_2" class="oneList" ng-click="choosePannel(2)">下架申请管理</div>
+			</div>
+			
+			<!-- 品牌信息管理 -->
+			<div id="container_1">
+				 <div class="form-horizontal form-widgets col-sm-12 gray">
+			            <div class="form-group">
+					        <div class="form-horizontal form-widgets col-sm-4" ng-show="enterprise_show">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">企业名称</label>
+					                <div class="col-sm-8"><input ng-model="search.enterprise_name"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4" ng-show="partner_show">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">合伙人</label>
+					                <div class="col-sm-8"><input ng-model="search.parter_principal"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">品牌名称</label>
+					                <div class="col-sm-8"><input ng-model="search.brand_name"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">后台账号</label>
+					                <div class="col-sm-8"><input ng-model="search.account"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">负责人</label>
+					                <div class="col-sm-8"><input ng-model="search.user_name"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4" translate="phone_number"></label>
+					                <div class="col-sm-8"><input ng-model="search.phone_num"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">账号状态</label>
+					                <div class="col-sm-8">
+					                	<input id="accountState"/>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">品牌状态</label>
+					                <div class="col-sm-8">
+					                	<input id="brandState"/>
+					                </div>
+					            </div>
+					        </div>
+					        
+					 
+					        <div class="buttons-wrap clearBoth">
+					            <button class="k-button k-state-default" ng-click="search(1)" translate="search"></button>
+					        </div>
+					    </div>
+				 </div>
+			     <div>
+			     	<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+				 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+					<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+					<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+			     	<button class="k-button k-state-default" ng-click="addAccountInformation()" id="addAccount" translate="add_account_information"></button>
+			     	<hr class="towGreen">
+			     </div>
+		     	 <div id="gridBrand" kendo-grid="grid1"  k-options="mainGridOptions" ></div>
+			</div>
+			
+			<!-- 下架申请管理 -->
+			<div id="container_2">
+				 <div class="form-horizontal form-widgets col-sm-12 gray">
+			            <div class="form-group">
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">合伙人</label>
+					                <div class="col-sm-8"><input ng-model="search2.partner"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+					        <div class="form-horizontal form-widgets col-sm-4">
+					            <div class="form-group">
+					                <label class="control-label col-sm-4">品牌名称</label>
+					                <div class="col-sm-8"><input ng-model="search2.brand_name"  class="k-textbox"/></div>
+					            </div>
+					        </div>
+
+					        <div class="buttons-wrap clearBoth">
+					            <button class="k-button k-state-default" ng-click="search(2)" translate="search"></button>
+					        </div>
+					    </div>
+				 </div>
+		     	 <div kendo-grid="grid2"  k-options="applyPutDownGridOptions" ></div>
+			</div>
+		
+		
+		
+		
+
+		</div>    	 
+	     	 
+	</section>
+  
+	<div kendo-window="openBrandWindow" k-title="'开通品牌'" k-width="600" k-min-height="100" k-visible="false" k-modal="true">
+		<div class="pannel">
+			<h4>开通品牌标准：</h4>
+			<div style="font-size: 14px;">
+				<p>1、至少有一张Banner图片。</p>
+				<p>2、首页单品设置中至少有一款产品。</p>
+				<p>3、需要有背景图片。</p>
+				<p>4、产品数据中至少有一款上架产品。</p>
+				<p>5、品牌下至少有一家完整的上架店铺。</p>
+			</div>
+		</div>
+	 	<button class="k-button k-state-default button_center" ng-click="putUpBrand()">确定</button>
+	</div>
+  
+	<div kendo-window="applyPutDownWindow" k-title="'申请下架'" k-width="600" k-min-height="100" k-visible="false" k-modal="true">
+	 	<div style="padding:15px">
+	        <textarea style="width:100%;height:120px;" ng-model="reason"></textarea>
+		    <button class="k-button k-state-default button_center" ng-click="applyBrandPutDown()">确定</button>
+	  	</div>
+	</div>
+  
+</div>
+    
+

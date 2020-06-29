@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<div ng-controller="productDataForPartnerCtrl">
+	<section class="well ">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">产品数据</div>
+		
+		<div class="idMessage">
+			<div class="form-horizontal form-widgets col-sm-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">产品标题</label>
+			                <div class="col-sm-8">
+			                	<input ng-model="search.product_title"  class="k-textbox"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">分类</label>
+			                <div class="col-sm-8">
+			                	<input type="text" id="classify"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">系列</label>
+			                <div class="col-sm-8">
+			                	<input type="text" id="series"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">品类</label>
+			                <div class="col-sm-8">
+			                	<input type="text" id="classParent"/>
+			                </div>
+			            </div>
+			        </div>
+			        <div class="form-horizontal form-widgets col-sm-4">
+			            <div class="form-group">
+			                <label class="control-label col-sm-4">付款模式</label>
+			                <div class="col-sm-8">
+			                	<input type="text" id="payModel"/>
+			                </div>
+			            </div>
+			        </div>
+				
+					<div class="buttons-wrap clearBoth">
+						<button class="k-button k-state-default" ng-click="search()">搜索</button>
+					</div>
+				</div>
+			</div>
+
+
+			<div>
+				<button class="k-button k-state-default" ng-click="chooseAll('productSign',true)">全选</button>
+			 	<button class="k-button k-state-default" ng-click="chooseAll('productSign',false)">取消</button>
+				<button class="k-button k-state-default" ng-click="recommendToHome()">推荐到首页</button>
+				<hr class="towGreen"></hr>
+			</div>
+
+
+			<div kendo-grid="grid" k-options="mainGridOptions" id="grid"></div>
+		</div>
+	</section>
+</div>

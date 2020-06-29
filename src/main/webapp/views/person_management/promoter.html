@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<div ng-controller="promoterCtrl">
+	<section class="well">
+		<!-- 标题 -->
+		<div class="fileAbout backstage">推广员管理</div>
+		<div class="idMessage ">
+			<div class="form-horizontal form-widgets col-md-12 gray">
+				<div class="form-group">
+					<div class="form-horizontal form-widgets col-md-4">
+						<div class="form-group">
+							<label class="control-label col-md-4">姓名</label>
+							<div class="col-md-8">
+								<input ng-model="search.name1" class="k-textbox" />
+							</div>
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-md-4">
+						<div class="form-group">
+							<label class="control-label col-md-4">用户名</label>
+							<div class="col-md-8">
+								<input ng-model="search.account" class="k-textbox" />
+							</div>
+						</div>
+					</div>
+					<div class="form-horizontal form-widgets col-md-4">
+						<div class="form-group {{userRole.userPartner}}">
+							<label class="control-label col-md-4 ">合伙人</label>
+							<div class="col-md-8">
+								<input ng-model="search.principal" class="k-textbox" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="buttons-wrap text-center clearBoth">
+					<button class="k-button k-state-default" ng-click="search()">查询</button>
+				</div>
+			</div>
+			<div>
+				<button class="k-button k-state-default" ng-click="checkAll(true)">全选</button>
+			 	<button class="k-button k-state-default" ng-click="checkAll(false)">取消</button>
+				<button class="k-button k-state-default" ng-click="dataExport()">筛选导出</button>
+				<button class="k-button k-state-default" ng-click="dataCheckboxExport()">选中导出</button>
+				<button ng-show="{{userRole.isShowCreateAccountBtn}}"
+					class="k-button k-state-default"
+					ng-click="openCreateAccount_win()">+添加账号</button>
+				<hr class="towGreen">
+			</div>
+			<div id="gridPromoter" kendo-grid="grid" k-options="mainGridOptions"></div>
+		</div>
+
+		<div kendo-window="creatAccount_win" k-title="'推广员信息'" k-width="700"
+			k-height="200" k-visible="false" k-modal="true">
+
+			<div class="form-horizontal form-widgets col-md-12" id="promoterForm"
+				style="padding-top: 20px;">
+				<div class="form-group">
+					<label class="control-label col-md-1">姓名</label>
+					<div class="col-md-3">
+						<input ng-model="details.name" class="k-textbox" />
+					</div>
+					<label class="control-label col-md-1">联系方式</label>
+					<!-- 联系方式和账号名称一样 -->
+					<div class="col-md-3">
+						<input ng-model="details.phone" class="k-textbox" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-1">账号名称</label>
+					<!-- 联系方式和账号名称一样 -->
+					<div class="col-md-3">
+						<input ng-model="details.phone" disabled="disabled"
+							class="k-textbox" />
+					</div>
+
+					<label class="control-label col-md-1">密码</label>
+					<div class="col-md-3">
+						<input ng-model="details.password" id="pwd" class="k-textbox" />
+					</div>
+					<div class="col-md-1">
+						<button class="k-button k-state-default" id="resetPasswordBtn"
+							ng-click="resetPassword()">重置</button>
+					</div>
+				</div>
+
+			</div>
+			<div class="form-group  text-center">
+				<button class="k-button k-state-defaul" id="submitButton" ng-click="createAccountOK()">确定</button>
+			</div>
+
+		</div>
+	</section>
+</div>
+
+

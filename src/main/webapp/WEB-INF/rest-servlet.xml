@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/websocket
+    http://www.springframework.org/schema/websocket/spring-websocket.xsd
+	">
+
+	<context:component-scan base-package="com.mfangsoft.zhuangjialong">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+		<context:exclude-filter type="regex"
+			expression=".*JacksonConversionServiceConfigurer$" />
+		<context:exclude-filter type="regex"
+			expression=".*Mapper$" />
+	</context:component-scan>
+
+	<!-- ajax json对于时间的配置 -->
+	<bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Resolves view names to protected .jsp resources within the /WEB-INF/views 
+		directory -->
+	<mvc:annotation-driven />
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为10MB 1M=1048576字节 -->
+		<property name="maxUploadSize">
+			<value>10485760</value>
+		</property>
+		<property name="defaultEncoding" value="utf-8"></property>
+	</bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+        	<!-- 添加需要拦截的路径，如购物车，个人中心等 -->
+            <mvc:mapping path="/**" />
+            <bean class="com.mfangsoft.zhuangjialong.core.interceptor.IdentityTokenInterceptor"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+         <mvc:mapping path="/server/*"/>
+        	<bean class="com.mfangsoft.zhuangjialong.core.interceptor.ServerLoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
+	<bean id="sysWebscoketHandler"
+		class="com.mfangsoft.zhuangjialong.common.webscoket.handler.SysWebscoketHandler"></bean>
+
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping handler="sysWebscoketHandler"
+			path="/js/scoket" />
+		<websocket:handshake-interceptors>
+			<bean
+				class="com.mfangsoft.zhuangjialong.core.interceptor.HandshakeInterceptor"></bean>
+		</websocket:handshake-interceptors>
+		<websocket:sockjs></websocket:sockjs>
+	</websocket:handlers>
+
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping handler="sysWebscoketHandler"
+			path="/ws/scoket" />
+		<!-- <websocket:sockjs></websocket:sockjs> -->
+		<websocket:handshake-interceptors>
+			<bean
+				class="com.mfangsoft.zhuangjialong.core.interceptor.HandshakeInterceptor"></bean>
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+		<property name="config">
+			<bean class="com.google.code.kaptcha.util.Config">
+				<constructor-arg>
+					<props>
+						<prop key="kaptcha.border">no</prop>
+						<prop key="kaptcha.border.color">105,179,90</prop>
+						<prop key="kaptcha.textproducer.font.color">red</prop>
+						<prop key="kaptcha.image.width">250</prop>
+						<prop key="kaptcha.textproducer.font.size">75</prop>
+						<prop key="kaptcha.image.height">90</prop>
+						<prop key="kaptcha.session.key">code</prop>
+						<prop key="kaptcha.textproducer.char.length">4</prop>
+						<prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+					</props>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+</beans>

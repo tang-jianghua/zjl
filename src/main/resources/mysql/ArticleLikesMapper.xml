@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfangsoft.zhuangjialong.app.article.mapper.ArticleLikesMapper">
+  <resultMap id="BaseResultMap" type="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleLikesEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_id" jdbcType="BIGINT" property="article_id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customer_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="album_id" jdbcType="BIGINT" property="album_id" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, article_id, customer_id, create_time, album_id, state
+  </sql>
+  
+    <select id="selectArticleLikesNum" parameterType="java.lang.Long" resultType="java.lang.Integer">
+  select count(1) from t_biz_article_likes where article_id = #{article_id,jdbcType=BIGINT} and state = 1
+  </select>
+  
+    <select id="selectWhetherLike" parameterType="com.mfangsoft.zhuangjialong.app.article.model.ArticleDetailModel" resultType="java.lang.Byte">
+  select state  from t_biz_article_likes
+   where  article_id = #{article_id,jdbcType=BIGINT} 
+   and customer_id = #{customer_id,jdbcType=BIGINT}
+  </select>
+  
+     <select id="selectLikeRecordByCustomerIdAndArticleId" parameterType="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleLikesEntity" 
+     resultType="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleLikesEntity">
+  select id,state  from t_biz_article_likes
+   where  article_id = #{article_id,jdbcType=BIGINT} 
+   and customer_id = #{customer_id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByCustomerIdAndArticleId"  parameterType="com.mfangsoft.zhuangjialong.app.article.model.BaseArticleLikesEntity">
+	   DELETE 
+	FROM
+	  `t_biz_article_likes` 
+	WHERE customer_id = #{customer_id,jdbcType=BIGINT} 
+	AND article_id = #{article_id,jdbcType=BIGINT}
+  </delete>
+  
+</mapper>
