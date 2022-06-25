@@ -11,7 +11,7 @@
 	<properties>
 		<spring.framework.version>4.2.5.RELEASE</spring.framework.version>
 		<spring.data.redis>1.7.1.RELEASE</spring.data.redis>
-		<spring.data.mongodb>1.9.1.RELEASE</spring.data.mongodb>
+		<spring.data.mongodb>3.3.5</spring.data.mongodb>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
